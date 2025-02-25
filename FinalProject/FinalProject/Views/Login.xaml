@@ -1,0 +1,63 @@
+﻿<Window x:Class="FinalProject.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FinalProject"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style x:Key="TextStyle">
+            <Setter Property="Control.Foreground" Value="White"></Setter>
+            <Setter Property="Control.FontSize" Value="13"></Setter>
+            <Setter Property="Control.FontWeight" Value="Bold"></Setter>
+
+        </Style>
+        <Style x:Key="btnLogin" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button" >
+                        <Grid>
+                            <Border CornerRadius="10" Background="#FF46BE12"></Border>
+                            <ContentPresenter Style="{StaticResource TextStyle}" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Login"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Border CornerRadius="6"
+			Background="White"
+			Padding="20"
+			Margin="376,69,78,69">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="15"
+							  Direction="270"
+							  Opacity="0.5"
+							  ShadowDepth="0"/>
+        </Border.Effect>
+        <Grid Margin="-20,-10,-20,-10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.ColumnSpan="2" Content="Login" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="30"/>
+            <Label Width="80px" Margin="0 0 -20 0" Content="Username" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="15"/>
+            <TextBox Padding="5.5" BorderThickness="1.5px" Grid.Row="1" Grid.Column="1" Width="150px" Height="30px" Margin="-10,13,47,13" />
+            <Label Width="80px" Margin="0 0 -20 0" Content="Password" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="15"/>
+            <TextBox Padding="5.5" BorderThickness="2px" Grid.Row="2" Grid.Column="1" Width="150px" Height="30px" Margin="-10,13,47,13" />
+
+            <Button Style="{StaticResource btnLogin}" Grid.Row="3" Grid.Column="1" Margin="20,10,81,20" Click="Button_Click" Background="#FF1A684F" />
+            <Image HorizontalAlignment="Left" Height="178" Margin="-287,47,0,0" Grid.RowSpan="4" VerticalAlignment="Top" Width="204" Source="/Images/img-01.png"/>
+
+        </Grid>
+
+    </Border>
+</Window>
