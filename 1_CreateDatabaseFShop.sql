@@ -46,8 +46,8 @@ CREATE TABLE Employees (
     PhoneNumber VARCHAR(15),
     Email VARCHAR(254),
     Gender CHAR(6),
-    CreatedDate DATETIME,
-	[Status] NVARCHAR(20),
+    CreatedDate DATE,
+	[Status] BIT,
     Avatar TEXT,
     RoleID INT,
     FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
@@ -76,7 +76,7 @@ CREATE TABLE Addresses (
 );
 
 CREATE TABLE Suppliers (
-    SupplierID INT PRIMARY KEY,
+    SupplierID INT PRIMARY KEY IDENTITY(1,1),
     TaxID VARCHAR(20) UNIQUE,
     [Name] NVARCHAR(255) UNIQUE NOT NULL,
     Email VARCHAR(254) UNIQUE,
@@ -108,6 +108,9 @@ CREATE TABLE Products (
 	IsDeleted BIT,
 	Price BIGINT,
     [Image] TEXT,
+	[Image1] TEXT,
+	[Image2] TEXT,
+	[Image3] TEXT,
     Quantity INT,
 	Stock INT
     FOREIGN KEY (BrandID) REFERENCES Brands(BrandID),
@@ -116,6 +119,8 @@ CREATE TABLE Products (
 
 CREATE TABLE Attributes (
     AttributeID INT PRIMARY KEY IDENTITY(1,1),
+	CategoryID INT,
+	FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID),
     [Name] NVARCHAR(100) NOT NULL
 );
 
@@ -128,6 +133,11 @@ CREATE TABLE AttributeDetails (
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 
+CREATE TABLE OrderStatus (
+    ID INT PRIMARY KEY,
+    [Status]NVARCHAR(50) NOT NULL
+);
+
 CREATE TABLE Orders (
     OrderID INT PRIMARY KEY IDENTITY(1,1),
     CustomerID INT,
@@ -138,7 +148,8 @@ CREATE TABLE Orders (
     DeliveredDate DATETIME,
     [Status]INT,
     TotalAmount BIGINT,
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+	FOREIGN KEY ([Status]) REFERENCES OrderStatus(ID),
 );
 
 CREATE TABLE OrderDetails (
@@ -151,10 +162,6 @@ CREATE TABLE OrderDetails (
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 
-CREATE TABLE OrderStatus (
-    ID INT PRIMARY KEY,
-    [Status]NVARCHAR(50) NOT NULL
-);
 
 CREATE TABLE ImportOrders (
     IOID INT PRIMARY KEY IDENTITY(1,1),
@@ -162,7 +169,7 @@ CREATE TABLE ImportOrders (
     SupplierID INT,
     ImportDate DATETIME,
     TotalCost BIGINT,
-    LastModify DATETIME,
+    Completed BIT,
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID),
     FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID)
 );
@@ -178,7 +185,7 @@ CREATE TABLE ImportOrderDetails (
 );
 
 CREATE TABLE ProductRatings (
-    RateID INT PRIMARY KEY,
+    RateID INT IDENTITY(1,1) PRIMARY KEY,
     CustomerID INT,
     ProductID INT,
 	OrderID INT,
@@ -193,7 +200,7 @@ CREATE TABLE ProductRatings (
 );
 
 CREATE TABLE RatingReplies (
-    ReplyID INT PRIMARY KEY,
+    ReplyID INT IDENTITY (1,1) PRIMARY KEY,
     EmployeeID INT,
     RateID INT,
     Answer NVARCHAR(300),
