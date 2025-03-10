@@ -124,6 +124,12 @@ CREATE TABLE ImportOrderDetails (
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 
+
+CREATE TABLE OrderStatus (
+    ID INT PRIMARY KEY,
+    Status NVARCHAR(50) NOT NULL
+);
+
 CREATE TABLE Orders (
     OrderID INT IDENTITY(1, 1) PRIMARY KEY,
     CustomerID INT,
@@ -134,6 +140,7 @@ CREATE TABLE Orders (
     DeliveredDate DATETIME,
     Status INT,
     TotalAmount BIGINT,
+	FOREIGN KEY (Status) REFERENCES OrderStatus(ID)
     FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
 );
 
@@ -147,10 +154,6 @@ CREATE TABLE OrderDetails (
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 
-CREATE TABLE OrderStatus (
-    ID INT PRIMARY KEY,
-    Status NVARCHAR(50) NOT NULL
-);
 
 /*******************************************************************************
    Schema for UI/UX Testing
