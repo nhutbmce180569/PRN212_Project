@@ -140,7 +140,7 @@ CREATE TABLE Orders (
     DeliveredDate DATETIME,
     Status INT,
     TotalAmount BIGINT,
-	FOREIGN KEY (Status) REFERENCES OrderStatus(ID)
+	FOREIGN KEY (Status) REFERENCES OrderStatus(ID),
     FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
 );
 

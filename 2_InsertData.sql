@@ -8,17 +8,17 @@ INSERT INTO Roles (RoleID, Name) VALUES
 (4, N'Order Manager');
 
 -- Employees
-INSERT INTO Employees (EmployeeID, FullName, Birthday, Password, PhoneNumber, Email, Gender, CreatedDate, [Status], RoleID) VALUES
-(1, N'John Doe', '1990-05-14', 'hashed_pwd', '0987654321', 'john@example.com', 'Male', '2024-03-01', 'Active', 1),
-(2, N'Jane Smith', '1992-08-21', 'hashed_pwd', '0977123456', 'jane@example.com', 'Female', '2024-03-01', 'Active', 2),
-(3, N'Michael Brown', '1985-12-30', 'hashed_pwd', '0909333222', 'michael@example.com', 'Male', '2024-03-01', 'Inactive', 3),
-(4, N'Emily White', '1995-07-11', 'hashed_pwd', '0911222333', 'emily@example.com', 'Female', '2024-03-01', 'Active', 4);
+INSERT INTO Employees (FullName, Birthday, Password, PhoneNumber, Email, Gender, CreatedDate, [Status], RoleID) VALUES
+(N'John Doe', '1990-05-14', 'hashed_pwd', '0987654321', 'john@example.com', 'Male', '2024-03-01', 'Active', 1),
+( N'Jane Smith', '1992-08-21', 'hashed_pwd', '0977123456', 'jane@example.com', 'Female', '2024-03-01', 'Active', 2),
+( N'Michael Brown', '1985-12-30', 'hashed_pwd', '0909333222', 'michael@example.com', 'Male', '2024-03-01', 'Inactive', 3),
+( N'Emily White', '1995-07-11', 'hashed_pwd', '0911222333', 'emily@example.com', 'Female', '2024-03-01', 'Active', 4);
 
 -- Customers
-INSERT INTO Customers (CustomerID, FullName, Birthday, Password, PhoneNumber, Email, Gender, CreatedDate, IsBlock, IsDeleted) VALUES
-(1, N'Alex Johnson', '1993-03-10', 'hashed_pwd', '0934567890', 'alex@example.com', 'Male', '2024-03-01', 0, 0),
-(2, N'Sophia Carter', '1998-07-22', 'hashed_pwd', '0922345678', 'sophia@example.com', 'Female', '2024-03-01', 0, 0),
-(3, N'Liam Wilson', '2000-11-15', 'hashed_pwd', '0911122334', 'liam@example.com', 'Male', '2024-03-01', 0, 0);
+INSERT INTO Customers ( FullName, Birthday, Password, PhoneNumber, Email, Gender, CreatedDate, IsBlock, IsDeleted) VALUES
+( N'Alex Johnson', '1993-03-10', 'hashed_pwd', '0934567890', 'alex@example.com', 'Male', '2024-03-01', 0, 0),
+( N'Sophia Carter', '1998-07-22', 'hashed_pwd', '0922345678', 'sophia@example.com', 'Female', '2024-03-01', 0, 0),
+( N'Liam Wilson', '2000-11-15', 'hashed_pwd', '0911122334', 'liam@example.com', 'Male', '2024-03-01', 0, 0);
 
 -- Suppliers
 INSERT INTO Suppliers (SupplierID, TaxID, Name, Email, PhoneNumber, Address, CreatedDate, LastModify, DeletedDate, IsActivate, IsDeleted) VALUES
@@ -38,31 +38,22 @@ INSERT INTO Brands (BrandID, Name) VALUES
 (3, 'Asus');
 
 -- Products
-INSERT INTO Products (ProductID, BrandID, CategoryID, Model, FullName, Description, IsDeleted, Price, Stock) VALUES
-(1, 1, 1, 'iPhone 15', N'Apple iPhone 15', N'Latest Apple smartphone', 0, 25000000, 50),
-(2, 2, 1, 'Galaxy S23', N'Samsung Galaxy S23', N'Flagship Samsung smartphone', 0, 20000000, 40),
-(3, 3, 2, 'ZenBook 14', N'Asus ZenBook 14', N'Ultrabook with OLED display', 0, 30000000, 20);
+INSERT INTO Products (BrandID, CategoryID, Model, FullName, Description, IsDeleted, Price, Stock) VALUES
+(1, 1, 'iPhone 15', N'Apple iPhone 15', N'Latest Apple smartphone', 0, 25000000, 50),
+( 2, 1, 'Galaxy S23', N'Samsung Galaxy S23', N'Flagship Samsung smartphone', 0, 20000000, 40),
+( 3, 2, 'ZenBook 14', N'Asus ZenBook 14', N'Ultrabook with OLED display', 0, 30000000, 20);
 
 -- ImportOrders
-INSERT INTO ImportOrders (IOID, EmployeeID, SupplierID, ImportDate, TotalCost, Completed) VALUES
-(1, 3, 1, '2024-03-01', 50000000, 1),
-(2, 3, 2, '2024-03-02', 70000000, 1);
+INSERT INTO ImportOrders ( EmployeeID, SupplierID, ImportDate, TotalCost, Completed) VALUES
+( 3, 1, '2024-03-01', 50000000, 1),
+( 3, 2, '2024-03-02', 70000000, 1);
 
 -- ImportOrderDetails
-INSERT INTO ImportOrderDetails (IOID, ProductID, Quantity, ImportPrice) VALUES
+INSERT INTO ImportOrderDetails ( IOID, ProductID, Quantity, ImportPrice) VALUES
 (1, 1, 10, 23000000),
 (1, 2, 15, 18000000),
-(2, 3, 8, 28000000);
+(1, 3, 8, 28000000);
 
--- Orders
-INSERT INTO Orders (OrderID, CustomerID, FullName, Address, PhoneNumber, OrderedDate, DeliveredDate, Status, TotalAmount) VALUES
-(1, 1, N'Alex Johnson', N'123 Elm Street', '0934567890', '2024-03-01', NULL, 1, 25000000),
-(2, 2, N'Sophia Carter', N'456 Oak Avenue', '0922345678', '2024-03-02', NULL, 1, 20000000);
-
--- OrderDetails
-INSERT INTO OrderDetails (OrderID, ProductID, Quantity, Price) VALUES
-(1, 1, 1, 25000000),
-(2, 2, 1, 20000000);
 
 -- OrderStatus
 INSERT INTO OrderStatus (ID, Status) VALUES
@@ -70,3 +61,15 @@ INSERT INTO OrderStatus (ID, Status) VALUES
 (2, N'Processing'),
 (3, N'Completed'),
 (4, N'Cancelled');
+
+-- Orders
+INSERT INTO Orders (CustomerID, FullName, Address, PhoneNumber, OrderedDate, DeliveredDate, Status, TotalAmount) VALUES
+( 1, N'Alex Johnson', N'123 Elm Street', '0934567890', '2024-03-01', NULL, 1, 25000000),
+( 2, N'Sophia Carter', N'456 Oak Avenue', '0922345678', '2024-03-02', NULL, 1, 20000000);
+
+-- OrderDetails
+INSERT INTO OrderDetails (OrderID, ProductID, Quantity, Price) VALUES
+(1, 1, 1, 25000000),
+(1, 2, 1, 20000000);
+
+
