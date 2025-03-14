@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FinalProject.Views.ShopManager"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
         mc:Ignorable="d"
-        Title="ShopManagerView" Height="450" Width="800">
+        Title="ShopManagerView" Height="600" Width="1000">
     <Window.Resources>
 
         <ResourceDictionary>

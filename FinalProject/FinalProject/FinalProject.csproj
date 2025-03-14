@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\ShopManager\Product\" />
     <Folder Include="Views\WarehouseManager\" />
     <Folder Include="Views\OrderManager\" />
     <Folder Include="Views\Admin\" />

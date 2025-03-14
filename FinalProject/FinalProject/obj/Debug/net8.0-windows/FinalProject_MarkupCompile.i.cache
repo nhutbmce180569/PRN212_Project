@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\App.xaml
-4-630116091
+51175112708
 
-25-1677493621
+261552361694
 293-1992728050
-Views\Home.xaml;Views\Login.xaml;Views\ShopManager\CustomerListView.xaml;Views\ShopManager\ShopManagerView.xaml;
+Views\Home.xaml;Views\Login.xaml;Views\ShopManager\Customer\AddCustomer.xaml;Views\ShopManager\Customer\CustomerListView.xaml;Views\ShopManager\ShopManagerView.xaml;
 
-False
+True
 

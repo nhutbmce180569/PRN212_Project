@@ -595,7 +595,6 @@ E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\b
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\FinalProject.csproj.AssemblyReference.cache
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\Home.g.cs
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\Login.g.cs
-E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\CustomerListView.g.cs
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\ShopManagerView.g.cs
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\App.g.cs
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\FinalProject_MarkupCompile.cache
@@ -603,7 +602,6 @@ E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\o
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\App.baml
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\Home.baml
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\Login.baml
-E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\CustomerListView.baml
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\ShopManagerView.baml
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\FinalProject.g.resources
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Avalonia\Resources.Inputs.cache
@@ -618,3 +616,7 @@ E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\o
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\FinalProject.pdb
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\FinalProject.genruntimeconfig.cache
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\ref\FinalProject.dll
+E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\Customer\AddCustomer.g.cs
+E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\Customer\CustomerListView.g.cs
+E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\Customer\AddCustomer.baml
+E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\Customer\CustomerListView.baml

@@ -10,7 +10,10 @@
     <Compile Update="Views\Home.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\ShopManager\CustomerListView.xaml.cs">
+    <Compile Update="Views\ShopManager\Customer\AddCustomer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ShopManager\Customer\CustomerListView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\ShopManager\ShopManagerView.xaml.cs">
@@ -24,7 +27,10 @@
     <Page Update="Views\Home.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\ShopManager\CustomerListView.xaml">
+    <Page Update="Views\ShopManager\Customer\AddCustomer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ShopManager\Customer\CustomerListView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\ShopManager\ShopManagerView.xaml">
