@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using FinalProject.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using WPFLab.Helpler;
+using WPFLab.Helper;
 
 namespace FinalProject.ViewModels.ShopManager
 {
