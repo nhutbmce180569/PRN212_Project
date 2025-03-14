@@ -27,6 +27,9 @@
     <Page Update="Views\Home.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\ShopManager\Customer\UpdateCustomer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\ShopManager\Customer\AddCustomer.xaml">
       <SubType>Designer</SubType>
     </Page>

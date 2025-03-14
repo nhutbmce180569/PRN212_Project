@@ -620,3 +620,5 @@ E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\o
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\Customer\CustomerListView.g.cs
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\Customer\AddCustomer.baml
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\Customer\CustomerListView.baml
+E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\Customer\UpdateCustomer.g.cs
+E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\Customer\UpdateCustomer.baml
