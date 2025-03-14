@@ -4,60 +4,107 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FinalProject"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize">
-    <Window.Resources>
-        <Style x:Key="TextStyle">
-            <Setter Property="Control.Foreground" Value="White"></Setter>
-            <Setter Property="Control.FontSize" Value="13"></Setter>
-            <Setter Property="Control.FontWeight" Value="Bold"></Setter>
+        Title="Login" Height="450" Width="600" ResizeMode="NoResize">
 
-        </Style>
-        <Style x:Key="btnLogin" TargetType="Button">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button" >
-                        <Grid>
-                            <Border CornerRadius="10" Background="#FF46BE12"></Border>
-                            <ContentPresenter Style="{StaticResource TextStyle}" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Login"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
-    <Border CornerRadius="6"
-			Background="White"
-			Padding="20"
-			Margin="376,69,78,69">
+
+    <Border Width="300"
+            Height="350"
+            Background="White"
+            CornerRadius="6">
         <Border.Effect>
             <DropShadowEffect BlurRadius="15"
-							  Direction="270"
-							  Opacity="0.5"
-							  ShadowDepth="0"/>
+                              Direction ="-90" 
+                              RenderingBias ="Quality" 
+                              ShadowDepth ="2" 
+                              Color ="Gray" />
         </Border.Effect>
-        <Grid Margin="-20,-10,-20,-10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical"
+                    Margin="20">
+            <TextBlock Text="Login" 
+                       FontSize="25"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Top"
+                       FontWeight="Bold"
+                       Padding="10"
+                       />
+            <Grid VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" Grid.ColumnSpan="2" Content="Login" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="30"/>
-            <Label Width="80px" Margin="0 0 -20 0" Content="Username" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="15"/>
-            <TextBox Padding="5.5" BorderThickness="1.5px" Grid.Row="1" Grid.Column="1" Width="150px" Height="30px" Margin="-10,13,47,13" />
-            <Label Width="80px" Margin="0 0 -20 0" Content="Password" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="15"/>
-            <TextBox Padding="5.5" BorderThickness="2px" Grid.Row="2" Grid.Column="1" Width="150px" Height="30px" Margin="-10,13,47,13" />
+                <TextBlock Text="User Name" 
+                   Grid.Row="0"
+                   Margin="0,15"
+                   HorizontalAlignment="Left"/>
 
-            <Button Style="{StaticResource btnLogin}" Grid.Row="3" Grid.Column="1" Margin="20,10,81,20" Click="Button_Click" Background="#FF1A684F" />
-            <Image HorizontalAlignment="Left" Height="178" Margin="-287,47,0,0" Grid.RowSpan="4" VerticalAlignment="Top" Width="204" Source="/Images/img-01.png"/>
+                <Grid Grid.Row="1">
+                    <iconPacks:PackIconModern 
+                                          Width="16" 
+                                          Height="16" 
+                                          Margin="0,5,10,10" 
+                                          Kind="User" />
 
-        </Grid>
+                    <TextBox 
+                  Padding="0,5"
+                  Width="235"
+                  BorderThickness="0,0,0,1"
+                  HorizontalAlignment="Right"
+                  Text="MP Codes"/>
+                </Grid>
 
+
+                <TextBlock Text="Password" 
+                   Grid.Row="2"
+                   Margin="0,15"
+                   HorizontalAlignment="Left"/>
+                <Grid Grid.Row="3">
+                    <iconPacks:PackIconModern Width="16"
+                                    Height="16"
+                                    Margin="0,2,10,0"
+                                    Kind="Lock" />
+                    <PasswordBox
+                      Password="mpcodes"
+                      Padding="0,5"                           
+                      Width="235"
+BorderThickness="0,0,0,1"
+                      HorizontalAlignment="Right"/>
+                </Grid>
+            </Grid>
+
+            <Button x:Name="LoginBtn" 
+                    Content="Login" 
+                    Foreground="White"
+                    Background="Black"
+                    Margin="0,25"
+                    Height="35"
+                    Width="250">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border x:Name="LoginBorder" Background="{TemplateBinding Background}"
+                            CornerRadius="15">
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="AliceBlue" TargetName="LoginBorder"  />
+                                            <Setter Property="TextBlock.Foreground" Value="Black"  TargetName="LoginBorder" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
     </Border>
 </Window>
