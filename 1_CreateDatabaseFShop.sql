@@ -46,7 +46,7 @@ CREATE TABLE Employees (
     PhoneNumber VARCHAR(15),
     Email VARCHAR(254),
     Gender CHAR(6),
-    CreatedDate DATETIME,
+    CreatedDate DATETIME DEFAULT GETDATE(),
     [Status] VARCHAR(20),
     RoleID INT,
     FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
@@ -60,7 +60,7 @@ CREATE TABLE Customers (
     PhoneNumber VARCHAR(15),
     Email VARCHAR(254),
     Gender CHAR(6),
-    CreatedDate DATETIME,
+    CreatedDate DATETIME DEFAULT GETDATE(),
     IsBlock BIT DEFAULT 0,
     IsDeleted BIT DEFAULT 0
 );
@@ -72,7 +72,7 @@ CREATE TABLE Suppliers (
     Email VARCHAR(254),
     PhoneNumber VARCHAR(15),
     Address NVARCHAR(255),
-    CreatedDate DATETIME,
+    CreatedDate DATETIME DEFAULT GETDATE(),
     LastModify DATETIME,
     DeletedDate DATETIME,
     IsActivate BIT DEFAULT 1,
@@ -136,7 +136,7 @@ CREATE TABLE Orders (
     FullName NVARCHAR(100) NOT NULL,
     Address NTEXT NOT NULL,
     PhoneNumber VARCHAR(15) NOT NULL,
-    OrderedDate DATETIME NOT NULL,
+    OrderedDate DATETIME NOT NULL DEFAULT GETDATE(),
     DeliveredDate DATETIME,
     Status INT,
     TotalAmount BIGINT,
