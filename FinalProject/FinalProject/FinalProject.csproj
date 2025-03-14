@@ -10,6 +10,8 @@
 
   <ItemGroup>
     <None Remove="Views\img-01.png" />
+    <None Remove="Views\ShopManager\Group 1521 %282%29.png" />
+    <None Remove="Views\ShopManager\Group 1521 %283%29.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="5.1.0" />
+    <PackageReference Include="Material.Icons.Avalonia" Version="2.3.1" />
+    <PackageReference Include="MaterialDesignColors" Version="5.2.1" />
+    <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
+    <PackageReference Include="MaterialDesignThemes.MahApps" Version="5.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -31,6 +38,9 @@
 
   <ItemGroup>
     <Resource Include="Images\img-01.png" />
+    <Resource Include="Images\Group-1521.png" />
+    <Resource Include="Images\Group 1521 %282%29.png" />
+    <Resource Include="Images\Group 1521 %283%29.png" />
   </ItemGroup>
 
 </Project>

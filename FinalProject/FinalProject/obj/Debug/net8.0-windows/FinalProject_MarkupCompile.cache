@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-E:\HocTap\Ky5\PRN212\FinalProject\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\
+E:\HocTap\Ky5\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\
 FinalProject
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-E:\HocTap\Ky5\PRN212\FinalProject\PRN212_Project\FinalProject\FinalProject\App.xaml
-31862741106
+E:\HocTap\Ky5\PRN212_Project\FinalProject\FinalProject\App.xaml
+4-630116091
 
-22-562351502
-235-1337428708
-Views\Home.xaml;Views\Login.xaml;Views\ShopManager\CustomerListView.xaml;
+23-1052474243
+293-1992728050
+Views\Home.xaml;Views\Login.xaml;Views\ShopManager\CustomerListView.xaml;Views\ShopManager\ShopManagerView.xaml;
 
 False
 
