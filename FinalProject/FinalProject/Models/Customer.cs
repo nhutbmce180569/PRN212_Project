@@ -9,7 +9,7 @@ public partial class Customer
 
     public string FullName { get; set; } = null!;
 
-    public DateOnly? Birthday { get; set; }
+    public DateTime? Birthday { get; set; }
 
     public string Password { get; set; } = null!;
 

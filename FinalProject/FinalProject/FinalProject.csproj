@@ -44,4 +44,16 @@
     <Resource Include="Images\Group 1521 %283%29.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Views\ShopManager\Customer\UpdateCustomer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\ShopManager\Customer\UpdateCustomer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>

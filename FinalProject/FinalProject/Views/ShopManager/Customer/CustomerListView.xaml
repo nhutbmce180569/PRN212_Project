@@ -22,35 +22,40 @@
             <Setter Property="HorizontalAlignment" Value="Left"></Setter>
         </Style>
         <Style TargetType="Button">
-            <Setter Property="Height" Value="40px"></Setter>
-            <Setter Property="Width" Value="100px"></Setter>
+            <Setter Property="Height" Value="30px"></Setter>
+            <Setter Property="Width" Value="80px"></Setter>
+            <Setter Property="Background" Value="#1565C0"></Setter>
+            <Setter Property="Foreground" Value="White"></Setter>
+        </Style>
+        <Style TargetType="DataGridRow">
+            <Setter Property="Margin" Value="2"></Setter>
         </Style>
     </Page.Resources>
-    <Grid Background="White">
+    <Grid Background="#E3F2FD">
         <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="8*"></RowDefinition>
-            <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="5*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Grid.Row="0" Content="Add"  Command="{Binding OpenPopupCommand}"></Button>
-            <Button Grid.Column="1" Grid.Row="0" Content="Update" Command="{Binding UpdateCommand}"></Button>
-            <Button Grid.Column="2" Grid.Row="0" Content="Delete" Command="{Binding DeleteCommand}"></Button>
-
+            <Button Grid.Column="0" Grid.Row="0" Content="Add"  Command="{Binding OpenAddPopupCommand}"></Button>
+            <Button Grid.Column="1" Grid.Row="0" Content="Update" Command="{Binding OpenUpdatePopupCommand}"></Button>
+            <Button Grid.Column="2" Grid.Row="0" Content="Delete" Command="{Binding DeleteCommand}" HorizontalAlignment="Right" Margin="0, 0, 10, 0"></Button>
+            
         </Grid>
-        <DataGrid Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding CustomerList}" SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}">
+        <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding CustomerList}" SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}" Background="#E3F2FD">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Width="0.4*" Binding="{Binding CustomerId}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Fullname" Width="1.3*" Binding="{Binding Email}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Telephone" Width="*" Binding="{Binding Birthday}"></DataGridTextColumn>
-                <DataGridTextColumn Header="EmailAddress" Width="2.2*" Binding="{Binding Password}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Email" Width="1.3*" Binding="{Binding Email}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Fullname" Width="*" Binding="{Binding FullName}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Password" Width="2.2*" Binding="{Binding Password}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Birthday" Width="1.2*" Binding="{Binding Birthday, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Status" Width="0.7*" Binding="{Binding Gender}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Password" Width="*" Binding="{Binding CreatedDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Gender" Width="0.7*" Binding="{Binding Gender}"></DataGridTextColumn>
+                <DataGridTextColumn Header="CreatedDate" Width="*" Binding="{Binding CreatedDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

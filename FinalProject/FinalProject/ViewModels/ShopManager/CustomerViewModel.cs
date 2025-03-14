@@ -10,14 +10,32 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using WPFLab.Helper;
 using FinalProject.Views.ShopManager.Customer;
 using System.Windows;
+using WPFLab.ViewModels;
+using Newtonsoft.Json;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using FinalProject.Views.ShopManager;
+using System.Diagnostics;
 
 namespace FinalProject.ViewModels.ShopManager
 {
-    internal class CustomerViewModel
+    internal class CustomerViewModel : BaseViewModel
     {
-        public ObservableCollection<Customer> CustomerList { get; set; }
+        public event Action OnCustomerAdded;
 
-        public ICommand OpenPopupCommand { get; }
+        private ObservableCollection<Customer> _customerList;
+        public ObservableCollection<Customer> CustomerList
+        {
+            get => _customerList;
+            set
+            {
+                _customerList = value;
+                OnPropertyChanged(nameof(CustomerList)); // Kích hoạt UI update
+            }
+        }
+
+        public ICommand OpenAddPopupCommand { get; }
+        public ICommand OpenUpdatePopupCommand { get; }
         public ICommand AddCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
@@ -29,16 +47,62 @@ namespace FinalProject.ViewModels.ShopManager
             UpdateCommand = new RelayCommand(Update);
             DeleteCommand = new RelayCommand(Delete);
             SearchCommand = new RelayCommand(Search);
-            OpenPopupCommand = new RelayCommand(OpenPopup);
+            OpenAddPopupCommand = new RelayCommand(OpenPopup);
+            OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
         }
+
+        public CustomerViewModel(Customer customer)
+        {
+            SelectedItem = customer;
+            Load();
+            AddCommand = new RelayCommand(Add);
+            UpdateCommand = new RelayCommand(Update);
+            DeleteCommand = new RelayCommand(Delete);
+            SearchCommand = new RelayCommand(Search);
+            OpenAddPopupCommand = new RelayCommand(OpenPopup);
+            OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
+        }
+
+        private Customer textBoxItem = new Customer();
+        public Customer TextBoxItem
+        {
+            get { return textBoxItem; }
+            set
+            {
+                textBoxItem = value;
+                OnPropertyChanged(nameof(TextBoxItem));
+            }
+        }
+
+        private Customer selectedItem;
+        public Customer SelectedItem
+        {
+            get { return selectedItem; }
+            set
+            {
+                selectedItem = value;
+                OnPropertyChanged(nameof(SelectedItem));
+                if (selectedItem != null)
+                {
+                    textBoxItem = JsonConvert.DeserializeObject<Customer>(JsonConvert.SerializeObject(selectedItem));
+                    OnPropertyChanged(nameof(TextBoxItem));
+                }
+            }
+        }
+
+
+
         private void OpenPopup(object obj)
         {
+            var action = new CustomerViewModel();
+            action.OnCustomerAdded += Load;
             var popup = new AddCustomer
             {
+                DataContext = action,
                 Owner = Application.Current.MainWindow,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
 
+            };
             // Dùng Dispatcher để tránh lỗi "Window is closing"
             popup.Deactivated += (s, e) =>
             {
@@ -62,7 +126,48 @@ namespace FinalProject.ViewModels.ShopManager
             Application.Current.MainWindow.Opacity = 0.5;
             popup.ShowDialog();
         }
+        private void OpenUpdatePopup(object obj)
+        {
+            if (selectedItem != null)
+            {
+                var action = new CustomerViewModel(selectedItem);
+                action.OnCustomerAdded += Load;
+                var popup = new UpdateCustomer(selectedItem)
+                {
+                    DataContext = action,
+                    Owner = Application.Current.MainWindow,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                };
 
+                // Dùng Dispatcher để tránh lỗi "Window is closing"
+                popup.Deactivated += (s, e) =>
+                {
+                    if (popup.IsLoaded)
+                    {
+
+                        Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            if (!popup.IsActive) // khi click chuột ra ngoài không trong popup
+                            {
+                                popup.Topmost = true;
+
+                                //// Lấy lại focus cho MainWindow
+                                //Application.Current.MainWindow.Activate();
+                                //Application.Current.MainWindow.Opacity = 1;
+
+                            }
+                        }));
+                    }
+                };
+                Application.Current.MainWindow.Opacity = 0.5;
+                popup.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Please select customer to update", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+        }
 
         public void Load()
         {
@@ -79,18 +184,92 @@ namespace FinalProject.ViewModels.ShopManager
 
         private void Delete(object obj)
         {
-            throw new NotImplementedException();
+            if (selectedItem == null)
+            {
+                MessageBox.Show("Please select customer to delete", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                if (MessageBox.Show("Are you sure to delete this customer?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    using (var context = new FstoreContext())
+                    {
+                        var list = from item in context.Orders
+                                   where item.CustomerId == textBoxItem.CustomerId
+                                   select item;
+                        if (list.Any())
+                        {
+                            MessageBox.Show("This Customer is having order", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                        } else
+                        {
+                            context.Customers.Remove(selectedItem);
+                            context.SaveChanges();
+                            CustomerList.Remove(selectedItem);
+                            MessageBox.Show("Delete Successfully", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                }
+            }
         }
 
         private void Add(object obj)
         {
-            throw new NotImplementedException();
-
+            if (textBoxItem.FullName.IsNullOrEmpty() ||
+                textBoxItem.PhoneNumber.IsNullOrEmpty() ||
+                textBoxItem.Email.IsNullOrEmpty() ||
+                textBoxItem.Password.IsNullOrEmpty())
+            {
+                MessageBox.Show("Input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                var item = new Customer
+                {
+                    Password = textBoxItem.Password,
+                    Email = textBoxItem.Email,
+                    PhoneNumber = textBoxItem.PhoneNumber,
+                    FullName = textBoxItem.FullName,
+                    Birthday = textBoxItem.Birthday,
+                    Gender = textBoxItem.Gender,
+                    CreatedDate = DateTime.Now
+                };
+                using (var context = new FstoreContext())
+                {
+                    context.Customers.Add(item);
+                    context.SaveChanges();
+                }
+                OnCustomerAdded?.Invoke();
+                textBoxItem = new Customer();
+                OnPropertyChanged(nameof(TextBoxItem));
+                Application.Current.Windows[2]?.Close();
+                Application.Current.MainWindow.Opacity = 1;
+                Application.Current.MainWindow.Focus();
+            }
         }
 
         private void Update(object obj)
         {
-            throw new NotImplementedException();
+            if (textBoxItem.FullName.IsNullOrEmpty() ||
+           textBoxItem.PhoneNumber.IsNullOrEmpty() ||
+           textBoxItem.Email.IsNullOrEmpty() ||
+           textBoxItem.Password.IsNullOrEmpty())
+            {
+                MessageBox.Show("Input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                using (var context = new FstoreContext())
+                {
+                    context.Customers.Update(textBoxItem);
+                    context.SaveChanges();
+                }
+                OnCustomerAdded?.Invoke();
+                textBoxItem = new Customer();
+                OnPropertyChanged(nameof(TextBoxItem));
+                Application.Current.Windows[2]?.Close();
+                Application.Current.MainWindow.Opacity = 1;
+                Application.Current.MainWindow.Focus();
+            }
         }
     }
 }

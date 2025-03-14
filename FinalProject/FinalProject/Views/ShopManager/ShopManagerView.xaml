@@ -95,7 +95,7 @@
 
 
         <Grid Grid.Column="1" Grid.Row="1" Background="#FFCFCFCF">
-            <Frame x:Name="fmt"></Frame>
+            <Frame x:Name="fmt" NavigationUIVisibility="Hidden"></Frame>
         </Grid>
 
         <Grid Grid.Row="1">
@@ -124,7 +124,7 @@
                         <TextBlock HorizontalAlignment="Center" Text="Products" FontFamily="Champagne &amp; Limousines"/>
                     </Grid>
                 </Button>
-                <Button Margin="10" Foreground="Red" Background="LightGray" BorderBrush="LightGray" >
+                <Button Margin="10" Foreground="#D32F2F" Background="Transparent" BorderBrush="Transparent" >
                     <Grid Width="150">
                         <TextBlock HorizontalAlignment="Center" Text="Logout" FontFamily="Champagne &amp; Limousines"/>
                     </Grid>
