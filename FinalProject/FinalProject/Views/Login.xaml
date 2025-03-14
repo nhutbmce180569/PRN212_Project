@@ -3,32 +3,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FinalProject"
+        xmlns:local="clr-namespace:FinalProject.Helper"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
         Title="Login" Height="450" Width="600" ResizeMode="NoResize">
 
 
     <Border Width="300"
-            Height="350"
-            Background="White"
-            CornerRadius="6">
+        Height="350"
+        Background="White"
+        CornerRadius="6">
         <Border.Effect>
             <DropShadowEffect BlurRadius="15"
-                              Direction ="-90" 
-                              RenderingBias ="Quality" 
-                              ShadowDepth ="2" 
-                              Color ="Gray" />
+                          Direction ="-90" 
+                          RenderingBias ="Quality" 
+                          ShadowDepth ="2" 
+                          Color ="Gray" />
         </Border.Effect>
         <StackPanel Orientation="Vertical"
-                    Margin="20">
+                Margin="20">
             <TextBlock Text="Login" 
-                       FontSize="25"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Top"
-                       FontWeight="Bold"
-                       Padding="10"
-                       />
+                   FontSize="25"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   FontWeight="Bold"
+                   Padding="10"
+                   />
             <Grid VerticalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -37,61 +37,63 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="User Name" 
-                   Grid.Row="0"
-                   Margin="0,15"
-                   HorizontalAlignment="Left"/>
+                <TextBlock Text="Email" 
+               Grid.Row="0"
+               Margin="0,15"
+               HorizontalAlignment="Left"/>
 
                 <Grid Grid.Row="1">
                     <iconPacks:PackIconModern 
-                                          Width="16" 
-                                          Height="16" 
-                                          Margin="0,5,10,10" 
-                                          Kind="User" />
+                                      Width="16" 
+                                      Height="16" 
+                                      Margin="0,5,10,10" 
+                                      Kind="User" />
 
                     <TextBox 
-                  Padding="0,5"
-                  Width="235"
-                  BorderThickness="0,0,0,1"
-                  HorizontalAlignment="Right"
-                  Text="MP Codes"/>
+                    Padding="0,5"
+                    Width="235"
+                    BorderThickness="0,0,0,1"
+                    HorizontalAlignment="Right"
+                    Text="{Binding UsernameBox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
 
 
                 <TextBlock Text="Password" 
-                   Grid.Row="2"
-                   Margin="0,15"
-                   HorizontalAlignment="Left"/>
+               Grid.Row="2"
+               Margin="0,15"
+               HorizontalAlignment="Left"/>
                 <Grid Grid.Row="3">
                     <iconPacks:PackIconModern Width="16"
-                                    Height="16"
-                                    Margin="0,2,10,0"
-                                    Kind="Lock" />
-                    <PasswordBox
-                      Password="mpcodes"
-                      Padding="0,5"                           
-                      Width="235"
-BorderThickness="0,0,0,1"
-                      HorizontalAlignment="Right"/>
+                                Height="16"
+                                Margin="0,2,10,0"
+                                Kind="Lock" />
+                    <PasswordBox 
+                    local:PasswordBoxHelper.BoundPassword="{Binding PasswordBox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    local:PasswordBoxHelper.BindPassword="True"
+                    Padding="0,5"
+                    Width="235"
+                    BorderThickness="0,0,0,1"
+                    HorizontalAlignment="Right"/>
                 </Grid>
             </Grid>
 
             <Button x:Name="LoginBtn" 
-                    Content="Login" 
-                    Foreground="White"
-                    Background="Black"
-                    Margin="0,25"
-                    Height="35"
-                    Width="250">
+                Command="{Binding LoginCommand}"
+                Content="Login" 
+                Foreground="White"
+                Background="Black"
+                Margin="0,25"
+                Height="35"
+                Width="250">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type Button}">
                                     <Border x:Name="LoginBorder" Background="{TemplateBinding Background}"
-                            CornerRadius="15">
+                        CornerRadius="15">
                                         <ContentPresenter HorizontalAlignment="Center" 
-                                          VerticalAlignment="Center"/>
+                                      VerticalAlignment="Center"/>
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
