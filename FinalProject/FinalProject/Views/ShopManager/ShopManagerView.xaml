@@ -119,7 +119,7 @@
                     </Grid>
                 </Button>
 
-                <Button Margin="10" Foreground="White" Background="#1565C0" BorderBrush="#1565C0" Height="30">
+                <Button Margin="10" Foreground="White" Background="#1565C0" BorderBrush="#1565C0" Height="30" Click="ButtonClick_Product">
                     <Grid Width="150">
                         <TextBlock HorizontalAlignment="Center" Text="Products" FontFamily="Champagne &amp; Limousines"/>
                     </Grid>
