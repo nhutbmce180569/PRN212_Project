@@ -52,7 +52,8 @@
             <TextBlock Text="Birthday" Grid.Column="0" Grid.Row="5"></TextBlock>
             <TextBlock Text="Password" Grid.Column="0" Grid.Row="6"></TextBlock>
             <TextBox x:Name="txtFullName" Grid.Column="1" Grid.Row="1" Text="{Binding TextBoxItem.FullName, Mode=OneWayToSource}"></TextBox>
-            <TextBox x:Name="txtGender" Grid.Column="1" Grid.Row="2" Text="{Binding TextBoxItem.Gender, Mode=OneWayToSource}"></TextBox>
+            <ComboBox Name="txtGender" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Gender}"
+          SelectedItem="{Binding TextBoxItem.Gender, Mode=TwoWay}" Height="30" Width="190"></ComboBox>
             <TextBox x:Name="txtEmail" Grid.Column="1" Grid.Row="3" Text="{Binding TextBoxItem.Email, Mode=OneWayToSource}"></TextBox>
             <TextBox x:Name="txtPhoneNumber" Grid.Column="1" Grid.Row="4" Text="{Binding TextBoxItem.PhoneNumber, Mode=OneWayToSource}"></TextBox>
             <DatePicker x:Name="txtBirthday" Grid.Column="1" Grid.Row="5" Height="40" Width="190" HorizontalAlignment="Left"

@@ -24,6 +24,7 @@ namespace FinalProject.Views.ShopManager
         public CustomerListView()
         {
             InitializeComponent();
+            searchBox.Text = "Search by name";
             DataContext = new CustomerViewModel();
         }
     }

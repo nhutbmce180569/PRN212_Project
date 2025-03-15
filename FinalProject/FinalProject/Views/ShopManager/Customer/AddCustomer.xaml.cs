@@ -23,12 +23,14 @@ namespace FinalProject.Views.ShopManager.Customer
         public AddCustomer()
         {
             InitializeComponent();
+            cbGender.ItemsSource = new List<string>() { "Male", "Female", "Other" };
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
             Application.Current.MainWindow.Opacity = 1;
+            Application.Current.MainWindow.IsHitTestVisible = true;
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
