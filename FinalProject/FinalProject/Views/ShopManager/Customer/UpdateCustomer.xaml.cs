@@ -38,7 +38,9 @@ namespace FinalProject.Views.ShopManager.Customer
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-            Application.Current.MainWindow.Opacity = 1;
+            Application.Current.Windows[0].Opacity = 1;
+            Application.Current.Windows[0].IsHitTestVisible = true;
+
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
