@@ -10,6 +10,7 @@ using System.Windows;
 using WPFLab.Helper;
 using WPFLab.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using FinalProject.Views.ShopManager.Product;
 
 namespace FinalProject.ViewModels.ShopManager
 {
@@ -21,6 +22,10 @@ namespace FinalProject.ViewModels.ShopManager
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand SearchCommand { get; }
+        public ICommand OpenCreatePopupCommand { get; }
+        public ICommand OpenUpdatePopupCommand { get; }
+        public ObservableCollection<Brand> Brands { get; set; }
+        public ObservableCollection<Category> Categories { get; set; }
 
         public ProductViewModel()
         {
@@ -29,6 +34,9 @@ namespace FinalProject.ViewModels.ShopManager
             UpdateCommand = new RelayCommand(Update);
             DeleteCommand = new RelayCommand(Delete);
             SearchCommand = new RelayCommand(Search);
+            OpenCreatePopupCommand = new RelayCommand(OpenCreatePopup);
+            OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
+
         }
         private void Load()
         {
@@ -40,6 +48,8 @@ namespace FinalProject.ViewModels.ShopManager
                     .ToList();
 
                 products = new ObservableCollection<Product>(list);
+                Brands = new ObservableCollection<Brand>(context.Brands.ToList());
+                Categories = new ObservableCollection<Category>(context.Categories.ToList());
             }
             allproducts = new ObservableCollection<Product>(products);
         }
@@ -65,23 +75,26 @@ namespace FinalProject.ViewModels.ShopManager
                 _selectItem = value;
                 OnPropertyChanged(nameof(selectItem));
 
+                // Kiểm tra nếu đã chọn sản phẩm thì cho phép Update
+                CanUpdate = _selectItem != null;
+
+                // Sao chép dữ liệu vào textboxItem nếu có sản phẩm được chọn
                 if (_selectItem != null)
                 {
-                    // Sao chép dữ liệu sang textboxItem
                     textboxItem = new Product
                     {
                         ProductId = _selectItem.ProductId,
-                        Brand = _selectItem.Brand != null ? new Brand { BrandId = _selectItem.Brand.BrandId, Name = _selectItem.Brand.Name } : new Brand(),
-                        Category = _selectItem.Category != null ? new Category { CategoryId = _selectItem.Category.CategoryId, Name = _selectItem.Category.Name } : new Category(),
+                        Brand = _selectItem.Brand != null ? new Brand { BrandId = _selectItem.Brand.BrandId, Name = _selectItem.Brand.Name } : null,
+                        Category = _selectItem.Category != null ? new Category { CategoryId = _selectItem.Category.CategoryId, Name = _selectItem.Category.Name } : null,
                         Model = _selectItem.Model,
                         FullName = _selectItem.FullName,
                         Description = _selectItem.Description,
-                        IsDeleted = _selectItem.IsDeleted,
                         Price = _selectItem.Price,
-                        Stock = _selectItem.Stock
+                        Stock = _selectItem.Stock,
+                        IsDeleted = _selectItem.IsDeleted
                     };
 
-                    OnPropertyChanged(nameof(textboxItem)); // Cập nhật giao diện
+                    OnPropertyChanged(nameof(textboxItem));
                 }
             }
         }
@@ -149,32 +162,56 @@ namespace FinalProject.ViewModels.ShopManager
                 OnPropertyChanged(nameof(textboxItem));
             }
         }
+        private bool _canUpdate;
+        public bool CanUpdate
+        {
+            get { return _canUpdate; }
+            set
+            {
+                _canUpdate = value;
+                OnPropertyChanged(nameof(CanUpdate));
+            }
+        }
 
 
         private void Update(object obj)
         {
-            if (_selectItem != null)
+            if (textboxItem == null || textboxItem.ProductId == 0)
             {
-                using (var context = new FstoreContext())
+                MessageBox.Show("No product selected for update.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            using (var context = new FstoreContext())
+            {
+                var existingProduct = context.Products.Find(textboxItem.ProductId);
+                if (existingProduct != null)
                 {
-                    context.Products.Update(_textboxItem);
+                    existingProduct.BrandId = textboxItem.Brand?.BrandId;
+                    existingProduct.CategoryId = textboxItem.Category?.CategoryId;
+                    existingProduct.Model = textboxItem.Model;
+                    existingProduct.FullName = textboxItem.FullName;
+                    existingProduct.Description = textboxItem.Description;
+                    existingProduct.Price = textboxItem.Price;
+                    existingProduct.Stock = textboxItem.Stock;
+                    existingProduct.IsDeleted = textboxItem.IsDeleted;
+
                     context.SaveChanges();
                 }
-
-                //cập nhật observablecollection
-                int index = products.IndexOf(_selectItem);
-                if (index >= 0)
-                {
-                    products[index] = _textboxItem;
-                }
-
-                //gán dữ liệu vào allstudents (observablecollection)
-                allproducts = new ObservableCollection<Product>(products);
-
-                textboxItem = new Product();
-                OnPropertyChanged(nameof(textboxItem)); //phải có
             }
+
+            // Cập nhật danh sách sản phẩm trong UI
+            var index = products.IndexOf(selectItem);
+            if (index >= 0)
+            {
+                products[index] = textboxItem;
+            }
+
+            allproducts = new ObservableCollection<Product>(products);
+            OnPropertyChanged(nameof(products));
+            OnPropertyChanged(nameof(allproducts));
         }
+
 
         private void Add(object obj)
         {
@@ -253,6 +290,36 @@ namespace FinalProject.ViewModels.ShopManager
             }
 
             OnPropertyChanged(nameof(products));
+        }
+        private void OpenCreatePopup(object obj)
+        {
+            textboxItem = new Product
+            {
+                Brand = new Brand(),
+                Category = new Category(),
+                Model = "",
+                FullName = "",
+                Description = "",
+                Price = 0,
+                Stock = 0,
+                IsDeleted = false
+            };
+
+            var popup = new AddProduct();
+            popup.DataContext = this;
+            popup.ShowDialog();
+        }
+        private void OpenUpdatePopup(object obj)
+        {
+            if (!CanUpdate)
+            {
+                MessageBox.Show("Please select a product to update.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var popup = new UpdateProduct();
+            popup.DataContext = this;
+            popup.ShowDialog();
         }
 
     }

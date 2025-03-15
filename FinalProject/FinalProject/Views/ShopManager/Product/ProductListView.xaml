@@ -5,79 +5,80 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:FinalProject.Views.ShopManager.Product"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="ProductListView"
+      d:DesignHeight="600" d:DesignWidth="900"
+      Title="Product List"
       Background="#F4F4F4">
-    
-    <Grid Margin="20" Background="White"  >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2.5*"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2.5*"/>
-        </Grid.ColumnDefinitions>
 
-        <!-- Search Box -->
-        <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 10">
-            <TextBox Width="250" Height="35" Text="{Binding SearchText, Mode=TwoWay}" ToolTip="Enter search term"  BorderBrush="#ccc" />
-            <Button Content="Search" Command="{Binding SearchCommand}" Height="35" Margin="10 0 0 0" Background="#0078D7" Foreground="White" Padding="5 0"  />
-        </StackPanel>
+    <Grid Margin="20">
+        <!-- Main Container -->
+        <Border Background="White" Padding="20" BorderBrush="#DDD" BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Search Box -->
+                    <RowDefinition Height="5*"/>
+                    <!-- Data Grid -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Buttons -->
+                </Grid.RowDefinitions>
 
-        <!-- Data Grid -->
-        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"  BorderBrush="#ddd"  >
-            <DataGrid Background="White" 
-                      SelectedItem="{Binding selectItem, Mode=TwoWay}" 
-                      ItemsSource="{Binding products}" 
-                      AutoGenerateColumns="False"
-                      RowHeight="35"
-                      HeadersVisibility="Column"
-                      >
-                <DataGrid.Columns>
-                    <DataGridTextColumn Width="50" Header="ID" Binding="{Binding ProductId}"/>
-                    <DataGridTextColumn Width="150" Header="Brand" Binding="{Binding Brand.Name}"/>
-                    <DataGridTextColumn Width="150" Header="Category" Binding="{Binding Category.Name}"/>
-                    <DataGridTextColumn Width="150" Header="Model" Binding="{Binding Model}"/>
-                    <DataGridTextColumn Width="200" Header="Full Name" Binding="{Binding FullName}"/>
-                    <DataGridTextColumn Width="200" Header="Description" Binding="{Binding Description}"/>
-                    <DataGridTextColumn Width="100" Header="Price" Binding="{Binding Price}"/>
-                    <DataGridTextColumn Width="80" Header="Stock" Binding="{Binding Stock}"/>
-                    <DataGridCheckBoxColumn Width="80" Header="Deleted" Binding="{Binding IsDeleted}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2.5*"/>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="2.5*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Search Box (Dùng Grid để tránh lỗi mất nội dung) -->
+                <Grid Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Right" Margin="0 0 0 10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Column="0" Width="230" Height="30" Text="{Binding SearchText, Mode=TwoWay}" 
+                             ToolTip="Enter search term" BorderBrush="#CCC" BorderThickness="1" 
+                             Padding="5" VerticalAlignment="Center"/>
+
+                    <Button Grid.Column="1" Content="🔍 Search" Command="{Binding SearchCommand}" 
+                            Height="30" Width="90" Background="#0078D7" Foreground="White" 
+                            FontWeight="Bold" Margin="10 0 0 0"
+                            VerticalAlignment="Center"/>
+                </Grid>
+
+                <!-- Data Grid -->
+                <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="#DDD" BorderThickness="1" Padding="5">
+                    <DataGrid Background="White" SelectedItem="{Binding selectItem, Mode=TwoWay}" 
+                              ItemsSource="{Binding products}" AutoGenerateColumns="False"
+                              RowHeight="40" HeadersVisibility="Column" FontSize="14"
+                              GridLinesVisibility="Horizontal">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="50" Header="ID" Binding="{Binding ProductId}"/>
+                            <DataGridTextColumn Width="150" Header="Brand" Binding="{Binding Brand.Name}"/>
+                            <DataGridTextColumn Width="150" Header="Category" Binding="{Binding Category.Name}"/>
+                            <DataGridTextColumn Width="150" Header="Model" Binding="{Binding Model}"/>
+                            <DataGridTextColumn Width="200" Header="Full Name" Binding="{Binding FullName}"/>
+                            <DataGridTextColumn Width="250" Header="Description" Binding="{Binding Description}"/>
+                            <DataGridTextColumn Width="100" Header="Price" Binding="{Binding Price}"/>
+                            <DataGridTextColumn Width="80" Header="Stock" Binding="{Binding Stock}"/>
+                            <DataGridCheckBoxColumn Width="80" Header="Deleted" Binding="{Binding IsDeleted}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+
+                <!-- Buttons -->
+                <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" LastChildFill="False"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+                    <Button Content="➕ CREATE" Command="{Binding OpenCreatePopupCommand}" 
+                            Height="40" Width="130" Background="#28A745" Foreground="White" 
+                            Margin="5" FontWeight="Bold"/>
+                    <Button Content="✏️ UPDATE" Command="{Binding OpenUpdatePopupCommand}" 
+                            Height="40" Width="130" Background="#FFC107" Foreground="White" 
+                            Margin="5" FontWeight="Bold"/>
+                    <Button Content="🗑 DELETE" Command="{Binding DeleteCommand}" 
+                            Height="40" Width="130" Background="#DC3545" Foreground="White" 
+                            Margin="5" FontWeight="Bold"/>
+                </DockPanel>
+            </Grid>
         </Border>
-
-        <!-- Form Inputs -->
-        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical" >
-            <TextBlock Text="Brand Name:" FontWeight="Bold"/>
-            <TextBox Text="{Binding textboxItem.Brand.Name, Mode=TwoWay}" Height="30" />
-
-            <TextBlock Text="Category Name:" FontWeight="Bold" Margin="0 10 0 0"/>
-            <TextBox Text="{Binding textboxItem.Category.Name, Mode=TwoWay}" Height="30" />
-
-            <TextBlock Text="Model:" FontWeight="Bold" Margin="0 10 0 0"/>
-            <TextBox Text="{Binding textboxItem.Model, Mode=TwoWay}" Height="30" />
-        </StackPanel>
-
-        <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Vertical" >
-            <TextBlock Text="Full Name:" FontWeight="Bold"/>
-            <TextBox Text="{Binding textboxItem.FullName, Mode=TwoWay}" Height="30" />
-
-            <TextBlock Text="Description:" FontWeight="Bold" Margin="0 10 0 0"/>
-            <TextBox Text="{Binding textboxItem.Description, Mode=TwoWay}" Height="30" />
-
-            <TextBlock Text="Price:" FontWeight="Bold" Margin="0 10 0 0"/>
-            <TextBox Text="{Binding textboxItem.Price, Mode=TwoWay}" Height="30" />
-        </StackPanel>
-
-        <!-- Buttons -->
-        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Content="ADD" Command="{Binding AddCommand}" Height="35" Width="100" Background="#28A745" Foreground="White"   Margin="0 5"/>
-            <Button Content="UPDATE" Command="{Binding UpdateCommand}" Height="35" Width="100" Background="#FFC107" Foreground="White"   Margin="0 5"/>
-            <Button Content="DELETE" Command="{Binding DeleteCommand}" Height="35" Width="100" Background="#DC3545" Foreground="White"   Margin="0 5"/>
-        </StackPanel>
     </Grid>
 </Page>
