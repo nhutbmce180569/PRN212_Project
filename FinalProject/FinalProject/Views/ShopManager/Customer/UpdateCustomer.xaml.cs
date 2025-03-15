@@ -24,9 +24,12 @@ namespace FinalProject.Views.ShopManager.Customer
         public UpdateCustomer(FinalProject.Models.Customer customer)
         {
             InitializeComponent();
+            txtGender.Items.Add("Male");
+            txtGender.Items.Add("Female");
+            txtGender.Items.Add("Other");
             txtFullName.Text = customer.FullName;
             txtBirthday.SelectedDate = customer.Birthday;
-            txtGender.Text = customer.Gender;
+            txtGender.SelectedIndex = txtGender.Items.IndexOf(customer.Gender.Trim());
             txtEmail.Text = customer.Email;
             txtPassword.Text = customer.Password;
             txtPhoneNumber.Text = customer.PhoneNumber;

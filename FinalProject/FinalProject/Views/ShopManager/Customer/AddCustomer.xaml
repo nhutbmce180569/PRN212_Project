@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FinalProject.Views.ShopManager.Customer"
         mc:Ignorable="d"
             WindowStyle="None" AllowsTransparency="True" Background="AliceBlue" Topmost="True"
-        Title="AddCustomer" Height="350" Width="500">
+        Title="AddCustomer" Height="400" Width="550">
     <Window.Resources>
         <Style TargetType="TextBlock" >
             <Setter Property="HorizontalAlignment" Value="Right"></Setter>
@@ -52,7 +52,9 @@
             <TextBlock Text="Birthday" Grid.Column="0" Grid.Row="5"></TextBlock>
             <TextBlock Text="Password" Grid.Column="0" Grid.Row="6"></TextBlock>
             <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding TextBoxItem.FullName, Mode=TwoWay}"></TextBox>
-            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding TextBoxItem.Gender, Mode=TwoWay}"></TextBox>
+            <!-- <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding TextBoxItem.Gender, Mode=TwoWay}"></TextBox>  -->
+            <ComboBox HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2" x:Name="cbGender" Background="White"
+                      SelectedItem="{Binding TextBoxItem.Gender, Mode=TwoWay}" Height="30" Width="190"></ComboBox>
             <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding TextBoxItem.Email, Mode=TwoWay}"></TextBox>
             <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding TextBoxItem.PhoneNumber, Mode=TwoWay}"></TextBox>
             <DatePicker Grid.Column="1" Grid.Row="5" Height="40" Width="190" HorizontalAlignment="Left"

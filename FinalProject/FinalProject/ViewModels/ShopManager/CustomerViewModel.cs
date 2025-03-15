@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using FinalProject.Views.ShopManager;
 using System.Diagnostics;
+using System.Windows.Documents;
 
 namespace FinalProject.ViewModels.ShopManager
 {
@@ -33,6 +34,7 @@ namespace FinalProject.ViewModels.ShopManager
                 OnPropertyChanged(nameof(CustomerList)); // Kích hoạt UI update
             }
         }
+        public ObservableCollection<Customer> AllCustomerList { set; get; }
 
         public ICommand OpenAddPopupCommand { get; }
         public ICommand OpenUpdatePopupCommand { get; }
@@ -106,6 +108,8 @@ namespace FinalProject.ViewModels.ShopManager
             // Dùng Dispatcher để tránh lỗi "Window is closing"
             popup.Deactivated += (s, e) =>
             {
+                Application.Current.MainWindow.IsHitTestVisible = false;
+
                 if (popup.IsLoaded)
                 {
 
@@ -116,7 +120,6 @@ namespace FinalProject.ViewModels.ShopManager
                             popup.Topmost = true;
 
                             //// Lấy lại focus cho MainWindow
-                            //Application.Current.MainWindow.Activate();
                             //Application.Current.MainWindow.Opacity = 1;
 
                         }
@@ -174,12 +177,9 @@ namespace FinalProject.ViewModels.ShopManager
             using (var context = new FstoreContext())
             {
                 var list = context.Customers.ToList();
-                CustomerList = new ObservableCollection<Customer>(list);
+                AllCustomerList = new ObservableCollection<Customer>(list);
+                CustomerList = new ObservableCollection<Customer>(AllCustomerList);
             }
-        }
-        private void Search(object obj)
-        {
-            throw new NotImplementedException();
         }
 
         private void Delete(object obj)
@@ -200,11 +200,13 @@ namespace FinalProject.ViewModels.ShopManager
                         if (list.Any())
                         {
                             MessageBox.Show("This Customer is having order", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
-                        } else
+                        }
+                        else
                         {
                             context.Customers.Remove(selectedItem);
                             context.SaveChanges();
                             CustomerList.Remove(selectedItem);
+                            AllCustomerList.Remove(selectedItem);
                             MessageBox.Show("Delete Successfully", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                     }
@@ -269,6 +271,38 @@ namespace FinalProject.ViewModels.ShopManager
                 Application.Current.Windows[2]?.Close();
                 Application.Current.MainWindow.Opacity = 1;
                 Application.Current.MainWindow.Focus();
+            }
+        }
+        private String searchBoxItem;
+        public String SearchBoxItem
+        {
+            get { return searchBoxItem; }
+            set
+            {
+                searchBoxItem = value;
+                OnPropertyChanged(nameof(SearchBoxItem));
+            }
+        }
+        private void Search(object obj)
+        {
+            if (!searchBoxItem.Equals(""))
+            {
+                var list = from item in AllCustomerList
+                           where item.FullName.ToLower().Contains(searchBoxItem.ToLower())
+                           select item;
+                if (list.Any())
+                {
+                    CustomerList = new ObservableCollection<Customer>(list);
+                }
+                else
+                {
+                    MessageBox.Show("There is no customer", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            else if (searchBoxItem.Equals(""))
+            {
+                CustomerList = new ObservableCollection<Customer>(AllCustomerList);
+                OnPropertyChanged(nameof(CustomerList));
             }
         }
     }
