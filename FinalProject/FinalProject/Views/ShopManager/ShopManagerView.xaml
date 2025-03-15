@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FinalProject.Views.ShopManager"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
         mc:Ignorable="d"
-        Title="ShopManagerView" Height="600" Width="1000">
+        Title="ShopManagerView" Height="600" Width="1000" >
     <Window.Resources>
 
         <ResourceDictionary>
@@ -124,7 +124,7 @@
                         <TextBlock HorizontalAlignment="Center" Text="Products" FontFamily="Champagne &amp; Limousines"/>
                     </Grid>
                 </Button>
-                <Button Margin="10" Foreground="#D32F2F" Background="Transparent" BorderBrush="Transparent" >
+                <Button Margin="10" Foreground="#D32F2F" Background="Transparent" BorderBrush="Transparent" Click="ButtonClick_Logout">
                     <Grid Width="150">
                         <TextBlock HorizontalAlignment="Center" Text="Logout" FontFamily="Champagne &amp; Limousines"/>
                     </Grid>
@@ -141,7 +141,7 @@
                 <Image Margin="10,0,0,0" Source="/Images/Group 1521 (3).png" Width="120px" Height="30" HorizontalAlignment="Left"/>
             </Grid>
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,0">
-                <Button Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White">
+                <Button Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Click="ButtonClick_ShowProfile">
                     <materialDesign:PackIcon Kind="Account"/>
                 </Button>
                 <Button x:Name="ButtonFechar" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White">

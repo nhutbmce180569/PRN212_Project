@@ -17,6 +17,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using FinalProject.Views.ShopManager;
 using System.Diagnostics;
 using System.Windows.Documents;
+using System.Text.RegularExpressions;
+using FinalProject.Helper;
 
 namespace FinalProject.ViewModels.ShopManager
 {
@@ -108,8 +110,7 @@ namespace FinalProject.ViewModels.ShopManager
             // Dùng Dispatcher để tránh lỗi "Window is closing"
             popup.Deactivated += (s, e) =>
             {
-                Application.Current.MainWindow.IsHitTestVisible = false;
-
+                Application.Current.Windows[0].IsHitTestVisible = false;
                 if (popup.IsLoaded)
                 {
 
@@ -121,12 +122,11 @@ namespace FinalProject.ViewModels.ShopManager
 
                             //// Lấy lại focus cho MainWindow
                             //Application.Current.MainWindow.Opacity = 1;
-
                         }
                     }));
                 }
             };
-            Application.Current.MainWindow.Opacity = 0.5;
+            Application.Current.Windows[0].Opacity = 0.5;
             popup.ShowDialog();
         }
         private void OpenUpdatePopup(object obj)
@@ -147,6 +147,7 @@ namespace FinalProject.ViewModels.ShopManager
                 {
                     if (popup.IsLoaded)
                     {
+                        Application.Current.Windows[0].IsHitTestVisible = false;
 
                         Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                         {
@@ -162,7 +163,7 @@ namespace FinalProject.ViewModels.ShopManager
                         }));
                     }
                 };
-                Application.Current.MainWindow.Opacity = 0.5;
+                Application.Current.Windows[0].Opacity = 0.5;
                 popup.ShowDialog();
             }
             else
@@ -219,33 +220,44 @@ namespace FinalProject.ViewModels.ShopManager
             if (textBoxItem.FullName.IsNullOrEmpty() ||
                 textBoxItem.PhoneNumber.IsNullOrEmpty() ||
                 textBoxItem.Email.IsNullOrEmpty() ||
-                textBoxItem.Password.IsNullOrEmpty())
+                textBoxItem.Password.IsNullOrEmpty()||
+                textBoxItem.Gender.IsNullOrEmpty())
             {
                 MessageBox.Show("Input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
-                var item = new Customer
-                {
-                    Password = textBoxItem.Password,
-                    Email = textBoxItem.Email,
-                    PhoneNumber = textBoxItem.PhoneNumber,
-                    FullName = textBoxItem.FullName,
-                    Birthday = textBoxItem.Birthday,
-                    Gender = textBoxItem.Gender,
-                    CreatedDate = DateTime.Now
-                };
-                using (var context = new FstoreContext())
-                {
-                    context.Customers.Add(item);
-                    context.SaveChanges();
+                if (IsValidEmail(textBoxItem.Email)) {
+                    var item = new Customer
+                    {
+                        Password = PasswordBoxHelper.GetMD5(textBoxItem.Password),
+                        Email = textBoxItem.Email,
+                        PhoneNumber = textBoxItem.PhoneNumber,
+                        FullName = textBoxItem.FullName,
+                        Birthday = textBoxItem.Birthday,
+                        Gender = textBoxItem.Gender,
+                        CreatedDate = DateTime.Now
+                    };
+                    using (var context = new FstoreContext())
+                    {
+                        context.Customers.Add(item);
+                        context.SaveChanges();
+                    }
+                    OnCustomerAdded?.Invoke();
+                    textBoxItem = new Customer();
+                    OnPropertyChanged(nameof(TextBoxItem));
+                    Application.Current.Windows[2]?.Close();
+                    Application.Current.Windows[0].Opacity = 1;
+                    Application.Current.MainWindow.Focus();
+                    Application.Current.Windows[0].IsHitTestVisible = true;
+                    MessageBox.Show("Add Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+
                 }
-                OnCustomerAdded?.Invoke();
-                textBoxItem = new Customer();
-                OnPropertyChanged(nameof(TextBoxItem));
-                Application.Current.Windows[2]?.Close();
-                Application.Current.MainWindow.Opacity = 1;
-                Application.Current.MainWindow.Focus();
+                else
+                {
+                    MessageBox.Show("Invalid email format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
             }
         }
 
@@ -260,6 +272,7 @@ namespace FinalProject.ViewModels.ShopManager
             }
             else
             {
+                TextBoxItem.Password = PasswordBoxHelper.GetMD5(textBoxItem.Password);
                 using (var context = new FstoreContext())
                 {
                     context.Customers.Update(textBoxItem);
@@ -269,8 +282,11 @@ namespace FinalProject.ViewModels.ShopManager
                 textBoxItem = new Customer();
                 OnPropertyChanged(nameof(TextBoxItem));
                 Application.Current.Windows[2]?.Close();
-                Application.Current.MainWindow.Opacity = 1;
-                Application.Current.MainWindow.Focus();
+                Application.Current.Windows[0].Opacity = 1;
+                Application.Current.Windows[0].Focus();
+                Application.Current.Windows[0].IsHitTestVisible = true;
+                MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+
             }
         }
         private String searchBoxItem;
@@ -304,6 +320,14 @@ namespace FinalProject.ViewModels.ShopManager
                 CustomerList = new ObservableCollection<Customer>(AllCustomerList);
                 OnPropertyChanged(nameof(CustomerList));
             }
+        }
+        public bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            return Regex.IsMatch(email, pattern);
         }
     }
 }

@@ -622,3 +622,10 @@ E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\o
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\Customer\CustomerListView.baml
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\Customer\UpdateCustomer.g.cs
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\ShopManager\Customer\UpdateCustomer.baml
+E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\Profile\ChangePasswordPopup.g.cs
+E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\Profile\UpdateProfilePopup.g.cs
+E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\Profile\UserProfile.g.cs
+E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
+E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\Profile\ChangePasswordPopup.baml
+E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\Profile\UpdateProfilePopup.baml
+E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\obj\Debug\net8.0-windows\Views\Profile\UserProfile.baml

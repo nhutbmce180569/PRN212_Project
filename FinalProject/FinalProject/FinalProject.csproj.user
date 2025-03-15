@@ -21,10 +21,19 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Views\Home.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Login.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Home.xaml">
+    <Page Update="Views\Profile\ChangePasswordPopup.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Profile\UpdateProfilePopup.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Profile\UserProfile.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\ShopManager\Customer\UpdateCustomer.xaml">
