@@ -1,0 +1,10 @@
+/FinalProject/.vs/
+/FinalProject/FinalProject/bin/
+/FinalProject/FinalProject/obj/
+*.exe
+*.dll
+*.pdb
+*.cache
+*.editorconfig
+*.BuildWithSkipAnalyzers
+*.sourcelink.json
