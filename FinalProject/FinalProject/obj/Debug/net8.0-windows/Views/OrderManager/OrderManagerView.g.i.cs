@@ -81,7 +81,7 @@ namespace FinalProject.Views.OrderManager {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/FinalProject;component/views/ordermanager/ordermanagerview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/FinalProject;V1.0.0.0;component/views/ordermanager/ordermanagerview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\OrderManager\OrderManagerView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

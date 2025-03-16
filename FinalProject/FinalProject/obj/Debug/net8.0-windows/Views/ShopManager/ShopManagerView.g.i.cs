@@ -81,7 +81,7 @@ namespace FinalProject.Views.ShopManager {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/FinalProject;component/views/shopmanager/shopmanagerview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/FinalProject;V1.0.0.0;component/views/shopmanager/shopmanagerview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\ShopManager\ShopManagerView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

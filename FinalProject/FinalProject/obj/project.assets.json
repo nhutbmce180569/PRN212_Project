@@ -7581,11 +7581,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\HocTap\\Ky5\\PRN212\\FinalProjectCode\\PRN212_Project\\FinalProject\\FinalProject\\FinalProject.csproj",
+      "projectUniqueName": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\FinalProject.csproj",
       "projectName": "FinalProject",
-      "projectPath": "E:\\HocTap\\Ky5\\PRN212\\FinalProjectCode\\PRN212_Project\\FinalProject\\FinalProject\\FinalProject.csproj",
+      "projectPath": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\FinalProject.csproj",
       "packagesPath": "C:\\Users\\nhutb\\.nuget\\packages\\",
-      "outputPath": "E:\\HocTap\\Ky5\\PRN212\\FinalProjectCode\\PRN212_Project\\FinalProject\\FinalProject\\obj\\",
+      "outputPath": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

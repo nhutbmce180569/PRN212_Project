@@ -116,7 +116,7 @@ namespace FinalProject.ViewModels.ShopManager
 
                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        if (!popup.IsActive) // khi click chuột ra ngoài không trong popup
+                        if (!popup.IsActive) 
                         {
                             popup.Topmost = true;
 

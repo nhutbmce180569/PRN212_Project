@@ -61,7 +61,8 @@ namespace FinalProject.Views.WarehouseManager.Supplier {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/FinalProject;component/views/warehousemanager/supplier/supplierlistview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/FinalProject;V1.0.0.0;component/views/warehousemanager/supplier/supplierlistview" +
+                    ".xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\WarehouseManager\Supplier\SupplierListView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

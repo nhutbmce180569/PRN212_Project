@@ -53,7 +53,7 @@ namespace FinalProject.Views.Profile {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/FinalProject;component/views/profile/changepasswordpopup.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/FinalProject;V1.0.0.0;component/views/profile/changepasswordpopup.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\Profile\ChangePasswordPopup.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

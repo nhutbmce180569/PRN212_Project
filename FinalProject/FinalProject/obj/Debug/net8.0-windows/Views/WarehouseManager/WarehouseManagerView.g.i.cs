@@ -81,7 +81,8 @@ namespace FinalProject.Views.WarehouseManager {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/FinalProject;component/views/warehousemanager/warehousemanagerview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/FinalProject;V1.0.0.0;component/views/warehousemanager/warehousemanagerview.xaml" +
+                    "", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\WarehouseManager\WarehouseManagerView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
