@@ -116,7 +116,7 @@ namespace FinalProject.ViewModels.ShopManager
 
                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        if (!popup.IsActive) 
+                        if (!popup.IsActive) // Check fix loix
                         {
                             popup.Topmost = true;
 
