@@ -110,7 +110,7 @@ namespace FinalProject.ViewModels.ShopManager
             popup.Deactivated += (s, e) =>
             {
                 Application.Current.Windows[0].IsHitTestVisible = false;
-                if (popup.IsLoaded)
+                if (popup.IsLoaded) //fdjskfjdskfds
                 {
 
                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>

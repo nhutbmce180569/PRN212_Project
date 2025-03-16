@@ -1,9 +1,9 @@
 # Ignore Visual Studio specific files
-/.vs/
+/FinalProject/.vs/
 
 # Ignore build outputs
-/bin/
-/obj/
+/FinalProject/FinalProject/bin/
+/FinalProject/FinalProject/obj/
 *.exe
 *.dll
 *.pdb
