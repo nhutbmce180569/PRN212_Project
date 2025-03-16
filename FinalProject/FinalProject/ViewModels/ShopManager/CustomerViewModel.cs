@@ -107,7 +107,6 @@ namespace FinalProject.ViewModels.ShopManager
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
 
             };
-            // Dùng Dispatcher để tránh lỗi "Window is closing"
             popup.Deactivated += (s, e) =>
             {
                 Application.Current.Windows[0].IsHitTestVisible = false;
@@ -116,7 +115,7 @@ namespace FinalProject.ViewModels.ShopManager
 
                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        if (!popup.IsActive) // khi click chuột ra ngoài không trong popup
+                        if (!popup.IsActive) 
                         {
                             popup.Topmost = true;
 
@@ -142,7 +141,6 @@ namespace FinalProject.ViewModels.ShopManager
                     WindowStartupLocation = WindowStartupLocation.CenterOwner
                 };
 
-                // Dùng Dispatcher để tránh lỗi "Window is closing"
                 popup.Deactivated += (s, e) =>
                 {
                     if (popup.IsLoaded)
@@ -151,7 +149,7 @@ namespace FinalProject.ViewModels.ShopManager
 
                         Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                         {
-                            if (!popup.IsActive) // khi click chuột ra ngoài không trong popup
+                            if (!popup.IsActive) 
                             {
                                 popup.Topmost = true;
 
