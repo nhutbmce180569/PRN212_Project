@@ -1,6 +1,6 @@
-/FinalProject/.vs/
-/FinalProject/FinalProject/bin/
-/FinalProject/FinalProject/obj/
+FinalProject/.vs/
+FinalProject/FinalProject/bin/
+FinalProject/FinalProject/obj/
 *.exe
 *.dll
 *.pdb
