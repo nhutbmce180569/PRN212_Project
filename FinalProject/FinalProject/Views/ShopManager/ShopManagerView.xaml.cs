@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using FinalProject.Models;
 using FinalProject.Views.Profile;
+using FinalProject.Views.ShopManager.Product;
 
 namespace FinalProject.Views.ShopManager
 {
@@ -44,6 +45,10 @@ namespace FinalProject.Views.ShopManager
                 new MainWindow().Show();
                 this.Close();
             } 
+        }
+        private void ButtonClick_Product(object sender, RoutedEventArgs e)
+        {
+            fmt.Content = new ProductListView();
         }
     }
 }
