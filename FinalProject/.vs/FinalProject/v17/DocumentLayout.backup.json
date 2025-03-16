@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{2022E131-0D9D-4B76-80F2-6EBD01BD0237}|FinalProject\\FinalProject.csproj|e:\\hoctap\\ky5\\prn212_project\\finalproject\\finalproject\\viewmodels\\shopmanager\\customerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2022E131-0D9D-4B76-80F2-6EBD01BD0237}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\viewmodels\\shopmanager\\customerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{2022E131-0D9D-4B76-80F2-6EBD01BD0237}|FinalProject\\FinalProject.csproj|e:\\hoctap\\ky5\\prn212_project\\finalproject\\finalproject\\viewmodels\\warehousemanager\\supplierviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2022E131-0D9D-4B76-80F2-6EBD01BD0237}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\viewmodels\\warehousemanager\\supplierviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -83,10 +87,6 @@
       "RelativeMoniker": "D:0:0:{2022E131-0D9D-4B76-80F2-6EBD01BD0237}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\views\\shopmanager\\customer\\addcustomer.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2022E131-0D9D-4B76-80F2-6EBD01BD0237}|FinalProject\\FinalProject.csproj|e:\\hoctap\\ky5\\prn212_project\\finalproject\\finalproject\\viewmodels\\shopmanager\\customerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2022E131-0D9D-4B76-80F2-6EBD01BD0237}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\viewmodels\\shopmanager\\customerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{2022E131-0D9D-4B76-80F2-6EBD01BD0237}|FinalProject\\FinalProject.csproj|e:\\hoctap\\ky5\\prn212_project\\finalproject\\finalproject\\views\\login.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2022E131-0D9D-4B76-80F2-6EBD01BD0237}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\views\\login.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -142,7 +142,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 182,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -150,19 +150,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AddOrder.xaml.cs",
-              "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\OrderManager\\Order\\AddOrder.xaml.cs",
-              "RelativeDocumentMoniker": "FinalProject\\Views\\OrderManager\\Order\\AddOrder.xaml.cs",
-              "ToolTip": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\OrderManager\\Order\\AddOrder.xaml.cs",
-              "RelativeToolTip": "FinalProject\\Views\\OrderManager\\Order\\AddOrder.xaml.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAQwB8AAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T07:16:26.39Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "UpdateOrder.xaml.cs",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\OrderManager\\Order\\UpdateOrder.xaml.cs",
               "RelativeDocumentMoniker": "FinalProject\\Views\\OrderManager\\Order\\UpdateOrder.xaml.cs",
@@ -174,7 +162,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "OrderViewModel.cs",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\ViewModels\\OrderManager\\OrderViewModel.cs",
               "RelativeDocumentMoniker": "FinalProject\\ViewModels\\OrderManager\\OrderViewModel.cs",
@@ -186,7 +174,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "SupplierViewModel.cs",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\ViewModels\\WarehouseManager\\SupplierViewModel.cs",
               "RelativeDocumentMoniker": "FinalProject\\ViewModels\\WarehouseManager\\SupplierViewModel.cs",
@@ -199,7 +187,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "UpdateSupplier.xaml.cs",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\WarehouseManager\\Supplier\\UpdateSupplier.xaml.cs",
               "RelativeDocumentMoniker": "FinalProject\\Views\\WarehouseManager\\Supplier\\UpdateSupplier.xaml.cs",
@@ -211,7 +199,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "AddSupplier.xaml.cs",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\WarehouseManager\\Supplier\\AddSupplier.xaml.cs",
               "RelativeDocumentMoniker": "FinalProject\\Views\\WarehouseManager\\Supplier\\AddSupplier.xaml.cs",
@@ -223,7 +211,32 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
+              "Title": "CustomerViewModel.cs",
+              "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\ViewModels\\ShopManager\\CustomerViewModel.cs",
+              "RelativeDocumentMoniker": "FinalProject\\ViewModels\\ShopManager\\CustomerViewModel.cs",
+              "ToolTip": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\ViewModels\\ShopManager\\CustomerViewModel.cs",
+              "RelativeToolTip": "FinalProject\\ViewModels\\ShopManager\\CustomerViewModel.cs",
+              "ViewState": "AgIAAGEAAAAAAAAAAAAYwG0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-15T16:20:35.311Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AddOrder.xaml.cs",
+              "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\OrderManager\\Order\\AddOrder.xaml.cs",
+              "RelativeDocumentMoniker": "FinalProject\\Views\\OrderManager\\Order\\AddOrder.xaml.cs",
+              "ToolTip": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\OrderManager\\Order\\AddOrder.xaml.cs",
+              "RelativeToolTip": "FinalProject\\Views\\OrderManager\\Order\\AddOrder.xaml.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAQwB8AAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T07:16:26.39Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "UpdateOrder.xaml",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\OrderManager\\Order\\UpdateOrder.xaml",
               "RelativeDocumentMoniker": "FinalProject\\Views\\OrderManager\\Order\\UpdateOrder.xaml",
@@ -234,7 +247,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "LoginViewModel.cs",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\ViewModels\\LoginViewModel.cs",
               "RelativeDocumentMoniker": "FinalProject\\ViewModels\\LoginViewModel.cs",
@@ -246,7 +259,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "OrderManagerView.xaml.cs",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\OrderManager\\OrderManagerView.xaml.cs",
               "RelativeDocumentMoniker": "FinalProject\\Views\\OrderManager\\OrderManagerView.xaml.cs",
@@ -258,7 +271,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "OrderManagerView.xaml",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\OrderManager\\OrderManagerView.xaml",
               "RelativeDocumentMoniker": "FinalProject\\Views\\OrderManager\\OrderManagerView.xaml",
@@ -269,7 +282,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "WarehouseManagerView.xaml.cs",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\WarehouseManager\\WarehouseManagerView.xaml.cs",
               "RelativeDocumentMoniker": "FinalProject\\Views\\WarehouseManager\\WarehouseManagerView.xaml.cs",
@@ -281,7 +294,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "ProfileViewModel.cs",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\ViewModels\\ProfileViewModel.cs",
               "RelativeDocumentMoniker": "FinalProject\\ViewModels\\ProfileViewModel.cs",
@@ -293,7 +306,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "ShopManagerView.xaml",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\ShopManager\\ShopManagerView.xaml",
               "RelativeDocumentMoniker": "FinalProject\\Views\\ShopManager\\ShopManagerView.xaml",
@@ -304,7 +317,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "WarehouseManagerView.xaml",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\WarehouseManager\\WarehouseManagerView.xaml",
               "RelativeDocumentMoniker": "FinalProject\\Views\\WarehouseManager\\WarehouseManagerView.xaml",
@@ -315,7 +328,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "ProductListView.xaml",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\ShopManager\\Product\\ProductListView.xaml",
               "RelativeDocumentMoniker": "FinalProject\\Views\\ShopManager\\Product\\ProductListView.xaml",
@@ -326,7 +339,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "ProductListView.xaml.cs",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\ShopManager\\Product\\ProductListView.xaml.cs",
               "RelativeDocumentMoniker": "FinalProject\\Views\\ShopManager\\Product\\ProductListView.xaml.cs",
@@ -338,7 +351,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "ShopManagerView.xaml.cs",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\ShopManager\\ShopManagerView.xaml.cs",
               "RelativeDocumentMoniker": "FinalProject\\Views\\ShopManager\\ShopManagerView.xaml.cs",
@@ -350,7 +363,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "App.xaml",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\App.xaml",
               "RelativeDocumentMoniker": "FinalProject\\App.xaml",
@@ -361,7 +374,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "OrderListView.xaml",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\OrderManager\\Order\\OrderListView.xaml",
               "RelativeDocumentMoniker": "FinalProject\\Views\\OrderManager\\Order\\OrderListView.xaml",
@@ -385,18 +398,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 20,
-              "Title": "CustomerViewModel.cs",
-              "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\ViewModels\\ShopManager\\CustomerViewModel.cs",
-              "RelativeDocumentMoniker": "FinalProject\\ViewModels\\ShopManager\\CustomerViewModel.cs",
-              "ToolTip": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\ViewModels\\ShopManager\\CustomerViewModel.cs",
-              "RelativeToolTip": "FinalProject\\ViewModels\\ShopManager\\CustomerViewModel.cs",
-              "ViewState": "AgIAALkAAAAAAAAAAAA/wNUAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-15T16:20:35.311Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
               "Title": "AddCustomer.xaml.cs",
               "DocumentMoniker": "E:\\HocTap\\Ky5\\PRN212_Project\\FinalProject\\FinalProject\\Views\\ShopManager\\Customer\\AddCustomer.xaml.cs",
               "RelativeDocumentMoniker": "FinalProject\\Views\\ShopManager\\Customer\\AddCustomer.xaml.cs",
