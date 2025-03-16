@@ -24,6 +24,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Views\Admin\AdminView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Admin\Employee\AddEmployee.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Admin\Employee\EmployeeListView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Admin\Employee\UpdateEmployee.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Home.xaml">
       <SubType>Designer</SubType>
     </Page>

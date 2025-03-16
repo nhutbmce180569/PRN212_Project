@@ -16,6 +16,7 @@ using FinalProject.Views.ShopManager;
 using FinalProject.Views.WarehouseManager;
 using FinalProject.Views.OrderManager.Order;
 using FinalProject.Views.OrderManager;
+using FinalProject.Views.Admin;
 
 namespace FinalProject.ViewModels
 {
@@ -49,7 +50,7 @@ namespace FinalProject.ViewModels
                     //}
                     if (em.RoleId == 1)
                     {
-
+                        new AdminView().Show();
                     }
                     else if (em.RoleId == 2)
                     {

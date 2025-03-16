@@ -9,10 +9,10 @@ INSERT INTO Roles (RoleID, Name) VALUES
 
 -- Employees
 INSERT INTO Employees (FullName, Birthday, Password, PhoneNumber, Email, Gender, CreatedDate, [Status], RoleID) VALUES
-(N'John Doe', '1990-05-14', 'hashed_pwd', '0987654321', 'john@example.com', 'Male', '2024-03-01', 'Active', 1),
-( N'Jane Smith', '1992-08-21', 'hashed_pwd', '0977123456', 'jane@example.com', 'Female', '2024-03-01', 'Active', 2),
-( N'Michael Brown', '1985-12-30', 'hashed_pwd', '0909333222', 'michael@example.com', 'Male', '2024-03-01', 'Inactive', 3),
-( N'Emily White', '1995-07-11', 'hashed_pwd', '0911222333', 'emily@example.com', 'Female', '2024-03-01', 'Active', 4);
+(N'John Doe', '1990-05-14', '36fdba5968850579c0a89444f4ca4772', '0987654321', 'nguyenvana@example.com', 'Male', '2024-03-01', 'Active', 1),
+( N'Jane Smith', '1992-08-21', '36fdba5968850579c0a89444f4ca4772', '0977123456', 'nguyenvanb@example.com', 'Female', '2024-03-01', 'Active', 2),
+( N'Michael Brown', '1985-12-30', '36fdba5968850579c0a89444f4ca4772', '0909333222', 'nguyenvanc@example.com', 'Male', '2024-03-01', 'Active', 3),
+( N'Emily White', '1995-07-11', '36fdba5968850579c0a89444f4ca4772', '0911222333', 'nguyenvand@example.com', 'Female', '2024-03-01', 'Active', 4);
 
 -- Customers
 INSERT INTO Customers ( FullName, Birthday, Password, PhoneNumber, Email, Gender, CreatedDate, IsBlock, IsDeleted) VALUES
