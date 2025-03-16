@@ -10,6 +10,9 @@
     <Compile Update="Views\Home.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\OrderManager\OrderManagerView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\ShopManager\Customer\AddCustomer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -25,6 +28,18 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Login.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\OrderManager\OrderManagerView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\OrderManager\Order\AddOrder.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\OrderManager\Order\OrderListView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\OrderManager\Order\UpdateOrder.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Profile\ChangePasswordPopup.xaml">
@@ -45,7 +60,28 @@
     <Page Update="Views\ShopManager\Customer\CustomerListView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\ShopManager\Product\AddProduct.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ShopManager\Product\ProductListView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ShopManager\Product\UpdateProduct.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\ShopManager\ShopManagerView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WarehouseManager\Supplier\AddSupplier.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WarehouseManager\Supplier\SupplierListView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WarehouseManager\Supplier\UpdateSupplier.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WarehouseManager\WarehouseManagerView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

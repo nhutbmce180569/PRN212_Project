@@ -13,6 +13,9 @@ using WPFLab.Helper;
 using WPFLab.ViewModels;
 using FinalProject.Helper;
 using FinalProject.Views.ShopManager;
+using FinalProject.Views.WarehouseManager;
+using FinalProject.Views.OrderManager.Order;
+using FinalProject.Views.OrderManager;
 
 namespace FinalProject.ViewModels
 {
@@ -55,11 +58,11 @@ namespace FinalProject.ViewModels
                     }
                     else if (em.RoleId == 3)
                     {
-
+                        new WarehouseManagerView().Show();
                     }
-                    else if (em.RoleId != 4)
+                    else if (em.RoleId == 4)
                     {
-
+                        new OrderManagerView().Show();
                     }
                     else
                     {

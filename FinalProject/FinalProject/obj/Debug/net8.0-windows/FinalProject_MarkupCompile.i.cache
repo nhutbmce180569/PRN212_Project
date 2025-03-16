@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 E:\HocTap\Ky5\PRN212\FinalProjectCode\PRN212_Project\FinalProject\FinalProject\App.xaml
-9-330964777
+20206081674
 
-331324724842
+47-1537325749
 293-1992728050
-Views\Home.xaml;Views\Login.xaml;Views\Profile\ChangePasswordPopup.xaml;Views\Profile\UpdateProfilePopup.xaml;Views\Profile\UserProfile.xaml;Views\ShopManager\Customer\AddCustomer.xaml;Views\ShopManager\Customer\CustomerListView.xaml;Views\ShopManager\Customer\UpdateCustomer.xaml;Views\ShopManager\ShopManagerView.xaml;
+Views\Home.xaml;Views\Login.xaml;Views\OrderManager\OrderManagerView.xaml;Views\OrderManager\Order\AddOrder.xaml;Views\OrderManager\Order\OrderListView.xaml;Views\OrderManager\Order\UpdateOrder.xaml;Views\Profile\ChangePasswordPopup.xaml;Views\Profile\UpdateProfilePopup.xaml;Views\Profile\UserProfile.xaml;Views\ShopManager\Customer\AddCustomer.xaml;Views\ShopManager\Customer\CustomerListView.xaml;Views\ShopManager\Customer\UpdateCustomer.xaml;Views\ShopManager\Product\AddProduct.xaml;Views\ShopManager\Product\ProductListView.xaml;Views\ShopManager\Product\UpdateProduct.xaml;Views\ShopManager\ShopManagerView.xaml;Views\WarehouseManager\Supplier\AddSupplier.xaml;Views\WarehouseManager\Supplier\SupplierListView.xaml;Views\WarehouseManager\Supplier\UpdateSupplier.xaml;Views\WarehouseManager\WarehouseManagerView.xaml;
 
 False
 
