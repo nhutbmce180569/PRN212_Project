@@ -272,7 +272,10 @@ namespace FinalProject.ViewModels.ShopManager
             }
             else
             {
-                TextBoxItem.Password = PasswordBoxHelper.GetMD5(textBoxItem.Password);
+                if (!textBoxItem.Password.Equals(selectedItem.Password))
+                {
+                    TextBoxItem.Password = PasswordBoxHelper.GetMD5(textBoxItem.Password);
+                }
                 using (var context = new FstoreContext())
                 {
                     context.Customers.Update(textBoxItem);

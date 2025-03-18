@@ -44,6 +44,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Update="Views\ShopManager\Customer\UpdateCustomer.xaml">
       <SubType>Designer</SubType>
     </Page>

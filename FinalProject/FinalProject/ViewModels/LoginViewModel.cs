@@ -48,6 +48,11 @@ namespace FinalProject.ViewModels
                     //        MessageBox.Show($"Welcome, {currentEmployee.Name}");
                     //    }
                     //}
+                    if (!em.Status.Trim().Equals("Active", StringComparison.Ordinal))
+                    {
+                        MessageBox.Show("The account is inactive!", "Alert", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
                     if (em.RoleId == 1)
                     {
                         new AdminView().Show();
