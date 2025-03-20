@@ -99,7 +99,6 @@ namespace FinalProject.ViewModels.ShopManager
             }
         }
 
-
         private string _searchText;
         public string SearchText
         {
@@ -350,10 +349,11 @@ namespace FinalProject.ViewModels.ShopManager
                         .Include(p => p.Brand)
                         .Include(p => p.Category)
                         .Where(p =>
-                            p.Model.ToLower().Contains(searchQuery) ||
-                            p.FullName.ToLower().Contains(searchQuery) ||
-                            (p.Brand != null && p.Brand.Name.ToLower().Contains(searchQuery)) ||
-                            (p.Category != null && p.Category.Name.ToLower().Contains(searchQuery)))
+                            p.FullName.ToLower().Contains(searchQuery)
+                            // || p.Model.ToLower().Contains(searchQuery) ||
+                            //(p.Brand != null && p.Brand.Name.ToLower().Contains(searchQuery)) ||
+                            //(p.Category != null && p.Category.Name.ToLower().Contains(searchQuery))
+                            )
                         .ToList();
 
                     products = new ObservableCollection<Product>(filteredProducts);
