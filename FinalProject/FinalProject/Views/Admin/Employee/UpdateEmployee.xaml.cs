@@ -36,11 +36,14 @@ namespace FinalProject.Views.Admin.Employee
             txtStatus.Items.Add("Active");
             txtStatus.Items.Add("Inactive");
             txtStatus.SelectedIndex = txtStatus.Items.IndexOf(employee.Status.Trim());
-            txtRoleId.Items.Add(1);
-            txtRoleId.Items.Add(2);
-            txtRoleId.Items.Add(3);
-            txtRoleId.Items.Add(4);
-            txtRoleId.SelectedIndex = txtRoleId.Items.IndexOf(employee.RoleId);
+            using (var context = new FstoreContext())
+            {
+                var roleList = context.Roles.Where(r => r.RoleId != 1).ToList();
+                txtRoleId.ItemsSource = roleList;
+                txtRoleId.SelectedValuePath = "RoleId";
+                txtRoleId.DisplayMemberPath = "Name";
+                txtRoleId.SelectedValue = employee.RoleId;
+            }          
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -53,7 +56,7 @@ namespace FinalProject.Views.Admin.Employee
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            DragMove(); // Kéo popup
+            DragMove();
         }
     }
 }
