@@ -35,7 +35,6 @@
                 <Label Grid.Row="1" Content="Brand:" FontWeight="Bold" VerticalAlignment="Center"/>
                 <ComboBox Grid.Row="1" ItemsSource="{Binding Brands}" 
                           DisplayMemberPath="Name" SelectedItem="{Binding textboxItem.Brand}" Padding="5" BorderBrush="#CCC" Margin="120,0,21,26" Grid.RowSpan="2"/>
-
                 <!-- Category -->
                 <Label Grid.Row="2" Content="Category:" FontWeight="Bold" VerticalAlignment="Center" />
                 <ComboBox Grid.Row="2" ItemsSource="{Binding Categories}" 
@@ -59,11 +58,6 @@
                 <!-- Price -->
                 <Label Grid.Row="6" Content="Price:" FontWeight="Bold"/>
                 <TextBox Grid.Row="6" Margin="120 0 0 0" Text="{Binding textboxItem.Price, Mode=TwoWay}" 
-                         Padding="5" BorderBrush="#CCC" Width="213" HorizontalAlignment="Left"/>
-
-                <!-- Stock -->
-                <Label Grid.Row="7" Content="Stock:" FontWeight="Bold"/>
-                <TextBox Grid.Row="7" Margin="120 0 0 0" Text="{Binding textboxItem.Stock, Mode=TwoWay}" 
                          Padding="5" BorderBrush="#CCC" Width="213" HorizontalAlignment="Left"/>
 
                 <!-- Is Deleted Checkbox -->
