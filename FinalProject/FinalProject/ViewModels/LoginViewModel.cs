@@ -13,6 +13,10 @@ using WPFLab.Helper;
 using WPFLab.ViewModels;
 using FinalProject.Helper;
 using FinalProject.Views.ShopManager;
+using FinalProject.Views.WarehouseManager;
+using FinalProject.Views.OrderManager.Order;
+using FinalProject.Views.OrderManager;
+using FinalProject.Views.Admin;
 
 namespace FinalProject.ViewModels
 {
@@ -44,9 +48,14 @@ namespace FinalProject.ViewModels
                     //        MessageBox.Show($"Welcome, {currentEmployee.Name}");
                     //    }
                     //}
+                    if (!em.Status.Trim().Equals("Active", StringComparison.Ordinal))
+                    {
+                        MessageBox.Show("The account is inactive!", "Alert", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
                     if (em.RoleId == 1)
                     {
-
+                        new AdminView().Show();
                     }
                     else if (em.RoleId == 2)
                     {
@@ -55,11 +64,11 @@ namespace FinalProject.ViewModels
                     }
                     else if (em.RoleId == 3)
                     {
-
+                        new WarehouseManagerView().Show();
                     }
-                    else if (em.RoleId != 4)
+                    else if (em.RoleId == 4)
                     {
-
+                        new OrderManagerView().Show();
                     }
                     else
                     {

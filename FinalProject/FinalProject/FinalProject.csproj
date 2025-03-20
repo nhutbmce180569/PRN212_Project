@@ -15,13 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\ShopManager\Product\" />
-    <Folder Include="Views\WarehouseManager\" />
-    <Folder Include="Views\OrderManager\" />
-    <Folder Include="Views\Admin\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="MahApps.Metro.IconPacks" Version="5.1.0" />
     <PackageReference Include="Material.Icons.Avalonia" Version="2.3.1" />
     <PackageReference Include="MaterialDesignColors" Version="5.2.1" />
@@ -48,6 +41,12 @@
     <Compile Update="Views\ShopManager\Customer\UpdateCustomer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

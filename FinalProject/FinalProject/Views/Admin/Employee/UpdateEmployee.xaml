@@ -1,0 +1,90 @@
+﻿<Window x:Class="FinalProject.Views.Admin.Employee.UpdateEmployee"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FinalProject.Views.Admin.Employee"
+        mc:Ignorable="d"
+        WindowStyle="None" AllowsTransparency="True" Background="AliceBlue" Topmost="True"
+Title="UpdateEmployee" Height="350" Width="500">
+    <Window.Resources>
+        <Style TargetType="TextBlock" >
+            <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="Padding" Value="10px"></Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="5px"></Setter>
+            <Setter Property="Height" Value="30"></Setter>
+            <Setter Property="Width" Value="190"></Setter>
+            <Setter Property="TextWrapping" Value="NoWrap"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="40px"></Setter>
+            <Setter Property="Width" Value="100px"></Setter>
+        </Style>
+    </Window.Resources>
+    <Border CornerRadius="20">
+
+        <Grid MouseLeftButtonDown="Border_MouseLeftButtonDown" >
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3.5*"></ColumnDefinition>
+                <ColumnDefinition Width="6.5*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.ColumnSpan="2" Text="Update Customer" HorizontalAlignment="Left" FontWeight="Bold" FontSize="22"></TextBlock>
+            <TextBlock Text="Fullname" Grid.Column="0" Grid.Row="1"></TextBlock>
+            <TextBlock Text="Gender" Grid.Column="0" Grid.Row="2"></TextBlock>
+            <TextBlock Text="Email" Grid.Column="0" Grid.Row="3"></TextBlock>
+            <TextBlock Text="PhoneNumber" Grid.Column="0" Grid.Row="4"></TextBlock>
+            <TextBlock Text="Birthday" Grid.Column="0" Grid.Row="5"></TextBlock>
+            <TextBlock Text="Password" Grid.Column="0" Grid.Row="6"></TextBlock>
+            <TextBlock Text="Create Date" Grid.Column="0" Grid.Row="7"></TextBlock>
+            <TextBlock Text="Status" Grid.Column="0" Grid.Row="8"></TextBlock>
+            <TextBlock Text="Role ID" Grid.Column="0" Grid.Row="9"></TextBlock>
+            <TextBox x:Name="txtFullName" Grid.Column="1" Grid.Row="1" Text="{Binding TextBoxItem.FullName, Mode=OneWayToSource}"></TextBox>
+            <ComboBox Name="txtGender" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Gender}"
+                SelectedItem="{Binding TextBoxItem.Gender, Mode=TwoWay}" Height="30" Width="190"></ComboBox>
+            <TextBox x:Name="txtEmail" Grid.Column="1" Grid.Row="3" Text="{Binding TextBoxItem.Email, Mode=OneWayToSource}"></TextBox>
+            <TextBox x:Name="txtPhoneNumber" Grid.Column="1" Grid.Row="4" Text="{Binding TextBoxItem.PhoneNumber, Mode=OneWayToSource}"></TextBox>
+            <DatePicker x:Name="txtBirthday" Grid.Column="1" Grid.Row="5" Height="40" Width="190" HorizontalAlignment="Left"
+                SelectedDate="{Binding TextBoxItem.Birthday, Mode=OneWayToSource}"
+                SelectedDateFormat="Short"
+        ></DatePicker>
+            <TextBox x:Name="txtPassword" Grid.Column="1" Grid.Row="6" Text="{Binding TextBoxItem.Password, Mode=OneWayToSource}"></TextBox>
+            <DatePicker x:Name="txtCreateDate" Grid.Column="1" Grid.Row="7" Height="40" Width="190" HorizontalAlignment="Left"
+                SelectedDate="{Binding TextBoxItem.CreatedDate, Mode=TwoWay}"
+                SelectedDateFormat="Short"></DatePicker>
+            <ComboBox Name="txtStatus" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="8"  Background="White"
+                SelectedItem="{Binding TextBoxItem.Status, Mode=TwoWay}" Height="30" Width="190"></ComboBox>
+            <ComboBox Name="txtRoleId" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="9"  Background="White"
+                 SelectedItem="{Binding TextBoxItem.RoleId, Mode=TwoWay}" Height="30" Width="190"></ComboBox>
+            <Grid Grid.Row="10" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Button Background="Blue" Foreground="White" Height="30" Grid.Column="2" Grid.Row="0" Content="Update" Command="{Binding UpdateCommand}"></Button>
+                <Button Background="#FFEE4F4F" Foreground="White" Height="30" Grid.Column="1" Grid.Row="0" Content="Close" Click="Button_Click"></Button>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

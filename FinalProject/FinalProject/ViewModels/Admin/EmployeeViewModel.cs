@@ -4,39 +4,39 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using FinalProject.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using WPFLab.Helper;
+using FinalProject.ViewModels.ShopManager;
 using FinalProject.Views.ShopManager.Customer;
-using System.Windows;
-using WPFLab.ViewModels;
+using MaterialDesignColors;
 using Newtonsoft.Json;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using FinalProject.Views.ShopManager;
-using System.Diagnostics;
-using System.Windows.Documents;
-using System.Text.RegularExpressions;
+using WPFLab.Helper;
+using WPFLab.ViewModels;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using FinalProject.Helper;
+using Microsoft.IdentityModel.Tokens;
+using System.Text.RegularExpressions;
+using FinalProject.Views.Admin.Employee;
 
-namespace FinalProject.ViewModels.ShopManager
+namespace FinalProject.ViewModels.Admin
 {
-    internal class CustomerViewModel : BaseViewModel
+    internal class EmployeeViewModel : BaseViewModel
     {
-        public event Action OnCustomerAdded;
+        public event Action OnEmployeeAdded;
 
-        private ObservableCollection<Customer> _customerList;
-        public ObservableCollection<Customer> CustomerList
+        private ObservableCollection<Employee> _employeeList;
+        public ObservableCollection<Employee> EmployeeList
         {
-            get => _customerList;
+            get => _employeeList;
             set
             {
-                _customerList = value;
-                OnPropertyChanged(nameof(CustomerList)); // Kích hoạt UI update
+                _employeeList = value;
+                OnPropertyChanged(nameof(EmployeeList)); // Kích hoạt UI update
             }
         }
-        public ObservableCollection<Customer> AllCustomerList { set; get; }
+
+        public ObservableCollection<Employee> AllEmployeeList { set; get; }
 
         public ICommand OpenAddPopupCommand { get; }
         public ICommand OpenUpdatePopupCommand { get; }
@@ -44,7 +44,8 @@ namespace FinalProject.ViewModels.ShopManager
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand SearchCommand { get; }
-        public CustomerViewModel()
+
+        public EmployeeViewModel()
         {
             Load();
             AddCommand = new RelayCommand(Add);
@@ -55,9 +56,9 @@ namespace FinalProject.ViewModels.ShopManager
             OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
         }
 
-        public CustomerViewModel(Customer customer)
+        public EmployeeViewModel(Employee employee)
         {
-            SelectedItem = customer;
+            SelectedItem = employee;
             Load();
             AddCommand = new RelayCommand(Add);
             UpdateCommand = new RelayCommand(Update);
@@ -67,8 +68,9 @@ namespace FinalProject.ViewModels.ShopManager
             OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
         }
 
-        private Customer textBoxItem = new Customer();
-        public Customer TextBoxItem
+
+        private Employee textBoxItem = new Employee();
+        public Employee TextBoxItem
         {
             get { return textBoxItem; }
             set
@@ -78,8 +80,8 @@ namespace FinalProject.ViewModels.ShopManager
             }
         }
 
-        private Customer selectedItem;
-        public Customer SelectedItem
+        private Employee selectedItem;
+        public Employee SelectedItem
         {
             get { return selectedItem; }
             set
@@ -88,19 +90,18 @@ namespace FinalProject.ViewModels.ShopManager
                 OnPropertyChanged(nameof(SelectedItem));
                 if (selectedItem != null)
                 {
-                    textBoxItem = JsonConvert.DeserializeObject<Customer>(JsonConvert.SerializeObject(selectedItem));
+                    textBoxItem = JsonConvert.DeserializeObject<Employee>(JsonConvert.SerializeObject(selectedItem));
                     OnPropertyChanged(nameof(TextBoxItem));
                 }
             }
         }
 
 
-
         private void OpenPopup(object obj)
         {
-            var action = new CustomerViewModel();
-            action.OnCustomerAdded += Load;
-            var popup = new AddCustomer
+            var action = new EmployeeViewModel();
+            action.OnEmployeeAdded += Load;
+            var popup = new AddEmployee
             {
                 DataContext = action,
                 Owner = Application.Current.MainWindow,
@@ -116,7 +117,7 @@ namespace FinalProject.ViewModels.ShopManager
 
                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        if (!popup.IsActive) // Check fix loix
+                        if (!popup.IsActive) // khi click chuột ra ngoài không trong popup
                         {
                             popup.Topmost = true;
 
@@ -133,9 +134,9 @@ namespace FinalProject.ViewModels.ShopManager
         {
             if (selectedItem != null)
             {
-                var action = new CustomerViewModel(selectedItem);
-                action.OnCustomerAdded += Load;
-                var popup = new UpdateCustomer(selectedItem)
+                var action = new EmployeeViewModel(selectedItem);
+                action.OnEmployeeAdded += Load;
+                var popup = new UpdateEmployee(selectedItem)
                 {
                     DataContext = action,
                     Owner = Application.Current.MainWindow,
@@ -173,78 +174,52 @@ namespace FinalProject.ViewModels.ShopManager
 
         }
 
+
+
         public void Load()
         {
             using (var context = new FstoreContext())
             {
-                var list = context.Customers.ToList();
-                AllCustomerList = new ObservableCollection<Customer>(list);
-                CustomerList = new ObservableCollection<Customer>(AllCustomerList);
-            }
+                var list = context.Employees.ToList();
+                AllEmployeeList = new ObservableCollection<Employee>(list);
+                EmployeeList = new ObservableCollection<Employee>(AllEmployeeList);
+            }               
         }
 
-        private void Delete(object obj)
-        {
-            if (selectedItem == null)
-            {
-                MessageBox.Show("Please select customer to delete", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                if (MessageBox.Show("Are you sure to delete this customer?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                {
-                    using (var context = new FstoreContext())
-                    {
-                        var list = from item in context.Orders
-                                   where item.CustomerId == textBoxItem.CustomerId
-                                   select item;
-                        if (list.Any())
-                        {
-                            MessageBox.Show("This Customer is having order", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        else
-                        {
-                            context.Customers.Remove(selectedItem);
-                            context.SaveChanges();
-                            CustomerList.Remove(selectedItem);
-                            AllCustomerList.Remove(selectedItem);
-                            MessageBox.Show("Delete Successfully", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void Add(object obj)
+        private void Add(Object obj)
         {
             if (textBoxItem.FullName.IsNullOrEmpty() ||
-                textBoxItem.PhoneNumber.IsNullOrEmpty() ||
+                textBoxItem.Gender.IsNullOrEmpty() ||
                 textBoxItem.Email.IsNullOrEmpty() ||
-                textBoxItem.Password.IsNullOrEmpty()||
-                textBoxItem.Gender.IsNullOrEmpty())
+                textBoxItem.PhoneNumber.IsNullOrEmpty() ||
+                textBoxItem.Password.IsNullOrEmpty() ||
+                textBoxItem.Status.IsNullOrEmpty())
             {
                 MessageBox.Show("Input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
-                if (IsValidEmail(textBoxItem.Email)) {
-                    var item = new Customer
+                if (IsValidEmail(textBoxItem.Email))
+                {
+                    var item = new Employee
                     {
-                        Password = PasswordBoxHelper.GetMD5(textBoxItem.Password),
+                        FullName = textBoxItem.FullName,
+                        Gender = textBoxItem.Gender,
                         Email = textBoxItem.Email,
                         PhoneNumber = textBoxItem.PhoneNumber,
-                        FullName = textBoxItem.FullName,
                         Birthday = textBoxItem.Birthday,
-                        Gender = textBoxItem.Gender,
-                        CreatedDate = DateTime.Now
+                        Password = PasswordBoxHelper.GetMD5(textBoxItem.Password),                      
+                        CreatedDate = DateTime.Now,
+                        Status = textBoxItem.Status,
+                        RoleId = textBoxItem.RoleId
                     };
                     using (var context = new FstoreContext())
                     {
-                        context.Customers.Add(item);
+                        context.Employees.Add(item);
                         context.SaveChanges();
                     }
-                    OnCustomerAdded?.Invoke();
-                    textBoxItem = new Customer();
+                    OnEmployeeAdded?.Invoke();
+                    textBoxItem = new Employee();
                     OnPropertyChanged(nameof(TextBoxItem));
                     Application.Current.Windows[2]?.Close();
                     Application.Current.Windows[0].Opacity = 1;
@@ -264,25 +239,24 @@ namespace FinalProject.ViewModels.ShopManager
         private void Update(object obj)
         {
             if (textBoxItem.FullName.IsNullOrEmpty() ||
-           textBoxItem.PhoneNumber.IsNullOrEmpty() ||
-           textBoxItem.Email.IsNullOrEmpty() ||
-           textBoxItem.Password.IsNullOrEmpty())
+                textBoxItem.Gender.IsNullOrEmpty() ||
+                textBoxItem.Email.IsNullOrEmpty() ||
+                textBoxItem.PhoneNumber.IsNullOrEmpty() ||
+                textBoxItem.Password.IsNullOrEmpty() ||
+                textBoxItem.Status.IsNullOrEmpty())
             {
                 MessageBox.Show("Input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
-                if (!textBoxItem.Password.Equals(selectedItem.Password))
-                {
-                    TextBoxItem.Password = PasswordBoxHelper.GetMD5(textBoxItem.Password);
-                }
+                TextBoxItem.Password = PasswordBoxHelper.GetMD5(textBoxItem.Password);
                 using (var context = new FstoreContext())
                 {
-                    context.Customers.Update(textBoxItem);
+                    context.Employees.Update(textBoxItem);
                     context.SaveChanges();
                 }
-                OnCustomerAdded?.Invoke();
-                textBoxItem = new Customer();
+                OnEmployeeAdded?.Invoke();
+                textBoxItem = new Employee();
                 OnPropertyChanged(nameof(TextBoxItem));
                 Application.Current.Windows[2]?.Close();
                 Application.Current.Windows[0].Opacity = 1;
@@ -292,6 +266,38 @@ namespace FinalProject.ViewModels.ShopManager
 
             }
         }
+
+        private void Delete(object obj)
+        {
+            if (selectedItem == null)
+            {
+                MessageBox.Show("Please select customer to delete", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                if (MessageBox.Show("Are you sure to delete this Employee?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    using (var context = new FstoreContext())
+                    {
+                        var employee = context.Employees.FirstOrDefault(e => e.EmployeeId == selectedItem.EmployeeId);
+                        if (employee.Status == "Active")
+                        {
+                            MessageBox.Show("Employee Active!!!!!", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            context.Employees.Remove(employee);
+                            context.SaveChanges();
+                            EmployeeList.Remove(selectedItem);
+                            AllEmployeeList.Remove(selectedItem);
+                            MessageBox.Show("Delete Successfully", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                }
+            }
+        }
+
+
         private String searchBoxItem;
         public String SearchBoxItem
         {
@@ -306,24 +312,25 @@ namespace FinalProject.ViewModels.ShopManager
         {
             if (!searchBoxItem.Equals(""))
             {
-                var list = from item in AllCustomerList
+                var list = from item in AllEmployeeList
                            where item.FullName.ToLower().Contains(searchBoxItem.ToLower())
                            select item;
                 if (list.Any())
                 {
-                    CustomerList = new ObservableCollection<Customer>(list);
+                    EmployeeList = new ObservableCollection<Employee>(list);
                 }
                 else
                 {
-                    MessageBox.Show("There is no customer", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("There is no employee", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             else if (searchBoxItem.Equals(""))
             {
-                CustomerList = new ObservableCollection<Customer>(AllCustomerList);
-                OnPropertyChanged(nameof(CustomerList));
+                EmployeeList = new ObservableCollection<Employee>(AllEmployeeList);
+                OnPropertyChanged(nameof(EmployeeList));
             }
         }
+
         public bool IsValidEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))

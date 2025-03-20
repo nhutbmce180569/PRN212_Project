@@ -11,33 +11,27 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using FinalProject.Models;
+using FinalProject.Views.OrderManager.Order;
 using FinalProject.Views.Profile;
-using FinalProject.Views.ShopManager.Product;
 
-namespace FinalProject.Views.ShopManager
+namespace FinalProject.Views.OrderManager
 {
     /// <summary>
-    /// Interaction logic for ShopManagerView.xaml
+    /// Interaction logic for OrderManagerView.xaml
     /// </summary>
-    public partial class ShopManagerView : Window
+    public partial class OrderManagerView : Window
     {
-        public ShopManagerView()
+        public OrderManagerView()
         {
             InitializeComponent();
-            fmt.Content = new CustomerListView();
-            fmt.Content = new ProductListView();
         }
 
-        public void ButtonClick_Customer(object sender, RoutedEventArgs e)
+        private void ButtonClick_Orders(object sender, RoutedEventArgs e)
         {
-            fmt.Content = new CustomerListView();
+            fmt.Content = new OrderListView();
         }
-        public void ButtonClick_ShowProfile(object sender, RoutedEventArgs e)
-        {
-            fmt.Content = new UserProfile();
-        }
-        public void ButtonClick_Logout(object sender, RoutedEventArgs e)
+
+        private void ButtonClick_Logout(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure to logout?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
@@ -45,11 +39,11 @@ namespace FinalProject.Views.ShopManager
                 Application.Current.MainWindow?.Close();
                 new MainWindow().Show();
                 this.Close();
-            } 
+            }
         }
-        private void ButtonClick_Product(object sender, RoutedEventArgs e)
+        private void ButtonClick_ShowProfile(object sender, RoutedEventArgs e)
         {
-            fmt.Content = new ProductListView();
+            fmt.Content = new UserProfile();
         }
     }
 }

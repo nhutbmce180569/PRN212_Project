@@ -1,0 +1,91 @@
+﻿<Page x:Class="FinalProject.Views.OrderManager.Order.OrderListView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:FinalProject.Views.OrderManager.Order"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="OrderListView">
+
+    <Page.Resources>
+        <Style TargetType="TextBlock" >
+            <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="Padding" Value="10px"></Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="5px"></Setter>
+            <Setter Property="Height" Value="30"></Setter>
+            <Setter Property="Width" Value="190"></Setter>
+            <Setter Property="TextWrapping" Value="NoWrap"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="30px"></Setter>
+            <Setter Property="Width" Value="80px"></Setter>
+            <Setter Property="Background" Value="#1565C0"></Setter>
+            <Setter Property="Foreground" Value="White"></Setter>
+        </Style>
+        <Style TargetType="DataGridRow">
+            <Setter Property="Margin" Value="2"></Setter>
+        </Style>
+    </Page.Resources>
+    <Grid Background="#E3F2FD">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="8*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="5*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Grid.Row="0" Content="Add"  Command="{Binding OpenAddPopupCommand}"></Button>
+            <Button Grid.Column="1" Grid.Row="0" Content="Update" Command="{Binding OpenUpdatePopupCommand}"></Button>
+            <Button Grid.Column="2" Grid.Row="0" Content="Delete" Command="{Binding DeleteCommand}" HorizontalAlignment="Right" Margin="0, 0, 10, 0"></Button>
+
+        </Grid>
+
+        <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding OrderList}" SelectedItem="{Binding SelectedItem , Mode=OneWayToSource}" Background="#E3F2FD">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Order ID" Width="0.4*" Binding="{Binding OrderId}"></DataGridTextColumn>
+                <DataGridTextColumn Header="CustomerID" Width="1.3*" Binding="{Binding CustomerId}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Fullname" Width="*" Binding="{Binding FullName}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Address" Width="2.2*" Binding="{Binding Address}"></DataGridTextColumn>
+                <DataGridTextColumn Header="OrderDate" Width="1.2*" Binding="{Binding OrderedDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
+                <DataGridTextColumn Header="PhoneNumber" Width="0.7*" Binding="{Binding PhoneNumber}"></DataGridTextColumn>
+                <DataGridTextColumn Header="DeliveredDate" Width="*" Binding="{Binding DeliveredDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Status" Width="*" Binding="{Binding Status}"></DataGridTextColumn>
+                <DataGridTextColumn Header="TotalAmout" Width="*" Binding="{Binding TotalAmount}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid Grid.Row="2" 
+          AutoGenerateColumns="False" 
+          ItemsSource="{Binding SelectedOrderDetails}" 
+          Background="#E3F2FD">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Product ID" Width="*" Binding="{Binding ProductId}" />
+                <DataGridTextColumn Header="Quantity" Width="*" Binding="{Binding Quantity}" />
+                <DataGridTextColumn Header="Price" Width="*" Binding="{Binding Price}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+        <DataGrid Grid.Row="3" 
+   AutoGenerateColumns="False" 
+   ItemsSource="{Binding SelectedProducts}" 
+   Background="#E3F2FD" SelectionChanged="DataGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Product ID" Width="*" Binding="{Binding ProductId}" />
+                <DataGridTextColumn Header="ProductName" Width="*" Binding="{Binding FullName}" />
+                <DataGridTextColumn Header="Price" Width="*" Binding="{Binding Price}" />
+                <DataGridTextColumn Header="Stock" Width="*" Binding="{Binding Stock}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Page>

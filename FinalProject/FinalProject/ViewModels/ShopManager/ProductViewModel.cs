@@ -172,7 +172,6 @@ namespace FinalProject.ViewModels.ShopManager
                 OnPropertyChanged(nameof(CanUpdate));
             }
         }
-
         private void Update(object obj)
         {
             try
@@ -333,7 +332,7 @@ namespace FinalProject.ViewModels.ShopManager
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        
         private void Search(object obj)
         {
             if (string.IsNullOrWhiteSpace(SearchText))
@@ -379,25 +378,6 @@ namespace FinalProject.ViewModels.ShopManager
 
             var popup = new AddProduct();
             popup.DataContext = this;
-            // Dùng Dispatcher để tránh lỗi "Window is closing"
-            popup.Deactivated += (s, e) =>
-            {
-                Application.Current.Windows[0].IsHitTestVisible = false;
-                if (popup.IsLoaded)
-                {
-
-                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        if (!popup.IsActive) // khi click chuột ra ngoài không trong popup
-                        {
-                            popup.Topmost = true;
-
-                            //// Lấy lại focus cho MainWindow
-                            //Application.Current.MainWindow.Opacity = 1;
-                        }
-                    }));
-                }
-            };
             popup.ShowDialog();
         }
         private void OpenUpdatePopup(object obj)
@@ -410,25 +390,6 @@ namespace FinalProject.ViewModels.ShopManager
 
             var popup = new UpdateProduct();
             popup.DataContext = this;
-            // Dùng Dispatcher để tránh lỗi "Window is closing"
-            popup.Deactivated += (s, e) =>
-            {
-                Application.Current.Windows[0].IsHitTestVisible = false;
-                if (popup.IsLoaded)
-                {
-
-                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        if (!popup.IsActive) // khi click chuột ra ngoài không trong popup
-                        {
-                            popup.Topmost = true;
-
-                            //// Lấy lại focus cho MainWindow
-                            //Application.Current.MainWindow.Opacity = 1;
-                        }
-                    }));
-                }
-            };
             popup.ShowDialog();
         }
 
