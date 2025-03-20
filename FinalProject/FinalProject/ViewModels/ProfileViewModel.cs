@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using FinalProject.Helper;
@@ -118,9 +119,11 @@ namespace FinalProject.ViewModels
             // Kiểm tra độ mạnh của mật khẩu mới
             if (!IsValidPassword(_newPasswordBox))
             {
-                MessageBox.Show("New password does not meet security requirements!");
+                MessageBox.Show("New password must contain lowercase letters, uppercase letters, numbers and special characters!");
                 return;
             }
+
+            
 
             // Mã hóa mật khẩu cũ và kiểm tra với mật khẩu hiện tại trong database
             string oldPasswordHash = PasswordBoxHelper.GetMD5(_oldPasswordBox);
@@ -206,11 +209,15 @@ namespace FinalProject.ViewModels
             }
         }
 
+        private bool IsValidPhoneNumber(string phoneNumber)
+        {
+            return Regex.IsMatch(phoneNumber, @"^\d{10,15}$");
+        }
+
         private void SaveUpdate(object obj)
         {
             try
             {
-                // Kiểm tra dữ liệu đầu vào
                 if (string.IsNullOrEmpty(EmployeeView.FullName) ||
                     string.IsNullOrEmpty(EmployeeView.PhoneNumber) ||
                     string.IsNullOrEmpty(EmployeeView.Gender))
@@ -219,39 +226,38 @@ namespace FinalProject.ViewModels
                     return;
                 }
 
+                if (!IsValidPhoneNumber(EmployeeUpdate.PhoneNumber))
+                {
+                    MessageBox.Show("Phone number must contain only digits and be between 1 and 15 characters long.");
+                    return;
+                }
+
                 using (var context = new FstoreContext())
                 {
-                    // Kiểm tra context có hoạt động không
                     if (context == null)
                     {
                         MessageBox.Show("Database context could not be initialized");
                         return;
                     }
 
-                    // Lưu thông tin vào Application Properties
                     Application.Current.Properties["Employee"] = EmployeeUpdate;
 
 
 
-                    // Cập nhật giao diện
                     OnPropertyChanged(nameof(EmployeeUpdate));
 
-                    // Tìm nhân viên cần cập nhật
                     var employee = context.Employees.FirstOrDefault(e => e.EmployeeId == EmployeeUpdate.EmployeeId);
 
                     if (employee != null)
                     {
 
-                        // Cập nhật thông tin nhân viên
                         employee.FullName = EmployeeUpdate.FullName;
                         employee.PhoneNumber = EmployeeUpdate.PhoneNumber;
                         employee.Birthday = EmployeeUpdate.Birthday;
                         employee.Gender = EmployeeUpdate.Gender;
 
-                        // Lưu thay đổi vào database
                         context.SaveChanges();
 
-                        // 🔥 Gán một instance mới để kích hoạt OnPropertyChanged
                         EmployeeView = new Employee
                         {
                             EmployeeId = employee.EmployeeId,
@@ -263,7 +269,6 @@ namespace FinalProject.ViewModels
 
                         OnCustomerAdded?.Invoke();
                         OnPropertyChanged(nameof(EmployeeView));
-                        // Đóng popup sau khi thay đổi mật khẩu thành công
                         if (Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w is UpdateProfilePopup) is Window popup)
                         {
                             popup.Close();
