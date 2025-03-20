@@ -25,6 +25,9 @@ using Microsoft.IdentityModel.Tokens;
 using Avalonia.Controls;
 using System.Text.RegularExpressions;
 
+
+
+
 namespace FinalProject.ViewModels.OrderManager
 {
     public class OrderViewModel : BaseViewModel
@@ -54,7 +57,7 @@ namespace FinalProject.ViewModels.OrderManager
                 if (_selectedOrderStatus != null)
                 {
                     TextBoxItem.Status = _selectedOrderStatus.Id;
-                    UpdateOrderStatusList(); 
+                    UpdateOrderStatusList();
                     OnPropertyChanged(nameof(TextBoxItem));
                 }
             }
@@ -68,7 +71,7 @@ namespace FinalProject.ViewModels.OrderManager
                 var product = context.Products.FirstOrDefault(p => p.ProductId == productId);
                 if (product != null)
                 {
-                    product.Stock += quantity; 
+                    product.Stock += quantity;
                     context.SaveChanges();
                     MessageBox.Show($"Stock for product {product.FullName} has been increased by {quantity}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -78,7 +81,7 @@ namespace FinalProject.ViewModels.OrderManager
                 }
             }
         }
-   
+
         private void DecreaseStock(int productId, int quantity)
         {
             using (var context = new FstoreContext())
@@ -88,7 +91,7 @@ namespace FinalProject.ViewModels.OrderManager
                 {
                     if (product.Stock >= quantity)
                     {
-                        product.Stock -= quantity; 
+                        product.Stock -= quantity;
                         context.SaveChanges();
                         MessageBox.Show($"Stock for product {product.FullName} has been decreased by {quantity}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
@@ -375,17 +378,29 @@ namespace FinalProject.ViewModels.OrderManager
         {
             if (_selectedItem != null)
             {
-
                 var action = new OrderViewModel(_selectedItem);
                 action.OnOrderAdded += Load;
                 var popup = new UpdateOrder(_selectedItem)
                 {
                     DataContext = action,
-                    Owner = Application.Current.MainWindow,
                     WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner
                 };
 
-                Application.Current.Windows[0].Opacity = 0.5;
+                var mainWindow = Application.Current.MainWindow;
+                if (mainWindow != null && mainWindow != popup)
+                {
+                    popup.Owner = mainWindow;
+                }
+
+                if (Application.Current.Windows.Count > 0)
+                {
+                    var mainWin = Application.Current.Windows[0];
+                    if (mainWin != popup)
+                    {
+                        mainWin.Opacity = 0.5;
+                    }
+                }
+
                 popup.ShowDialog();
             }
             else
@@ -394,6 +409,7 @@ namespace FinalProject.ViewModels.OrderManager
             }
         }
 
+
         private void Delete(object obj)
         {
             if (textBoxItem == null || textBoxItem.OrderId == 0)
@@ -401,7 +417,7 @@ namespace FinalProject.ViewModels.OrderManager
                 MessageBox.Show("Please select an order to cancel", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
-             if (SelectedItem.Status == 3 || SelectedItem.Status == 4)
+            if (SelectedItem.Status == 3 || SelectedItem.Status == 4)
             {
                 MessageBox.Show("Cannot delete order with status 'Completed' or 'Cancelled'.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -412,14 +428,14 @@ namespace FinalProject.ViewModels.OrderManager
                 var orderToCancel = Context.Orders.FirstOrDefault(o => o.OrderId == textBoxItem.OrderId);
                 if (orderToCancel != null)
                 {
-                    orderToCancel.Status = 4;  
+                    orderToCancel.Status = 4;
                     Context.SaveChanges();
 
-                  
+
                     var orderDetails = Context.OrderDetails.Where(od => od.OrderId == orderToCancel.OrderId).ToList();
                     foreach (var orderDetail in orderDetails)
                     {
-                       
+
                         if (orderDetail.ProductId > 0 && orderDetail.Quantity.HasValue && orderDetail.Quantity.Value > 0)
                         {
                             IncreaseStock(orderDetail.ProductId, orderDetail.Quantity.Value);
@@ -442,7 +458,7 @@ namespace FinalProject.ViewModels.OrderManager
             {
                 OrderList.Remove(SelectedItem);
             }
-
+            Load();
             OnOrderAdded?.Invoke();
         }
 
@@ -453,7 +469,7 @@ namespace FinalProject.ViewModels.OrderManager
 
         private void Update(object obj)
         {
-           
+
             if (!IsValidPhoneNumber(TextBoxItem.PhoneNumber))
             {
                 MessageBox.Show("Invalid phone number. Ensure that the phone number contains only digits and does not exceed 15 characters.",
@@ -470,7 +486,7 @@ namespace FinalProject.ViewModels.OrderManager
                                 MessageBoxImage.Error);
                 return;
             }
-           else if (SelectedItem.Status == 3 || SelectedItem.Status == 4)
+            else if (SelectedItem.Status == 3 || SelectedItem.Status == 4)
             {
                 MessageBox.Show("Cannot update order with status 'Completed' or 'Cancelled'.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -545,7 +561,7 @@ namespace FinalProject.ViewModels.OrderManager
                     MessageBox.Show("Order not found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-
+            Load();
             OnOrderAdded?.Invoke();
         }
 
@@ -699,7 +715,7 @@ namespace FinalProject.ViewModels.OrderManager
             }
             else
             {
-                OrderStatusList = new ObservableCollection<OrderStatus>(OrderStatusList); 
+                OrderStatusList = new ObservableCollection<OrderStatus>(OrderStatusList);
             }
         }
 
