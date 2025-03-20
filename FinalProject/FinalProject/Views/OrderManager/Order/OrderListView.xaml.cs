@@ -26,5 +26,10 @@ namespace FinalProject.Views.OrderManager.Order
             InitializeComponent();
             DataContext = new OrderViewModel();
         }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
