@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FinalProject.Views.OrderManager.Order"
         mc:Ignorable="d"
+        WindowStyle="None" AllowsTransparency="True" Background="AliceBlue" Topmost="True"
         Title="UpdateOrder" Height="450" Width="800">
     <Window.Resources>
         <Style TargetType="TextBlock" >
@@ -41,43 +42,76 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3.5*"></ColumnDefinition>
-                <ColumnDefinition Width="6.5*"></ColumnDefinition>
+                <ColumnDefinition Width="280*"></ColumnDefinition>
+                <ColumnDefinition Width="137*"></ColumnDefinition>
+                <ColumnDefinition Width="383*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.ColumnSpan="2" Text="Update Order" HorizontalAlignment="Left" FontWeight="Bold" FontSize="22"></TextBlock>
-            <TextBlock Text="CustomerID" Grid.Column="0" Grid.Row="1"></TextBlock>
-            <TextBlock Text="Fullname" Grid.Column="0" Grid.Row="2" Margin="0,9,0,0" VerticalAlignment="Top"></TextBlock>
-            <TextBlock Text="Address" Grid.Column="0" Grid.Row="3"></TextBlock>
-            <TextBlock Text="PhoneNumber" Grid.Column="0" Grid.Row="4"></TextBlock>
-            <TextBlock Text="Status" Grid.Column="0" Grid.Row="5"></TextBlock>
-            <TextBlock Text="Product" Grid.Column="0" Grid.Row="6"></TextBlock>
-            <TextBlock Text="TotalAmount" Grid.Column="0" Grid.Row="7"></TextBlock>
+            <TextBlock Text="Update Order" HorizontalAlignment="Left" FontWeight="Bold" FontSize="22"/>
+            <TextBlock Text="CustomerID" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Margin="197,0,0,0"></TextBlock>
+            <TextBlock Text="Fullname" Grid.Column="0" Grid.Row="2" Margin="0,9,0,0" VerticalAlignment="Top" Grid.RowSpan="2"></TextBlock>
+            <TextBlock Text="Address" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" Margin="217,0,0,0"></TextBlock>
+            <TextBlock Text="PhoneNumber" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Left" Margin="183,0,0,0"></TextBlock>
+            <TextBlock Text="Status" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Left" Margin="228,0,0,0"></TextBlock>
+            <TextBlock Text="Product" Grid.Column="0" Grid.Row="6" HorizontalAlignment="Left" Margin="219,0,0,0"></TextBlock>
+            <TextBlock Text="Price" Grid.Column="0" Grid.Row="7" HorizontalAlignment="Left" Margin="234,0,0,0"></TextBlock>
+            <TextBlock Text="Quantity" Grid.Column="0" Grid.Row="8" HorizontalAlignment="Left" Margin="214,0,0,0"></TextBlock>
 
 
 
             <ComboBox Grid.Column="1" Grid.Row="1" Width="500" Height="30"
 ItemsSource="{Binding CustomerList}"
 SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}"
-DisplayMemberPath="CustomerId" />
+DisplayMemberPath="CustomerId" Grid.ColumnSpan="2" Margin="10,6,10,6" />
 
-            <TextBox Visibility="Hidden" Grid.Column="1" Grid.Row="2" Text="{Binding TextBoxItem.OrderId, Mode=TwoWay}"></TextBox>
-            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding TextBoxItem.FullName, Mode=TwoWay}"></TextBox>
-            <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding TextBoxItem.Address, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding TextBoxItem.PhoneNumber, Mode=TwoWay}"></TextBox>
+            <TextBox Visibility="Hidden" Grid.Column="1" Grid.Row="2" Text="{Binding TextBoxItem.OrderId, Mode=TwoWay}" Grid.ColumnSpan="2" Margin="0,6,0,5"></TextBox>
+            <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="2" Text="{Binding TextBoxItem.FullName, Mode=TwoWay}" Grid.ColumnSpan="2" Margin="0,6,0,5"></TextBox>
+            <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding TextBoxItem.Address, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2" Margin="0,6,0,6"></TextBox>
+            <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding TextBoxItem.PhoneNumber, Mode=TwoWay}" Grid.ColumnSpan="2" Margin="0,5,0,6"></TextBox>
             <ComboBox Grid.Column="1" Grid.Row="5" Width="500" Height="30"
           ItemsSource="{Binding OrderStatusList}"
           SelectedValue="{Binding TextBoxItem.Status, Mode=TwoWay}"
           SelectedValuePath="Id"
-          DisplayMemberPath="Status"/>
+          DisplayMemberPath="Status"
+          Grid.ColumnSpan="2" Margin="10,6,10,5"/>
+
 
 
             <ComboBox Grid.Column="1" Grid.Row="6" Width="500" Height="30"
       ItemsSource="{Binding ProductList}"
       SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
-      DisplayMemberPath="FullName" />
-            <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="7" Text="{Binding TextBoxProduct.Price, Mode=TwoWay}"></TextBox>
-            <TextBox Grid.Column="1" Grid.Row="8" Text="{Binding TextBoxDetail.Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
-            <Grid Grid.Row="9" Grid.Column="1">
+      DisplayMemberPath="FullName" Grid.ColumnSpan="2" Margin="10,6,10,6" />
+            <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="7" Text="{Binding TextBoxProduct.Price, Mode=TwoWay}" Grid.ColumnSpan="2" Margin="0,6,0,5"></TextBox>
+            <!--<TextBox Grid.Column="1" Grid.Row="8" Text="{Binding TextBoxDetail.Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.ColumnSpan="2" Margin="0,6,0,6"></TextBox>-->
+            <TextBox 
+    Grid.Column="1" 
+    Grid.Row="8" 
+    Text="{Binding TextBoxDetail.Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+    Grid.ColumnSpan="2" 
+    Margin="0,6,0,6">
+
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <!-- Trigger để chỉ đọc khi Status = 3 (hoàn thành) hoặc Status = 4 (hủy) -->
+                            <DataTrigger Binding="{Binding TextBoxItem.Status}" Value="3">
+                                <Setter Property="IsReadOnly" Value="True"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding TextBoxItem.Status}" Value="4">
+                                <Setter Property="IsReadOnly" Value="True"/>
+                            </DataTrigger>
+                            <!-- Trigger để cho phép chỉnh sửa khi Status khác 3 hoặc 4 -->
+                            <DataTrigger Binding="{Binding TextBoxItem.Status}" Value="1">
+                                <Setter Property="IsReadOnly" Value="False"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding TextBoxItem.Status}" Value="2">
+                                <Setter Property="IsReadOnly" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+
+            <Grid Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>

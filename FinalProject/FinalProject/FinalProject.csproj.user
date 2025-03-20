@@ -22,6 +22,15 @@
     <Compile Update="Views\ShopManager\ShopManagerView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\WarehouseManager\ImportOrder\ImportOrderListView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\WarehouseManager\ImportOrder\ImportProduct.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\WarehouseManager\ImportOrder\ProductListView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Admin\AdminView.xaml">
