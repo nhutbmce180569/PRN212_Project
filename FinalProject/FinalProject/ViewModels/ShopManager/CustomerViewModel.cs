@@ -1,24 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using FinalProject.Helper;
 using FinalProject.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using WPFLab.Helper;
 using FinalProject.Views.ShopManager.Customer;
-using System.Windows;
-using WPFLab.ViewModels;
-using Newtonsoft.Json;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using FinalProject.Views.ShopManager;
-using System.Diagnostics;
-using System.Windows.Documents;
+using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
-using FinalProject.Helper;
+using System.Windows;
+using System.Windows.Input;
+using WPFLab.Helper;
+using WPFLab.ViewModels;
 
 namespace FinalProject.ViewModels.ShopManager
 {
@@ -220,14 +210,19 @@ namespace FinalProject.ViewModels.ShopManager
             if (textBoxItem.FullName.IsNullOrEmpty() ||
                 textBoxItem.PhoneNumber.IsNullOrEmpty() ||
                 textBoxItem.Email.IsNullOrEmpty() ||
-                textBoxItem.Password.IsNullOrEmpty()||
+                textBoxItem.Password.IsNullOrEmpty() ||
                 textBoxItem.Gender.IsNullOrEmpty())
             {
-                MessageBox.Show("Input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Please input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
-                if (IsValidEmail(textBoxItem.Email)) {
+                if (!ExistEmail(textBoxItem.Email) && IsValidEmail(textBoxItem.Email)
+                    && IsValidPhoneNumber(textBoxItem.PhoneNumber)
+                    && IsValidPassword(textBoxItem.Password)
+                    && IsValidFullname(textBoxItem.FullName)
+                    && ValidateDate(textBoxItem.Birthday))
+                {
                     var item = new Customer
                     {
                         Password = PasswordBoxHelper.GetMD5(textBoxItem.Password),
@@ -251,45 +246,74 @@ namespace FinalProject.ViewModels.ShopManager
                     Application.Current.MainWindow.Focus();
                     Application.Current.Windows[0].IsHitTestVisible = true;
                     MessageBox.Show("Add Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                }
-                else
-                {
-                    MessageBox.Show("Invalid email format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
             }
         }
 
+        public bool IsValidFullname(string name)
+        {
+            if (name.Length >= 255)
+            {
+                MessageBox.Show("Fullname cannot be too long", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            return true;
+        }
+
         private void Update(object obj)
         {
-            if (textBoxItem.FullName.IsNullOrEmpty() ||
+           if (textBoxItem.FullName.IsNullOrEmpty() ||
            textBoxItem.PhoneNumber.IsNullOrEmpty() ||
            textBoxItem.Email.IsNullOrEmpty() ||
            textBoxItem.Password.IsNullOrEmpty())
-            {
+           {
                 MessageBox.Show("Input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+           }
             else
             {
-                if (!textBoxItem.Password.Equals(selectedItem.Password))
+                if (IsValidEmail(textBoxItem.Email)
+                        && IsValidPhoneNumber(textBoxItem.PhoneNumber)
+                        && IsValidFullname(textBoxItem.FullName)
+                        && ValidateDate(textBoxItem.Birthday))
                 {
-                    TextBoxItem.Password = PasswordBoxHelper.GetMD5(textBoxItem.Password);
-                }
-                using (var context = new FstoreContext())
-                {
-                    context.Customers.Update(textBoxItem);
-                    context.SaveChanges();
-                }
-                OnCustomerAdded?.Invoke();
-                textBoxItem = new Customer();
-                OnPropertyChanged(nameof(TextBoxItem));
-                Application.Current.Windows[2]?.Close();
-                Application.Current.Windows[0].Opacity = 1;
-                Application.Current.Windows[0].Focus();
-                Application.Current.Windows[0].IsHitTestVisible = true;
-                MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (!textBoxItem.Password.Equals(selectedItem.Password))
+                    {
+                        if (IsValidPassword(textBoxItem.Password))
+                        {
+                            TextBoxItem.Password = PasswordBoxHelper.GetMD5(textBoxItem.Password);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
 
+                    if (!selectedItem.Email.Equals(textBoxItem.Email))
+                    {
+                        if (ExistEmail(textBoxItem.Email))
+                        {
+                            return;
+                        }
+                    }
+
+                    using (var context = new FstoreContext())
+                    {
+                        context.Customers.Update(textBoxItem);
+                        context.SaveChanges();
+                    }
+
+                    OnCustomerAdded?.Invoke();
+                    textBoxItem = new Customer();
+                    OnPropertyChanged(nameof(TextBoxItem));
+
+                    Application.Current.Windows[2]?.Close();
+                    Application.Current.Windows[0].Opacity = 1;
+                    Application.Current.Windows[0].Focus();
+                    Application.Current.Windows[0].IsHitTestVisible = true;
+
+                    MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
         }
         private String searchBoxItem;
@@ -324,13 +348,75 @@ namespace FinalProject.ViewModels.ShopManager
                 OnPropertyChanged(nameof(CustomerList));
             }
         }
+
+        public bool IsValidPassword(string password)
+        {
+            if (password.Length < 8 ||
+                   !password.Any(char.IsUpper) ||
+                   !password.Any(char.IsLower) ||
+                   !password.Any(char.IsDigit) ||
+                   !password.Any(ch => !char.IsLetterOrDigit(ch)))
+            {
+                MessageBox.Show("Password must be contain at least 8 character, uppercase and special characters.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            return true;
+        }
         public bool IsValidEmail(string email)
         {
-            if (string.IsNullOrWhiteSpace(email))
-                return false;
-
             string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-            return Regex.IsMatch(email, pattern);
+            if (!Regex.IsMatch(email, pattern))
+            {
+                MessageBox.Show("Invalid email format.\nExample: abc123@gmail.com", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            return true;
+        }
+        public bool ExistEmail(string email)
+        {
+            using (var context = new FstoreContext())
+            {
+                var item = from cus in context.Customers
+                           where cus.Email.Equals(email)
+                           select cus;
+                if (item.Any())
+                {
+                    MessageBox.Show("An email is used.\nPlease different email.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool IsValidPhoneNumber(string phoneNumber)
+        {
+            if (!phoneNumber.All(char.IsDigit))
+            {
+                MessageBox.Show("Phone number can only contain digits.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            if (phoneNumber.Length > 15)
+            {
+                MessageBox.Show("Phone number cannot exceed 15 characters.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            return true;
+        }
+        public bool ValidateDate(DateTime? inputDate)
+        {
+            DateTime today = DateTime.Today;
+
+            if (inputDate >= today)
+            {
+                MessageBox.Show("The selected date cannot be today or a future date.",
+                                 "Validation Error",
+                                 MessageBoxButton.OK,
+                                 MessageBoxImage.Error);
+                return false;
+            }
+
+            return true;
         }
     }
 }

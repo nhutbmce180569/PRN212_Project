@@ -78,10 +78,10 @@
         <DataGrid Grid.Row="3" 
    AutoGenerateColumns="False" 
    ItemsSource="{Binding SelectedProducts}" 
-   Background="#E3F2FD">
+   Background="#E3F2FD" SelectionChanged="DataGrid_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Product ID" Width="*" Binding="{Binding ProductId}" />
-                <DataGridTextColumn Header="Quantity" Width="*" Binding="{Binding FullName}" />
+                <DataGridTextColumn Header="ProductName" Width="*" Binding="{Binding FullName}" />
                 <DataGridTextColumn Header="Price" Width="*" Binding="{Binding Price}" />
                 <DataGridTextColumn Header="Stock" Width="*" Binding="{Binding Stock}" />
             </DataGrid.Columns>

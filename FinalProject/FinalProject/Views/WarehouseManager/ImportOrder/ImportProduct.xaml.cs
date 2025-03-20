@@ -10,26 +10,22 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using FinalProject.ViewModels.OrderManager;
 
-namespace FinalProject.Views.OrderManager.Order
+namespace FinalProject.Views.WarehouseManager.ImportOrder
 {
     /// <summary>
-    /// Interaction logic for OrderListView.xaml
+    /// Interaction logic for ImportProduct.xaml
     /// </summary>
-    public partial class OrderListView : Page
+    public partial class ImportProduct : Window
     {
-        public OrderListView()
+        public ImportProduct()
         {
             InitializeComponent();
-            DataContext = new OrderViewModel();
         }
-
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-
+            this.Close();
         }
     }
 }

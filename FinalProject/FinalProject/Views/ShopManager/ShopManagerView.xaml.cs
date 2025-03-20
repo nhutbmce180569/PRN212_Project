@@ -26,6 +26,7 @@ namespace FinalProject.Views.ShopManager
         {
             InitializeComponent();
             fmt.Content = new CustomerListView();
+            fmt.Content = new ProductListView();
         }
 
         public void ButtonClick_Customer(object sender, RoutedEventArgs e)

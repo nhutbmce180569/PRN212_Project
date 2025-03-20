@@ -72,7 +72,7 @@
                 <DataGridTextColumn Width="1.3*" Header="Email" Binding="{Binding Email}"></DataGridTextColumn>
                 <DataGridTextColumn Width="0.8*" Header="Phone Number" Binding="{Binding PhoneNumber}"></DataGridTextColumn>
                 <DataGridTextColumn Width="1.7*" Header="Address" Binding="{Binding Address}"></DataGridTextColumn>
-                <DataGridTextColumn Width="0.5*" Header="Status"></DataGridTextColumn>
+                <DataGridTextColumn Width="0.5*" Header="Activate" Binding="{Binding IsActivate}"></DataGridTextColumn>
                 <DataGridTextColumn Width="0.7*" Header="CreatedDate" Binding="{Binding CreatedDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
