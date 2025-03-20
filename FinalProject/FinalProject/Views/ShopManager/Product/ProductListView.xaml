@@ -67,12 +67,15 @@
 
                 <!-- Buttons -->
                 <!-- CREATE và UPDATE bên trái -->
-                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
                     <Button Content="➕ CREATE" Command="{Binding OpenCreatePopupCommand}" 
                                 Height="35" Width="120" Background="#28A745" Foreground="White" 
                                 Margin="5" FontWeight="Bold"/>
                     <Button Content="✏️ UPDATE" Command="{Binding OpenUpdatePopupCommand}" 
                                 Height="35" Width="120" Background="#FFC107" Foreground="White" 
+                                Margin="5" FontWeight="Bold"/>
+                    <Button Content="EXPORT" Command="{Binding ExportCommand}" 
+                                Height="35" Width="120" Background="LightGray" Foreground="White" 
                                 Margin="5" FontWeight="Bold"/>
                 </StackPanel>
 

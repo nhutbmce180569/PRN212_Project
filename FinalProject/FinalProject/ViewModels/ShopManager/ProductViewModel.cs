@@ -11,6 +11,9 @@ using WPFLab.Helper;
 using WPFLab.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using FinalProject.Views.ShopManager.Product;
+using Newtonsoft.Json;
+using System.IO;
+using Microsoft.Win32;
 
 namespace FinalProject.ViewModels.ShopManager
 {
@@ -22,6 +25,7 @@ namespace FinalProject.ViewModels.ShopManager
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand SearchCommand { get; }
+        public ICommand ExportCommand { get; }
         public ICommand OpenCreatePopupCommand { get; }
         public ICommand OpenUpdatePopupCommand { get; }
         public ObservableCollection<Brand> Brands { get; set; }
@@ -34,6 +38,7 @@ namespace FinalProject.ViewModels.ShopManager
             UpdateCommand = new RelayCommand(Update);
             DeleteCommand = new RelayCommand(Delete);
             SearchCommand = new RelayCommand(Search);
+            ExportCommand = new RelayCommand(Export);
             OpenCreatePopupCommand = new RelayCommand(OpenCreatePopup);
             OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
 
@@ -47,11 +52,15 @@ namespace FinalProject.ViewModels.ShopManager
                     .Include(p => p.Category)
                     .ToList();
 
-                products = new ObservableCollection<Product>(list);
                 Brands = new ObservableCollection<Brand>(context.Brands.ToList());
                 Categories = new ObservableCollection<Category>(context.Categories.ToList());
+
+                products = new ObservableCollection<Product>(list);
+                allproducts = new ObservableCollection<Product>(products);
             }
-            allproducts = new ObservableCollection<Product>(products);
+
+            OnPropertyChanged(nameof(Brands));
+            OnPropertyChanged(nameof(Categories));
         }
 
 
@@ -75,17 +84,19 @@ namespace FinalProject.ViewModels.ShopManager
                 _selectItem = value;
                 OnPropertyChanged(nameof(selectItem));
 
-                // Kiểm tra nếu đã chọn sản phẩm thì cho phép Update
                 CanUpdate = _selectItem != null;
 
-                // Sao chép dữ liệu vào textboxItem nếu có sản phẩm được chọn
                 if (_selectItem != null)
                 {
+                    // Tìm Brand và Category từ danh sách hiện tại
+                    var selectedBrand = Brands?.FirstOrDefault(b => b.BrandId == _selectItem.Brand?.BrandId);
+                    var selectedCategory = Categories?.FirstOrDefault(c => c.CategoryId == _selectItem.Category?.CategoryId);
+
                     textboxItem = new Product
                     {
                         ProductId = _selectItem.ProductId,
-                        Brand = _selectItem.Brand != null ? new Brand { BrandId = _selectItem.Brand.BrandId, Name = _selectItem.Brand.Name } : null,
-                        Category = _selectItem.Category != null ? new Category { CategoryId = _selectItem.Category.CategoryId, Name = _selectItem.Category.Name } : null,
+                        Brand = selectedBrand ?? _selectItem.Brand,  // Đảm bảo lấy đúng Brand trong danh sách
+                        Category = selectedCategory ?? _selectItem.Category,  // Đảm bảo lấy đúng Category trong danh sách
                         Model = _selectItem.Model,
                         FullName = _selectItem.FullName,
                         Description = _selectItem.Description,
@@ -94,16 +105,11 @@ namespace FinalProject.ViewModels.ShopManager
                         IsDeleted = _selectItem.IsDeleted
                     };
 
-
-                    textboxItem = new Product();
                     OnPropertyChanged(nameof(textboxItem));
-                    Application.Current.Windows[2]?.Close();
-                    Application.Current.Windows[0].Opacity = 1;
-                    Application.Current.Windows[0].Focus();
-                    Application.Current.Windows[0].IsHitTestVisible = true;
                 }
             }
         }
+
 
         private string _searchText;
         public string SearchText
@@ -331,7 +337,7 @@ namespace FinalProject.ViewModels.ShopManager
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        
+
         private void Search(object obj)
         {
             if (string.IsNullOrWhiteSpace(SearchText))
@@ -415,6 +421,50 @@ namespace FinalProject.ViewModels.ShopManager
                     break;
                 }
             }
+        }
+
+
+        private void Export(object obj)
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                    FileName = "products.json",
+                    Title = "Save Exported Data"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    // Convert danh sách sản phẩm thành danh sách đơn giản để export
+                    var exportList = allproducts.Select(p => new
+                    {
+                        p.ProductId,
+                        Brand = p.Brand?.Name,
+                        Category = p.Category?.Name,
+                        p.Model,
+                        p.FullName,
+                        p.Description,
+                        p.Price,
+                        p.Stock,
+                        p.IsDeleted
+                    }).ToList();
+
+                    // Serialize thành JSON
+                    string json = JsonConvert.SerializeObject(exportList, Formatting.Indented);
+
+                    // Ghi vào file
+                    File.WriteAllText(saveFileDialog.FileName, json);
+
+                    MessageBox.Show("Export successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error exporting data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
         }
     }
 }

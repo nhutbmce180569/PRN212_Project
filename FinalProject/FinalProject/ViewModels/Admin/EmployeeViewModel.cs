@@ -18,6 +18,7 @@ using FinalProject.Helper;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.RegularExpressions;
 using FinalProject.Views.Admin.Employee;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinalProject.ViewModels.Admin
 {
@@ -47,6 +48,7 @@ namespace FinalProject.ViewModels.Admin
 
         public EmployeeViewModel()
         {
+            TextBoxItem.CreatedDate = DateTime.Now;
             Load();
             AddCommand = new RelayCommand(Add);
             UpdateCommand = new RelayCommand(Update);
@@ -180,14 +182,16 @@ namespace FinalProject.ViewModels.Admin
         {
             using (var context = new FstoreContext())
             {
-                var list = context.Employees.ToList();
+                var list = context.Employees.Where(e => e.RoleId != 1).ToList();
                 AllEmployeeList = new ObservableCollection<Employee>(list);
                 EmployeeList = new ObservableCollection<Employee>(AllEmployeeList);
-            }               
+            }
         }
+
 
         private void Add(Object obj)
         {
+            // Kiểm tra các trường bắt buộc
             if (textBoxItem.FullName.IsNullOrEmpty() ||
                 textBoxItem.Gender.IsNullOrEmpty() ||
                 textBoxItem.Email.IsNullOrEmpty() ||
@@ -195,46 +199,71 @@ namespace FinalProject.ViewModels.Admin
                 textBoxItem.Password.IsNullOrEmpty() ||
                 textBoxItem.Status.IsNullOrEmpty())
             {
-                MessageBox.Show("Input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Input enough information", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            else if (!IsValidEmail(textBoxItem.Email))
+            {
+                MessageBox.Show("Invalid email format", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            else if (!IsValidPhoneNumber(textBoxItem.PhoneNumber))
+            {
+                MessageBox.Show("Phone number can only be entered in numbers and up to 15 characters", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            else if(textBoxItem.Birthday > DateTime.Now)
+            {
+                MessageBox.Show("Birthday cannot be in the future", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            else if (IsEmailExists(textBoxItem.Email))
+            {
+                MessageBox.Show("Email already exists", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            else if (!IsValidPassword(textBoxItem.Password))
+            {
+                MessageBox.Show("Password must be at least 8 characters long, contain at least one uppercase letter and one special character!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
             else
             {
-                if (IsValidEmail(textBoxItem.Email))
+                var item = new Employee
                 {
-                    var item = new Employee
-                    {
-                        FullName = textBoxItem.FullName,
-                        Gender = textBoxItem.Gender,
-                        Email = textBoxItem.Email,
-                        PhoneNumber = textBoxItem.PhoneNumber,
-                        Birthday = textBoxItem.Birthday,
-                        Password = PasswordBoxHelper.GetMD5(textBoxItem.Password),                      
-                        CreatedDate = DateTime.Now,
-                        Status = textBoxItem.Status,
-                        RoleId = textBoxItem.RoleId
-                    };
-                    using (var context = new FstoreContext())
-                    {
-                        context.Employees.Add(item);
-                        context.SaveChanges();
-                    }
-                    OnEmployeeAdded?.Invoke();
-                    textBoxItem = new Employee();
-                    OnPropertyChanged(nameof(TextBoxItem));
-                    Application.Current.Windows[2]?.Close();
-                    Application.Current.Windows[0].Opacity = 1;
-                    Application.Current.MainWindow.Focus();
-                    Application.Current.Windows[0].IsHitTestVisible = true;
-                    MessageBox.Show("Add Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                    FullName = textBoxItem.FullName,
+                    Gender = textBoxItem.Gender,
+                    Email = textBoxItem.Email,
+                    PhoneNumber = textBoxItem.PhoneNumber,
+                    Birthday = textBoxItem.Birthday,
+                    Password = PasswordBoxHelper.GetMD5(textBoxItem.Password),
+                    CreatedDate = DateTime.Now,
+                    Status = textBoxItem.Status,
+                    RoleId = textBoxItem.RoleId
+                };
 
-                }
-                else
+                using (var context = new FstoreContext())
                 {
-                    MessageBox.Show("Invalid email format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                    context.Employees.Add(item);
+                    context.SaveChanges();
                 }
 
+                OnEmployeeAdded?.Invoke();
+                textBoxItem = new Employee();
+                OnPropertyChanged(nameof(TextBoxItem));
+                Application.Current.Windows[2]?.Close();
+                Application.Current.Windows[0].Opacity = 1;
+                Application.Current.MainWindow.Focus();
+                Application.Current.Windows[0].IsHitTestVisible = true;
+                MessageBox.Show("Add Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+
+           
         }
+
 
         private void Update(object obj)
         {
@@ -247,9 +276,33 @@ namespace FinalProject.ViewModels.Admin
             {
                 MessageBox.Show("Input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            else if (!IsValidPhoneNumber(textBoxItem.PhoneNumber))
+            {
+                MessageBox.Show("Phone number can only be entered in numbers and up to 15 characters!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            else if (textBoxItem.Birthday > DateTime.Now)
+            {
+                MessageBox.Show("Birthday cannot be in the future", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            else if (textBoxItem.Password != selectedItem.Password)
+            {
+                if (!IsValidPassword(textBoxItem.Password))
+                {
+                    MessageBox.Show("Password must be at least 8 characters long, contain at least one uppercase letter and one special character",
+                                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                TextBoxItem.Password = PasswordBoxHelper.GetMD5(textBoxItem.Password);
+            }
+            else if (!CheckEmail(textBoxItem.Email, selectedItem.Email))
+            {
+                return;
+            }
             else
             {
-                TextBoxItem.Password = PasswordBoxHelper.GetMD5(textBoxItem.Password);
                 using (var context = new FstoreContext())
                 {
                     context.Employees.Update(textBoxItem);
@@ -263,9 +316,9 @@ namespace FinalProject.ViewModels.Admin
                 Application.Current.Windows[0].Focus();
                 Application.Current.Windows[0].IsHitTestVisible = true;
                 MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            }
+            }          
         }
+        
 
         private void Delete(object obj)
         {
@@ -282,7 +335,7 @@ namespace FinalProject.ViewModels.Admin
                         var employee = context.Employees.FirstOrDefault(e => e.EmployeeId == selectedItem.EmployeeId);
                         if (employee.Status == "Active")
                         {
-                            MessageBox.Show("Employee Active!!!!!", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                            MessageBox.Show("The employee is in active status!", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         else
                         {
@@ -331,13 +384,68 @@ namespace FinalProject.ViewModels.Admin
             }
         }
 
+
+        private bool CheckEmail(string newEmail, string originalEmail)
+        {
+            // Nếu email không thay đổi, không cần kiểm tra gì thêm
+            if (newEmail.Equals(originalEmail, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            // Kiểm tra định dạng email
+            if (!IsValidEmail(newEmail))
+            {
+                MessageBox.Show("Email is not in correct format", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            // Kiểm tra email đã tồn tại trong cơ sở dữ liệu chưa
+            using (var context = new FstoreContext())
+            {
+                bool emailExists = context.Employees.Any(e => e.Email.ToLower() == newEmail.ToLower());
+                if (emailExists)
+                {
+                    MessageBox.Show("Email already exists", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
+                }
+            }
+
+            // Email hợp lệ và chưa tồn tại
+            return true;
+        }
+
+
+        public bool IsEmailExists(string email)
+        {
+            using (var context = new FstoreContext())
+            {
+                return context.Employees.Any(e => e.Email.ToLower() == email.ToLower());
+            }
+        }
+
+        public bool IsValidPassword(string password)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+                return false;
+            string pattern = @"^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$";
+            return Regex.IsMatch(password, pattern);
+        }
+
         public bool IsValidEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
                 return false;
-
             string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
             return Regex.IsMatch(email, pattern);
+        }
+
+        public bool IsValidPhoneNumber(string phoneNumber)
+        {
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+                return false;
+            string pattern = @"^\d{1,15}$"; // Chỉ cho phép nhập số và tối đa 15 ký tự
+            return Regex.IsMatch(phoneNumber, pattern);
         }
     }
 }
