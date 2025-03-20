@@ -73,6 +73,7 @@
                 <DataGridTextColumn Header="Password" Width="2.2*" Binding="{Binding Password}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Birthday" Width="1.2*" Binding="{Binding Birthday, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Gender" Width="0.7*" Binding="{Binding Gender}"></DataGridTextColumn>
+                <DataGridTextColumn Header="PhoneNumber" Width="1.1*" Binding="{Binding PhoneNumber}"></DataGridTextColumn>
                 <DataGridTextColumn Header="CreatedDate" Width="*" Binding="{Binding CreatedDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
