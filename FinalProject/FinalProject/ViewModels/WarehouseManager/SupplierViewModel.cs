@@ -1,12 +1,10 @@
 ﻿using FinalProject.Models;
-using FinalProject.ViewModels.ShopManager;
-using FinalProject.Views.ShopManager.Customer;
 using FinalProject.Views.WarehouseManager.Supplier;
-using MaterialDesignColors;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using WPFLab.Helper;
@@ -34,6 +32,7 @@ namespace FinalProject.ViewModels.WarehouseManager
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand SearchCommand { get; }
+        public List<bool> StatusList { get; set; } = new List<bool> { true, false };
         public SupplierViewModel()
         {
             Load();
@@ -188,27 +187,41 @@ namespace FinalProject.ViewModels.WarehouseManager
             }
             else
             {
-                var item = new Supplier
+                if (!IsValidPhone(TextBoxItem.PhoneNumber))
                 {
-                    TaxId = _textBoxItem.TaxId,
-                    Name = _textBoxItem.Name,
-                    Address = _textBoxItem.Address,
-                    Email = _textBoxItem.Email,
-                    PhoneNumber = _textBoxItem.PhoneNumber,
-                    CreatedDate = DateTime.Now
-                };
+                    MessageBox.Show("Invalid phone number format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else if (!IsValidEmail(TextBoxItem.Email))
+                {
+                    MessageBox.Show("Invalid email format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else if (TextBoxItem.Name.Length > 255)
+                {
+                    MessageBox.Show("Invalid name format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    var item = new Supplier
+                    {
+                        TaxId = _textBoxItem.TaxId,
+                        Name = _textBoxItem.Name,
+                        Address = _textBoxItem.Address,
+                        Email = _textBoxItem.Email,
+                        PhoneNumber = _textBoxItem.PhoneNumber,
+                        CreatedDate = DateTime.Now
+                    };
 
-                using var context = new FstoreContext();
-                context.Suppliers.Add(item);
-                context.SaveChanges();
-                OnSupplierAdded?.Invoke();
-                _textBoxItem = new Supplier();
-                OnPropertyChanged(nameof(TextBoxItem));
-                Application.Current.Windows[2]?.Close();
-                Application.Current.Windows[0].Opacity = 1;
-                Application.Current.Windows[0].Focus();
-                Application.Current.Windows[0].IsHitTestVisible = true;
-
+                    using var context = new FstoreContext();
+                    context.Suppliers.Add(item);
+                    context.SaveChanges();
+                    OnSupplierAdded?.Invoke();
+                    _textBoxItem = new Supplier();
+                    OnPropertyChanged(nameof(TextBoxItem));
+                    Application.Current.Windows[2]?.Close();
+                    Application.Current.Windows[0].Opacity = 1;
+                    Application.Current.Windows[0].Focus();
+                    Application.Current.Windows[0].IsHitTestVisible = true;
+                }
             }
         }
         private void Update(object obj)
@@ -223,19 +236,33 @@ namespace FinalProject.ViewModels.WarehouseManager
             }
             else
             {
-                using (var context = new FstoreContext())
+                if (!IsValidPhone(_textBoxItem.PhoneNumber))
                 {
-                    context.Suppliers.Update(_textBoxItem);
-                    context.SaveChanges();
+                    MessageBox.Show("Invalid phone number format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                OnSupplierAdded?.Invoke();
-                _textBoxItem = new Supplier();
-                OnPropertyChanged(nameof(TextBoxItem));
-                Application.Current.Windows[2]?.Close();
-                Application.Current.Windows[0].Opacity = 1;
-                Application.Current.Windows[0].Focus();
-                Application.Current.Windows[0].IsHitTestVisible = true;
-
+                else if (!IsValidEmail(_textBoxItem.Email))
+                {
+                    MessageBox.Show("Invalid email format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else if (_textBoxItem.Name.Length > 255)
+                {
+                    MessageBox.Show("Invalid name format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    using (var context = new FstoreContext())
+                    {
+                        context.Suppliers.Update(_textBoxItem);
+                        context.SaveChanges();
+                    }
+                    OnSupplierAdded?.Invoke();
+                    _textBoxItem = new Supplier();
+                    OnPropertyChanged(nameof(TextBoxItem));
+                    Application.Current.Windows[2]?.Close();
+                    Application.Current.Windows[0].Opacity = 1;
+                    Application.Current.Windows[0].Focus();
+                    Application.Current.Windows[0].IsHitTestVisible = true;
+                }
             }
         }
         private void Delete(object obj)
@@ -296,5 +323,18 @@ namespace FinalProject.ViewModels.WarehouseManager
                 OnPropertyChanged(nameof(SupplierList));
             }
         }
+        public bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            return Regex.IsMatch(email, pattern);
+        }
+        public bool IsValidPhone(string input)
+        {
+            return !string.IsNullOrEmpty(input) && input.Length == 10 && input.All(char.IsDigit);
+        }
+
     }
 }

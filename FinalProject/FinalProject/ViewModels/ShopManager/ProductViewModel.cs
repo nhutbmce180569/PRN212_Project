@@ -94,7 +94,13 @@ namespace FinalProject.ViewModels.ShopManager
                         IsDeleted = _selectItem.IsDeleted
                     };
 
+
+                    textboxItem = new Product();
                     OnPropertyChanged(nameof(textboxItem));
+                    Application.Current.Windows[2]?.Close();
+                    Application.Current.Windows[0].Opacity = 1;
+                    Application.Current.Windows[0].Focus();
+                    Application.Current.Windows[0].IsHitTestVisible = true;
                 }
             }
         }
