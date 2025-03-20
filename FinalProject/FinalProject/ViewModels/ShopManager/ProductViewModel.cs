@@ -233,10 +233,7 @@ namespace FinalProject.ViewModels.ShopManager
                     allproducts = new ObservableCollection<Product>(products);
                     OnPropertyChanged(nameof(products));
                     OnPropertyChanged(nameof(allproducts));
-                    Application.Current.Windows[2]?.Close();
-                    Application.Current.Windows[0].Opacity = 1;
-                    Application.Current.MainWindow.Focus();
-                    Application.Current.Windows[0].IsHitTestVisible = true;
+                    ClosePopup();
                     MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -318,10 +315,7 @@ namespace FinalProject.ViewModels.ShopManager
                         // Reset textbox
                         textboxItem = new Product();
                         OnPropertyChanged(nameof(textboxItem));
-                        Application.Current.Windows[2]?.Close();
-                        Application.Current.Windows[0].Opacity = 1;
-                        Application.Current.MainWindow.Focus();
-                        Application.Current.Windows[0].IsHitTestVisible = true;
+                        ClosePopup();
                         MessageBox.Show("Create Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
@@ -376,9 +370,16 @@ namespace FinalProject.ViewModels.ShopManager
                 IsDeleted = false
             };
 
-            var popup = new AddProduct();
-            popup.DataContext = this;
+            var popup = new AddProduct
+            {
+                DataContext = this,
+                Owner = Application.Current.MainWindow, // Đặt Owner để đảm bảo nó thuộc về MainWindow
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            Application.Current.MainWindow.Opacity = 0.7; // Làm mờ MainWindow
             popup.ShowDialog();
+            Application.Current.MainWindow.Opacity = 1; // Khôi phục lại MainWindow khi đóng popup
         }
         private void OpenUpdatePopup(object obj)
         {
@@ -387,11 +388,27 @@ namespace FinalProject.ViewModels.ShopManager
                 MessageBox.Show("Please select a product to update.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+            var popup = new UpdateProduct
+            {
+                DataContext = this,
+                Owner = Application.Current.MainWindow,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
 
-            var popup = new UpdateProduct();
-            popup.DataContext = this;
+            Application.Current.MainWindow.Opacity = 0.7;
             popup.ShowDialog();
+            Application.Current.MainWindow.Opacity = 1;
         }
-
+        private void ClosePopup()
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is AddProduct || window is UpdateProduct)
+                {
+                    window.Close();
+                    break;
+                }
+            }
+        }
     }
 }
