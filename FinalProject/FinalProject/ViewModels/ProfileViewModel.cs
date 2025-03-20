@@ -9,6 +9,7 @@ using FinalProject.Views.Profile;
 using Microsoft.IdentityModel.Tokens;
 using WPFLab.Helper;
 using WPFLab.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FinalProject.ViewModels
 {
@@ -229,6 +230,11 @@ namespace FinalProject.ViewModels
                 if (!IsValidPhoneNumber(EmployeeUpdate.PhoneNumber))
                 {
                     MessageBox.Show("Phone number must contain only digits and be between 1 and 15 characters long.");
+                    return;
+                }
+                if (EmployeeUpdate.Birthday <= DateTime.Today)
+                {
+                    MessageBox.Show("Your birthday cannot be in the future!");
                     return;
                 }
 
