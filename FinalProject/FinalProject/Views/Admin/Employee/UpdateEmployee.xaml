@@ -68,11 +68,12 @@ Title="UpdateEmployee" Height="350" Width="500">
             <TextBox x:Name="txtPassword" Grid.Column="1" Grid.Row="6" Text="{Binding TextBoxItem.Password, Mode=OneWayToSource}"></TextBox>
             <DatePicker x:Name="txtCreateDate" Grid.Column="1" Grid.Row="7" Height="40" Width="190" HorizontalAlignment="Left"
                 SelectedDate="{Binding TextBoxItem.CreatedDate, Mode=TwoWay}"
-                SelectedDateFormat="Short"></DatePicker>
+                SelectedDateFormat="Short" IsEnabled="False"></DatePicker>
             <ComboBox Name="txtStatus" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="8"  Background="White"
                 SelectedItem="{Binding TextBoxItem.Status, Mode=TwoWay}" Height="30" Width="190"></ComboBox>
             <ComboBox Name="txtRoleId" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="9"  Background="White"
-                 SelectedItem="{Binding TextBoxItem.RoleId, Mode=TwoWay}" Height="30" Width="190"></ComboBox>
+                 SelectedValue="{Binding TextBoxItem.RoleId, Mode=TwoWay}" Height="30" Width="190"
+                      SelectedValuePath="RoleId" DisplayMemberPath="Name"></ComboBox>
             <Grid Grid.Row="10" Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using FinalProject.Models;
 
 namespace FinalProject.Views.Admin.Employee
 {
@@ -24,7 +25,14 @@ namespace FinalProject.Views.Admin.Employee
             InitializeComponent();
             cbGender.ItemsSource = new List<string>() { "Male", "Female", "Other" };
             cbStatus.ItemsSource = new List<string>() { "Active", "Inactive"};
-            cbRoleId.ItemsSource = new List<int>() { 1, 2, 3, 4 };
+
+            using (var context = new FstoreContext())
+            {
+                var roles = context.Roles.Where(r => r.RoleId != 1).ToList();
+                cbRoleId.ItemsSource = roles;
+            }
+
+            dpCreatedDate.SelectedDate = DateTime.Now;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
