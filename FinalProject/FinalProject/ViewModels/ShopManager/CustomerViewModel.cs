@@ -1,24 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using FinalProject.Helper;
 using FinalProject.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using WPFLab.Helper;
 using FinalProject.Views.ShopManager.Customer;
-using System.Windows;
-using WPFLab.ViewModels;
-using Newtonsoft.Json;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using FinalProject.Views.ShopManager;
-using System.Diagnostics;
-using System.Windows.Documents;
+using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
-using FinalProject.Helper;
+using System.Windows;
+using System.Windows.Input;
+using WPFLab.Helper;
+using WPFLab.ViewModels;
 
 namespace FinalProject.ViewModels.ShopManager
 {
@@ -228,8 +218,8 @@ namespace FinalProject.ViewModels.ShopManager
             else
             {
                 if (!ExistEmail(textBoxItem.Email) && IsValidEmail(textBoxItem.Email)
-                    && IsValidPhoneNumber(textBoxItem.PhoneNumber) 
-                    && IsValidPassword(textBoxItem.Password) 
+                    && IsValidPhoneNumber(textBoxItem.PhoneNumber)
+                    && IsValidPassword(textBoxItem.Password)
                     && IsValidFullname(textBoxItem.FullName)
                     && ValidateDate(textBoxItem.Birthday))
                 {
@@ -273,27 +263,20 @@ namespace FinalProject.ViewModels.ShopManager
 
         private void Update(object obj)
         {
-            if (textBoxItem.FullName.IsNullOrEmpty() ||
+           if (textBoxItem.FullName.IsNullOrEmpty() ||
            textBoxItem.PhoneNumber.IsNullOrEmpty() ||
            textBoxItem.Email.IsNullOrEmpty() ||
            textBoxItem.Password.IsNullOrEmpty())
-            {
+           {
                 MessageBox.Show("Input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+           }
             else
             {
                 if (IsValidEmail(textBoxItem.Email)
-                    && IsValidPhoneNumber(textBoxItem.PhoneNumber) 
-                    && IsValidFullname(textBoxItem.FullName)
-                    && ValidateDate(textBoxItem.Birthday))
+                        && IsValidPhoneNumber(textBoxItem.PhoneNumber)
+                        && IsValidFullname(textBoxItem.FullName)
+                        && ValidateDate(textBoxItem.Birthday))
                 {
-                    if (!selectedItem.Email.Equals(textBoxItem.Email))
-                    {
-                        if (ExistEmail(textBoxItem.Email))
-                        {
-                            return;
-                        }
-                    }
                     if (!textBoxItem.Password.Equals(selectedItem.Password))
                     {
                         if (IsValidPassword(textBoxItem.Password))
@@ -305,18 +288,30 @@ namespace FinalProject.ViewModels.ShopManager
                             return;
                         }
                     }
+
+                    if (!selectedItem.Email.Equals(textBoxItem.Email))
+                    {
+                        if (ExistEmail(textBoxItem.Email))
+                        {
+                            return;
+                        }
+                    }
+
                     using (var context = new FstoreContext())
                     {
                         context.Customers.Update(textBoxItem);
                         context.SaveChanges();
                     }
+
                     OnCustomerAdded?.Invoke();
                     textBoxItem = new Customer();
                     OnPropertyChanged(nameof(TextBoxItem));
+
                     Application.Current.Windows[2]?.Close();
                     Application.Current.Windows[0].Opacity = 1;
                     Application.Current.Windows[0].Focus();
                     Application.Current.Windows[0].IsHitTestVisible = true;
+
                     MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }

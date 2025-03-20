@@ -1,5 +1,6 @@
 ﻿using FinalProject.Views.Profile;
 using FinalProject.Views.ShopManager;
+using FinalProject.Views.WarehouseManager.ImportOrder;
 using FinalProject.Views.WarehouseManager.Supplier;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace FinalProject.Views.WarehouseManager
         public WarehouseManagerView()
         {
             InitializeComponent();
+            fmt.Content = new ProductListView();
         }
         public void ButtonClick_ShowProfile(object sender, RoutedEventArgs e)
         {
@@ -43,6 +45,15 @@ namespace FinalProject.Views.WarehouseManager
                 new MainWindow().Show();
                 this.Close();
             }
+        }
+
+        private void ButtonClick_Import(object sender, RoutedEventArgs e)
+        {
+            fmt.Content = new ProductListView();
+        }
+        private void ButtonClick_ViewImport(object sender, RoutedEventArgs e)
+        {
+            fmt.Content = new ImportOrderListView();
         }
     }
 }
