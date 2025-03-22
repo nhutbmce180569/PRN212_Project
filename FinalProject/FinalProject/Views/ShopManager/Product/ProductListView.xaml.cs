@@ -26,5 +26,28 @@ namespace FinalProject.Views.ShopManager.Product
             InitializeComponent();
             DataContext = new ProductViewModel();
         }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox cb && cb.Tag is int productId)
+            {
+                if (DataContext is ProductViewModel vm)
+                {
+                    vm.SelectedProducts[productId] = true;
+                }
+            }
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox cb && cb.Tag is int productId)
+            {
+                if (DataContext is ProductViewModel vm)
+                {
+                    vm.SelectedProducts[productId] = false;
+                }
+            }
+        }
+
     }
 }

@@ -21,11 +21,13 @@ namespace FinalProject.ViewModels.ShopManager
     {
         public ObservableCollection<Product> allproducts { get; set; }
         public ObservableCollection<Product> products { get; set; }
+        public Dictionary<int, bool> SelectedProducts { get; set; } = new Dictionary<int, bool>();
         public ICommand AddCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand SearchCommand { get; }
         public ICommand ExportCommand { get; }
+        public ICommand DeleteSelectedCommand { get; }
         public ICommand OpenCreatePopupCommand { get; }
         public ICommand OpenUpdatePopupCommand { get; }
         public ObservableCollection<Brand> Brands { get; set; }
@@ -39,10 +41,12 @@ namespace FinalProject.ViewModels.ShopManager
             DeleteCommand = new RelayCommand(Delete);
             SearchCommand = new RelayCommand(Search);
             ExportCommand = new RelayCommand(Export);
+            DeleteSelectedCommand = new RelayCommand(DeleteSelected);
             OpenCreatePopupCommand = new RelayCommand(OpenCreatePopup);
             OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
 
         }
+
         private void Load()
         {
             using (var context = new FstoreContext())
@@ -52,16 +56,19 @@ namespace FinalProject.ViewModels.ShopManager
                     .Include(p => p.Category)
                     .ToList();
 
-                Brands = new ObservableCollection<Brand>(context.Brands.ToList());
-                Categories = new ObservableCollection<Category>(context.Categories.ToList());
-
                 products = new ObservableCollection<Product>(list);
                 allproducts = new ObservableCollection<Product>(products);
             }
 
-            OnPropertyChanged(nameof(Brands));
-            OnPropertyChanged(nameof(Categories));
+            foreach (var product in products)
+            {
+                if (!SelectedProducts.ContainsKey(product.ProductId))
+                    SelectedProducts[product.ProductId] = false;
+            }
+
+            OnPropertyChanged(nameof(products));
         }
+
 
 
         private Product _textboxItem;
@@ -123,44 +130,87 @@ namespace FinalProject.ViewModels.ShopManager
         }
         private void Delete(object obj)
         {
-            if (_selectItem == null)
+            // Lấy danh sách các sản phẩm được tick checkbox
+            var multiSelected = SelectedProducts
+                .Where(kvp => kvp.Value)
+                .Select(kvp => products.FirstOrDefault(p => p.ProductId == kvp.Key))
+                .Where(p => p != null)
+                .ToList();
+
+            // XÓA HÀNG LOẠT
+            if (multiSelected.Any())
             {
-                MessageBox.Show("Please select a product to delete.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var confirmMsg = $"Are you sure you want to delete {multiSelected.Count} selected product(s)?";
+                var result = MessageBox.Show(confirmMsg, "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result != MessageBoxResult.Yes) return;
+
+                using (var context = new FstoreContext())
+                {
+                    foreach (var product in multiSelected)
+                    {
+                        var dbProduct = context.Products
+                            .Include(p => p.OrderDetails)
+                            .Include(p => p.ImportOrderDetails)
+                            .FirstOrDefault(p => p.ProductId == product.ProductId);
+
+                        if (dbProduct != null)
+                        {
+                            if (dbProduct.OrderDetails.Any() || dbProduct.ImportOrderDetails.Any())
+                            {
+                                MessageBox.Show($"Cannot delete {product.FullName} because it has related order details.",
+                                                "Delete Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                continue;
+                            }
+
+                            context.Products.Remove(dbProduct);
+                            products.Remove(product);
+                            SelectedProducts[product.ProductId] = false;
+                        }
+                    }
+                    context.SaveChanges();
+                }
+
+                allproducts = new ObservableCollection<Product>(products);
+                OnPropertyChanged(nameof(products));
+                OnPropertyChanged(nameof(allproducts));
+
+                MessageBox.Show($"{multiSelected.Count} product(s) deleted successfully.", "Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            var result = MessageBox.Show($"Are you sure you want to delete {_selectItem.FullName}?",
-                                         "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
+            // XÓA ĐƠN LẺ
+            if (selectItem != null)
             {
+                var confirm = MessageBox.Show($"Are you sure you want to delete {selectItem.FullName}?",
+                                              "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (confirm != MessageBoxResult.Yes) return;
+
                 using (var context = new FstoreContext())
                 {
-                    // Tìm lại sản phẩm trong database
-                    var product = context.Products
+                    var dbProduct = context.Products
                         .Include(p => p.OrderDetails)
                         .Include(p => p.ImportOrderDetails)
-                        .FirstOrDefault(p => p.ProductId == _selectItem.ProductId);
+                        .FirstOrDefault(p => p.ProductId == selectItem.ProductId);
 
-                    if (product != null)
+                    if (dbProduct != null)
                     {
-                        // Kiểm tra nếu sản phẩm có dữ liệu trong OrderDetails hoặc ImportOrderDetails
-                        if (product.OrderDetails.Any() || product.ImportOrderDetails.Any())
+                        if (dbProduct.OrderDetails.Any() || dbProduct.ImportOrderDetails.Any())
                         {
                             MessageBox.Show("This product cannot be deleted because it has related order details.",
                                             "Delete Error", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
 
-                        // Nếu không có dữ liệu liên quan, tiến hành xóa
-                        context.Products.Remove(product);
+                        context.Products.Remove(dbProduct);
                         context.SaveChanges();
 
-                        // Cập nhật danh sách UI
-                        products.Remove(_selectItem);
+                        products.Remove(selectItem);
                         allproducts = new ObservableCollection<Product>(products);
                         OnPropertyChanged(nameof(products));
                         OnPropertyChanged(nameof(allproducts));
+
+                        MessageBox.Show($"{selectItem.FullName} deleted successfully.", "Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {
@@ -171,8 +221,13 @@ namespace FinalProject.ViewModels.ShopManager
                 // Reset form nhập
                 textboxItem = new Product { Brand = new Brand(), Category = new Category() };
                 OnPropertyChanged(nameof(textboxItem));
+                return;
             }
+
+            // KHÔNG CHỌN GÌ HẾT
+            MessageBox.Show("Please select a product to delete, or tick checkboxes for batch deletion.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
+
         private bool _canUpdate;
         public bool CanUpdate
         {
@@ -337,7 +392,6 @@ namespace FinalProject.ViewModels.ShopManager
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void Search(object obj)
         {
             if (string.IsNullOrWhiteSpace(SearchText))
@@ -423,48 +477,102 @@ namespace FinalProject.ViewModels.ShopManager
             }
         }
 
-
         private void Export(object obj)
         {
             try
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog
                 {
-                    Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
-                    FileName = "products.json",
+                    Filter = "Excel files (*.xlsx)|*.xlsx",
+                    FileName = "products.xlsx",
                     Title = "Save Exported Data"
                 };
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    // Convert danh sách sản phẩm thành danh sách đơn giản để export
-                    var exportList = allproducts.Select(p => new
+                    var workbook = new ClosedXML.Excel.XLWorkbook();
+                    var worksheet = workbook.Worksheets.Add("Products");
+
+                    var headerRange = worksheet.Range(1, 1, 1, 9);
+                    headerRange.Style.Font.Bold = true;
+                    headerRange.Style.Alignment.Horizontal = ClosedXML.Excel.XLAlignmentHorizontalValues.Center;
+                    worksheet.Columns().AdjustToContents();
+
+                    // Header row
+                    worksheet.Cell(1, 1).Value = "Product ID";
+                    worksheet.Cell(1, 2).Value = "Brand";
+                    worksheet.Cell(1, 3).Value = "Category";
+                    worksheet.Cell(1, 4).Value = "Model";
+                    worksheet.Cell(1, 5).Value = "Full Name";
+                    worksheet.Cell(1, 6).Value = "Description";
+                    worksheet.Cell(1, 7).Value = "Price";
+                    worksheet.Cell(1, 8).Value = "Stock";
+                    worksheet.Cell(1, 9).Value = "Disable";
+
+                    // Data rows
+                    for (int i = 0; i < allproducts.Count; i++)
                     {
-                        p.ProductId,
-                        Brand = p.Brand?.Name,
-                        Category = p.Category?.Name,
-                        p.Model,
-                        p.FullName,
-                        p.Description,
-                        p.Price,
-                        p.Stock,
-                        p.IsDeleted
-                    }).ToList();
+                        var p = allproducts[i];
+                        worksheet.Cell(i + 2, 1).Value = p.ProductId;
+                        worksheet.Cell(i + 2, 2).Value = p.Brand?.Name ?? "";
+                        worksheet.Cell(i + 2, 3).Value = p.Category?.Name ?? "";
+                        worksheet.Cell(i + 2, 4).Value = p.Model;
+                        worksheet.Cell(i + 2, 5).Value = p.FullName;
+                        worksheet.Cell(i + 2, 6).Value = p.Description;
+                        worksheet.Cell(i + 2, 7).Value = p.Price;
+                        worksheet.Cell(i + 2, 8).Value = p.Stock;
+                        worksheet.Cell(i + 2, 9).Value = p.IsDeleted == true ? "Yes" : "No";
+                    }
 
-                    // Serialize thành JSON
-                    string json = JsonConvert.SerializeObject(exportList, Formatting.Indented);
-
-                    // Ghi vào file
-                    File.WriteAllText(saveFileDialog.FileName, json);
-
-                    MessageBox.Show("Export successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    workbook.SaveAs(saveFileDialog.FileName);
+                    MessageBox.Show("Export to Excel successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error exporting data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error exporting to Excel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void DeleteSelected(object obj)
+        {
+            var selectedProducts = products.Where(p => SelectedProducts.ContainsKey(p.ProductId) && SelectedProducts[p.ProductId]).ToList();
+
+            if (!selectedProducts.Any())
+            {
+                MessageBox.Show("No products selected.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
 
+            using (var context = new FstoreContext())
+            {
+                foreach (var product in selectedProducts)
+                {
+                    var dbProduct = context.Products.Find(product.ProductId);
+                    if (dbProduct != null)
+                    {
+                        context.Products.Remove(dbProduct);
+                    }
+                }
+                context.SaveChanges();
+            }
+
+            foreach (var product in selectedProducts)
+            {
+                products.Remove(product);
+                SelectedProducts.Remove(product.ProductId);
+            }
+
+            allproducts = new ObservableCollection<Product>(products);
+            OnPropertyChanged(nameof(products));
+
+            MessageBox.Show($"{selectedProducts.Count} product(s) deleted successfully.", "Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            foreach (var product in SelectedProducts.Keys.ToList())
+            {
+                SelectedProducts[product] = false;
+            }
         }
+
     }
 }
