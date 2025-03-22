@@ -50,7 +50,7 @@
                     <DataGrid Background="White" SelectedItem="{Binding selectItem, Mode=TwoWay}" 
                               ItemsSource="{Binding products}" AutoGenerateColumns="False"
                               RowHeight="40" HeadersVisibility="Column" FontSize="14"
-                              GridLinesVisibility="Horizontal">
+                              GridLinesVisibility="Horizontal" CanUserAddRows="False" CanUserDeleteRows="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="50" Header="ID" Binding="{Binding ProductId}"/>
                             <DataGridTextColumn Width="150" Header="Brand" Binding="{Binding Brand.Name}"/>
@@ -60,7 +60,7 @@
                             <DataGridTextColumn Width="250" Header="Description" Binding="{Binding Description}"/>
                             <DataGridTextColumn Width="100" Header="Price" Binding="{Binding Price}"/>
                             <DataGridTextColumn Width="80" Header="Stock" Binding="{Binding Stock}"/>
-                            <DataGridCheckBoxColumn Width="80" Header="Deleted" Binding="{Binding IsDeleted}"/>
+                            <DataGridCheckBoxColumn Width="80" Header="Disable" Binding="{Binding IsDeleted}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>
