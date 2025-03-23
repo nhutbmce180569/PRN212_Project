@@ -204,16 +204,39 @@ namespace FinalProject.ViewModels.WarehouseManager
                         importedProduct.Stock += ImportedQuantity;
                         context.Update(importedProduct);
 
-                        // thu nghiem
 
-                        ImportOrder iO = new ImportOrder() { TotalCost = ImportedPrice * ImportedQuantity, ImportDate = DateTime.Now, SupplierId = SelectedSupplier.SupplierId };
-                        context.ImportOrders.Add(iO);
-                        context.SaveChanges();
+                        if (Application.Current?.Properties.Contains("Employee") == true)
+                        {
+                            if (Application.Current.Properties["Employee"] is Employee currentEmployee)
+                            {
+                                var employee = context.Employees.FirstOrDefault(
+                                    c => c.EmployeeId == currentEmployee.EmployeeId
+                                );
 
-                        ImportOrderDetail iOD = new ImportOrderDetail() { Io = iO, ProductId = importedProduct.ProductId, Quantity = ImportedQuantity, ImportPrice = ImportedPrice };
-                        context.ImportOrderDetails.Add(iOD);
+                                if (employee != null)
+                                {
+                                    // thu nghiem
 
-                        // thu nghiem
+                                    ImportOrder iO = new ImportOrder() { Employee = employee, TotalCost = ImportedPrice * ImportedQuantity, ImportDate = DateTime.Now, SupplierId = SelectedSupplier.SupplierId };
+                                    context.ImportOrders.Add(iO);
+                                    context.SaveChanges();
+
+                                    ImportOrderDetail iOD = new ImportOrderDetail() { Io = iO, ProductId = importedProduct.ProductId, Quantity = ImportedQuantity, ImportPrice = ImportedPrice };
+                                    context.ImportOrderDetails.Add(iOD);
+
+                                    // thu nghiem
+                                }
+
+                            }
+                            else
+                            {
+                                MessageBox.Show("Employee object is null!");
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("No Employee found in Application.Current.Properties!");
+                        }
 
                         context.SaveChanges();
 

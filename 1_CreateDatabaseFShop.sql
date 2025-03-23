@@ -66,7 +66,7 @@ CREATE TABLE Customers (
 );
 
 CREATE TABLE Suppliers (
-    SupplierID INT PRIMARY KEY,
+    SupplierID INT IDENTITY(1, 1) PRIMARY KEY,
     TaxID VARCHAR(20),
     Name NVARCHAR(255) NOT NULL,
     Email VARCHAR(254),
