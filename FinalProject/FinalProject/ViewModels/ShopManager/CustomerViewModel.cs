@@ -203,8 +203,8 @@ namespace FinalProject.ViewModels.ShopManager
                     {
                         var p = AllCustomerList[i];
                         worksheet.Cell(i + 2, 1).Value = p.CustomerId;
-                        worksheet.Cell(i + 2, 2).Value = p.FullName?? "";
-                        worksheet.Cell(i + 2, 3).Value = p.Email?? "";
+                        worksheet.Cell(i + 2, 2).Value = p.FullName ?? "";
+                        worksheet.Cell(i + 2, 3).Value = p.Email ?? "";
                         worksheet.Cell(i + 2, 4).Value = p.Gender;
                         worksheet.Cell(i + 2, 5).Value = p.Birthday;
                         worksheet.Cell(i + 2, 6).Value = p.CreatedDate;
@@ -256,8 +256,10 @@ namespace FinalProject.ViewModels.ShopManager
                         {
                             context.Customers.Remove(selectedItem);
                             context.SaveChanges();
-                            CustomerList.Remove(selectedItem);
                             AllCustomerList.Remove(selectedItem);
+                            CustomerList = new ObservableCollection<Customer>(AllCustomerList);
+                            OnPropertyChanged(nameof(CustomerList));
+                            OnPropertyChanged(nameof(AllCustomerList));
                             MessageBox.Show("Delete Successfully", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                     }
@@ -323,13 +325,13 @@ namespace FinalProject.ViewModels.ShopManager
 
         private void Update(object obj)
         {
-           if (textBoxItem.FullName.IsNullOrEmpty() ||
-           textBoxItem.PhoneNumber.IsNullOrEmpty() ||
-           textBoxItem.Email.IsNullOrEmpty() ||
-           textBoxItem.Password.IsNullOrEmpty())
-           {
+            if (textBoxItem.FullName.IsNullOrEmpty() ||
+            textBoxItem.PhoneNumber.IsNullOrEmpty() ||
+            textBoxItem.Email.IsNullOrEmpty() ||
+            textBoxItem.Password.IsNullOrEmpty())
+            {
                 MessageBox.Show("Input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
-           }
+            }
             else
             {
                 if (IsValidEmail(textBoxItem.Email)
