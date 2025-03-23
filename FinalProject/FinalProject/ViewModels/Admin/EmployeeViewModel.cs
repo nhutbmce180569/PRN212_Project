@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text.RegularExpressions;
 using FinalProject.Views.Admin.Employee;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 
 namespace FinalProject.ViewModels.Admin
 {
@@ -45,6 +46,8 @@ namespace FinalProject.ViewModels.Admin
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand SearchCommand { get; }
+        public ICommand ExportCommand { get; }
+
 
         public EmployeeViewModel()
         {
@@ -56,6 +59,82 @@ namespace FinalProject.ViewModels.Admin
             SearchCommand = new RelayCommand(Search);
             OpenAddPopupCommand = new RelayCommand(OpenPopup);
             OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
+            ExportCommand = new RelayCommand(Export);
+        }
+
+        private void Export(object obj)
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "Excel files (*.xlsx)|*.xlsx",
+                    FileName = "employees.xlsx",
+                    Title = "Save Exported Data"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    var workbook = new ClosedXML.Excel.XLWorkbook();
+                    var worksheet = workbook.Worksheets.Add("Employees");
+
+                    var headerRange = worksheet.Range(1, 1, 1, 9);
+                    headerRange.Style.Font.Bold = true;
+                    headerRange.Style.Alignment.Horizontal = ClosedXML.Excel.XLAlignmentHorizontalValues.Center;
+                    worksheet.Columns().AdjustToContents();
+
+                    // Header row
+                    worksheet.Cell(1, 1).Value = "Employee ID";
+                    worksheet.Cell(1, 2).Value = "FullName";
+                    worksheet.Cell(1, 3).Value = "Birthday";
+                    worksheet.Cell(1, 4).Value = "Password";
+                    worksheet.Cell(1, 5).Value = "Phone Number";
+                    worksheet.Cell(1, 6).Value = "Email";
+                    worksheet.Cell(1, 7).Value = "Gender";
+                    worksheet.Cell(1, 8).Value = "CreatedDate";
+                    worksheet.Cell(1, 9).Value = "Status";
+                    worksheet.Cell(1, 10).Value = "Role";
+
+                    // Data rows
+                    for (int i = 0; i < AllEmployeeList.Count; i++)
+                    {
+                        var p = AllEmployeeList[i];
+                        worksheet.Cell(i + 2, 1).Value = p.EmployeeId;
+                        worksheet.Cell(i + 2, 2).Value = p.FullName;
+                        worksheet.Cell(i + 2, 3).Value = p.Birthday;
+                        worksheet.Cell(i + 2, 4).Value = p.Password;
+                        worksheet.Cell(i + 2, 5).Value = p.PhoneNumber;
+                        worksheet.Cell(i + 2, 6).Value = p.Email;
+                        worksheet.Cell(i + 2, 7).Value = p.Gender;
+                        worksheet.Cell(i + 2, 8).Value = p.CreatedDate;
+                        worksheet.Cell(i + 2, 9).Value = p.Status;
+                        if (p.RoleId == 1)
+                        {
+                            worksheet.Cell(i + 2, 10).Value = "Admin";
+                        }
+                        else if (p.RoleId == 2)
+                        {
+                            worksheet.Cell(i + 2, 10).Value = "Shop Manager";
+                        }
+                        else if (p.RoleId == 3)
+                        {
+                            worksheet.Cell(i + 2, 10).Value = "Warehouse Manager";
+                        }
+                        else if (p.RoleId == 4)
+                        {
+                            worksheet.Cell(i + 2, 10).Value = "Order Manager";
+                        }
+
+                    }
+
+                    workbook.SaveAs(saveFileDialog.FileName);
+                    MessageBox.Show("Export to Excel successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error exporting to Excel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public EmployeeViewModel(Employee employee)
