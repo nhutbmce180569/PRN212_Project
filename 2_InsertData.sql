@@ -16,9 +16,9 @@ INSERT INTO Employees (FullName, Birthday, Password, PhoneNumber, Email, Gender,
 
 -- Customers
 INSERT INTO Customers ( FullName, Birthday, Password, PhoneNumber, Email, Gender, CreatedDate, IsBlock, IsDeleted) VALUES
-( N'Alex Johnson', '1993-03-10', 'hashed_pwd', '0934567890', 'alex@example.com', 'Male', '2024-03-01', 0, 0),
-( N'Sophia Carter', '1998-07-22', 'hashed_pwd', '0922345678', 'sophia@example.com', 'Female', '2024-03-01', 0, 0),
-( N'Liam Wilson', '2000-11-15', 'hashed_pwd', '0911122334', 'liam@example.com', 'Male', '2024-03-01', 0, 0);
+( N'Alex Johnson', '1993-03-10', '36fdba5968850579c0a89444f4ca4772', '0934567890', 'alex@example.com', 'Male', '2024-03-01', 0, 0),
+( N'Sophia Carter', '1998-07-22', '36fdba5968850579c0a89444f4ca4772', '0922345678', 'sophia@example.com', 'Female', '2024-03-01', 0, 0),
+( N'Liam Wilson', '2000-11-15', '36fdba5968850579c0a89444f4ca4772', '0911122334', 'liam@example.com', 'Male', '2024-03-01', 0, 0);
 
 -- Suppliers
 INSERT INTO Suppliers (SupplierID, TaxID, Name, Email, PhoneNumber, Address, CreatedDate, LastModify, DeletedDate, IsActivate, IsDeleted) VALUES
