@@ -26,6 +26,7 @@ namespace FinalProject.ViewModels.ShopManager
         public ICommand DeleteCommand { get; }
         public ICommand SearchCommand { get; }
         public ICommand ExportCommand { get; }
+        public ICommand DeleteSelectedCommand { get; }
         public ICommand OpenCreatePopupCommand { get; }
         public ICommand OpenUpdatePopupCommand { get; }
         public ObservableCollection<Brand> Brands { get; set; }
@@ -43,6 +44,7 @@ namespace FinalProject.ViewModels.ShopManager
             OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
 
         }
+
         private void Load()
         {
             using (var context = new FstoreContext())
@@ -62,7 +64,6 @@ namespace FinalProject.ViewModels.ShopManager
             OnPropertyChanged(nameof(Brands));
             OnPropertyChanged(nameof(Categories));
         }
-
 
         private Product _textboxItem;
         public Product textboxItem
@@ -173,6 +174,7 @@ namespace FinalProject.ViewModels.ShopManager
                 OnPropertyChanged(nameof(textboxItem));
             }
         }
+
         private bool _canUpdate;
         public bool CanUpdate
         {
@@ -203,7 +205,7 @@ namespace FinalProject.ViewModels.ShopManager
                 }
                 else
                 {
-                    if (textboxItem.Price < 0)
+                    if (textboxItem.Price <= 0)
                     {
                         MessageBox.Show("Product prices cannot be negative.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
@@ -288,7 +290,7 @@ namespace FinalProject.ViewModels.ShopManager
                             context.Categories.Add(category);
                             context.SaveChanges(); // Lưu để lấy CategoryId mới
                         }
-                        if (textboxItem.Price < 0)
+                        if (textboxItem.Price <= 0)
                         {
                             MessageBox.Show("Product prices cannot be negative.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
@@ -335,6 +337,70 @@ namespace FinalProject.ViewModels.ShopManager
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void AddNewBrand()
+        {
+            // Nhập tên Brand từ người dùng thông qua InputBox
+            string brandName = Microsoft.VisualBasic.Interaction.InputBox("Enter new Brand Name:", "New Brand");
+            if (!string.IsNullOrWhiteSpace(brandName))
+            {
+                // Tạo mới Brand
+                var newBrand = new Brand { Name = brandName };
+
+                // Lưu Brand vào database
+                using (var context = new FstoreContext())
+                {
+                    context.Brands.Add(newBrand);
+                    context.SaveChanges();
+                }
+
+                // Thêm Brand vào danh sách hiện có trong ViewModel
+                Brands.Add(newBrand);
+
+                // Đảm bảo textboxItem không null và gán Brand vừa tạo cho nó
+                if (textboxItem == null)
+                {
+                    textboxItem = new Product { Brand = newBrand };
+                }
+                else
+                {
+                    textboxItem.Brand = newBrand;
+                }
+                OnPropertyChanged(nameof(textboxItem));
+            }
+        }
+
+        public void AddNewCategory()
+        {
+            // Nhập tên Brand từ người dùng thông qua InputBox
+            string categoryName = Microsoft.VisualBasic.Interaction.InputBox("Enter new Category Name:", "New Category");
+            if (!string.IsNullOrWhiteSpace(categoryName))
+            {
+                // Tạo mới Brand
+                var newCategory = new Category { Name = categoryName };
+
+                // Lưu Brand vào database
+                using (var context = new FstoreContext())
+                {
+                    context.Categories.Add(newCategory);
+                    context.SaveChanges();
+                }
+
+                // Thêm Brand vào danh sách hiện có trong ViewModel
+                Categories.Add(newCategory);
+
+                // Đảm bảo textboxItem không null và gán Brand vừa tạo cho nó
+                if (textboxItem == null)
+                {
+                    textboxItem = new Product { Category = newCategory };
+                }
+                else
+                {
+                    textboxItem.Category = newCategory;
+                }
+                OnPropertyChanged(nameof(textboxItem));
             }
         }
 
@@ -423,48 +489,62 @@ namespace FinalProject.ViewModels.ShopManager
             }
         }
 
-
         private void Export(object obj)
         {
             try
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog
                 {
-                    Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
-                    FileName = "products.json",
+                    Filter = "Excel files (*.xlsx)|*.xlsx",
+                    FileName = "products.xlsx",
                     Title = "Save Exported Data"
                 };
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    // Convert danh sách sản phẩm thành danh sách đơn giản để export
-                    var exportList = allproducts.Select(p => new
+                    var workbook = new ClosedXML.Excel.XLWorkbook();
+                    var worksheet = workbook.Worksheets.Add("Products");
+
+                    var headerRange = worksheet.Range(1, 1, 1, 9);
+                    headerRange.Style.Font.Bold = true;
+                    headerRange.Style.Alignment.Horizontal = ClosedXML.Excel.XLAlignmentHorizontalValues.Center;
+                    worksheet.Columns().AdjustToContents();
+
+                    // Header row
+                    worksheet.Cell(1, 1).Value = "Product ID";
+                    worksheet.Cell(1, 2).Value = "Brand";
+                    worksheet.Cell(1, 3).Value = "Category";
+                    worksheet.Cell(1, 4).Value = "Model";
+                    worksheet.Cell(1, 5).Value = "Full Name";
+                    worksheet.Cell(1, 6).Value = "Description";
+                    worksheet.Cell(1, 7).Value = "Price";
+                    worksheet.Cell(1, 8).Value = "Stock";
+                    worksheet.Cell(1, 9).Value = "Disable";
+
+                    // Data rows
+                    for (int i = 0; i < allproducts.Count; i++)
                     {
-                        p.ProductId,
-                        Brand = p.Brand?.Name,
-                        Category = p.Category?.Name,
-                        p.Model,
-                        p.FullName,
-                        p.Description,
-                        p.Price,
-                        p.Stock,
-                        p.IsDeleted
-                    }).ToList();
+                        var p = allproducts[i];
+                        worksheet.Cell(i + 2, 1).Value = p.ProductId;
+                        worksheet.Cell(i + 2, 2).Value = p.Brand?.Name ?? "";
+                        worksheet.Cell(i + 2, 3).Value = p.Category?.Name ?? "";
+                        worksheet.Cell(i + 2, 4).Value = p.Model;
+                        worksheet.Cell(i + 2, 5).Value = p.FullName;
+                        worksheet.Cell(i + 2, 6).Value = p.Description;
+                        worksheet.Cell(i + 2, 7).Value = p.Price;
+                        worksheet.Cell(i + 2, 8).Value = p.Stock;
+                        worksheet.Cell(i + 2, 9).Value = p.IsDeleted == true ? "Yes" : "No";
+                    }
 
-                    // Serialize thành JSON
-                    string json = JsonConvert.SerializeObject(exportList, Formatting.Indented);
-
-                    // Ghi vào file
-                    File.WriteAllText(saveFileDialog.FileName, json);
-
-                    MessageBox.Show("Export successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    workbook.SaveAs(saveFileDialog.FileName);
+                    MessageBox.Show("Export to Excel successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error exporting data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error exporting to Excel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
         }
+
     }
 }

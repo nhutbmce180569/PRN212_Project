@@ -26,5 +26,7 @@ namespace FinalProject.Views.ShopManager.Product
             InitializeComponent();
             DataContext = new ProductViewModel();
         }
+        
+
     }
 }

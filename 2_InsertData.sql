@@ -12,7 +12,7 @@ INSERT INTO Employees (FullName, Birthday, Password, PhoneNumber, Email, Gender,
 (N'John Doe', '1990-05-14', '36fdba5968850579c0a89444f4ca4772', '0987654321', 'nguyenvana@example.com', 'Male', '2024-03-01', 'Active', 1),
 ( N'Jane Smith', '1992-08-21', '36fdba5968850579c0a89444f4ca4772', '0977123456', 'nguyenvanb@example.com', 'Female', '2024-03-01', 'Active', 2),
 ( N'Michael Brown', '1985-12-30', '36fdba5968850579c0a89444f4ca4772', '0909333222', 'nguyenvanc@example.com', 'Male', '2024-03-01', 'Active', 3),
-( N'Emily White', '1995-07-11', '36fdba5968850579c0a89444f4ca4772', '0911222333', 'nguyenvand@example.com', 'Female', '2024-03-01', 'Inactive', 4);
+( N'Emily White', '1995-07-11', '36fdba5968850579c0a89444f4ca4772', '0911222333', 'nguyenvand@example.com', 'Female', '2024-03-01', 'Active', 4);
 
 -- Customers
 INSERT INTO Customers ( FullName, Birthday, Password, PhoneNumber, Email, Gender, CreatedDate, IsBlock, IsDeleted) VALUES
@@ -26,16 +26,16 @@ INSERT INTO Suppliers (SupplierID, TaxID, Name, Email, PhoneNumber, Address, Cre
 (2, 'TAX67890', N'TechWorld Ltd.', 'info@techworld.com', '0977777777', N'456 Tech Park', '2024-03-01', NULL, NULL, 1, 0);
 
 -- Categories
-INSERT INTO Categories (CategoryID, Name) VALUES
-(1, 'Smartphones'),
-(2, 'Laptops'),
-(3, 'Accessories');
+INSERT INTO Categories (Name) VALUES
+('Smartphones'),
+('Laptops'),
+('Accessories');
 
 -- Brands
-INSERT INTO Brands (BrandID, Name) VALUES
-(1, 'Apple'),
-(2, 'Samsung'),
-(3, 'Asus');
+INSERT INTO Brands (Name) VALUES
+('Apple'),
+('Samsung'),
+('Asus');
 
 -- Products
 INSERT INTO Products (BrandID, CategoryID, Model, FullName, Description, IsDeleted, Price, Stock) VALUES
