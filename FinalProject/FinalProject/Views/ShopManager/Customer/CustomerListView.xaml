@@ -69,13 +69,13 @@
         </Grid>
         <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding CustomerList}" SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="#E3F2FD">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Width="0.4*" Binding="{Binding CustomerId}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Email" Width="1.3*" Binding="{Binding Email}"></DataGridTextColumn>
+                <DataGridTextColumn Header="ID" Width="*" Binding="{Binding CustomerId}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Email" Width="*" Binding="{Binding Email}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Fullname" Width="*" Binding="{Binding FullName}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Password" Width="2.2*" Binding="{Binding Password}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Birthday" Width="1.2*" Binding="{Binding Birthday, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Gender" Width="0.7*" Binding="{Binding Gender}"></DataGridTextColumn>
-                <DataGridTextColumn Header="PhoneNumber" Width="1.1*" Binding="{Binding PhoneNumber}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Password" Width="*" Binding="{Binding Password}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Birthday" Width="*" Binding="{Binding Birthday, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Gender" Width="*" Binding="{Binding Gender}"></DataGridTextColumn>
+                <DataGridTextColumn Header="PhoneNumber" Width="*" Binding="{Binding PhoneNumber}"></DataGridTextColumn>
                 <DataGridTextColumn Header="CreatedDate" Width="*" Binding="{Binding CreatedDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>

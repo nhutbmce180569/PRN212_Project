@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FinalProject.Helper"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
-        Title="Login" Height="450" Width="600" ResizeMode="NoResize">
+        Title="Login" Height="450" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
 
     <Border Width="300"
