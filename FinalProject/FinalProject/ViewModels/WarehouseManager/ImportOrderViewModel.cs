@@ -99,7 +99,7 @@ namespace FinalProject.ViewModels.WarehouseManager
         private void Load()
         {
             using var context = new FstoreContext();
-            var list = context.ImportOrders.Include(i => i.ImportOrderDetails).ThenInclude(p => p.Product).Include(s => s.Supplier).ToList();
+            var list = context.ImportOrders.Include(i => i.ImportOrderDetails).ThenInclude(p => p.Product).Include(s => s.Supplier).Include(e => e.Employee).ToList();
             AllImportList = new ObservableCollection<ImportOrder>(list);
             ImportList = new ObservableCollection<ImportOrder>(AllImportList);
         }
