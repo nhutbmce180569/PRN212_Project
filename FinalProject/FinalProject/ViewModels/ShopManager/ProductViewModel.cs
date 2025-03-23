@@ -172,6 +172,7 @@ namespace FinalProject.ViewModels.ShopManager
                 // Reset form nhập
                 textboxItem = new Product { Brand = new Brand(), Category = new Category() };
                 OnPropertyChanged(nameof(textboxItem));
+                MessageBox.Show("Delete successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
