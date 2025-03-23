@@ -75,5 +75,3 @@ INSERT INTO Orders (CustomerID, FullName, Address, PhoneNumber, OrderedDate, Del
 INSERT INTO OrderDetails (OrderID, ProductID, Quantity, Price) VALUES
 (1, 1, 1, 25000000),
 (1, 2, 1, 20000000);
-select * from products
-select * from ImportOrderDetails

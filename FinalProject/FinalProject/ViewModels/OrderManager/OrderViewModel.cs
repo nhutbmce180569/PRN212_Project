@@ -51,7 +51,7 @@ namespace FinalProject.ViewModels.OrderManager
 
 
 
-        private string _searchText;
+        private string _searchText = "";
         public string SearchText
         {
             get => _searchText;
@@ -785,7 +785,8 @@ namespace FinalProject.ViewModels.OrderManager
                 OnPropertyChanged(nameof(CustomerList));
 
                 SelectedCustomer = CustomerList.FirstOrDefault();
-
+                AllOrderList = new ObservableCollection<Order>(list);
+                OnPropertyChanged(nameof(AllOrderList));
                 if (ProductList == null || !ProductList.Any())
                 {
                     MessageBox.Show("ProductList is empty!", "Debug", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -850,23 +851,30 @@ namespace FinalProject.ViewModels.OrderManager
         }
         private void ExecuteSearch(object obj)
         {
-            if (string.IsNullOrWhiteSpace(SearchText))
+            if (AllOrderList == null)
             {
-
-                OrderList = new ObservableCollection<Order>(AllOrderList);
+                OrderList = new ObservableCollection<Order>();
             }
             else
             {
-                var lowerSearch = SearchText.ToLower();
-                var filtered = AllOrderList.Where(o =>
-                    (!string.IsNullOrEmpty(o.FullName) && o.FullName.ToLower().Contains(lowerSearch)) ||
-                    (!string.IsNullOrEmpty(o.Address) && o.Address.ToLower().Contains(lowerSearch)) ||
-                    (!string.IsNullOrEmpty(o.PhoneNumber) && o.PhoneNumber.ToLower().Contains(lowerSearch)) ||
-                    (o.CustomerId.HasValue && o.CustomerId.Value.ToString().Contains(lowerSearch))
-                );
-                OrderList = new ObservableCollection<Order>(filtered);
+                if (_searchText.IsNullOrEmpty())
+                {
+                    OrderList = new ObservableCollection<Order>(AllOrderList);
+                }
+                else
+                {
+                    var lowerSearch = (SearchText ?? "").ToLower();
+                    var filtered = AllOrderList.Where(o =>
+                        (o.FullName?.ToLower().Contains(lowerSearch) == true) ||
+                        (o.Address?.ToLower().Contains(lowerSearch) == true) ||
+                        (o.PhoneNumber?.ToLower().Contains(lowerSearch) == true) ||
+                        (o.CustomerId?.ToString().Contains(lowerSearch) == true)
+                    );
+                    OrderList = new ObservableCollection<Order>(filtered);
+                }
             }
             OnPropertyChanged(nameof(OrderList));
+
         }
 
     }

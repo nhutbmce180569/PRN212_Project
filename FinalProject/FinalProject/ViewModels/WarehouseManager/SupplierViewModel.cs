@@ -293,8 +293,8 @@ namespace FinalProject.ViewModels.WarehouseManager
                         using var context = new FstoreContext();
                         context.Suppliers.Remove(_selectedItem);
                         context.SaveChanges();
-                        SupplierList.Remove(_selectedItem);
                         AllSupplierList.Remove(_selectedItem);
+                        SupplierList = new ObservableCollection<Supplier>(AllSupplierList);
                         MessageBox.Show("Delete Successfully", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     catch (Exception e)
