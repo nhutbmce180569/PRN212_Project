@@ -232,7 +232,7 @@ namespace FinalProject.ViewModels
                     MessageBox.Show("Phone number must contain only digits and be between 1 and 15 characters long.");
                     return;
                 }
-                if (EmployeeUpdate.Birthday <= DateTime.Today)
+                if (EmployeeUpdate.Birthday >= DateTime.Today)
                 {
                     MessageBox.Show("Your birthday cannot be in the future!");
                     return;

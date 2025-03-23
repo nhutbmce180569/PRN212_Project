@@ -26,7 +26,7 @@ namespace FinalProject.ViewModels.WarehouseManager
             set
             {
                 _importList = value;
-                OnPropertyChanged(nameof(ImportList)); // Kích hoạt UI update
+                OnPropertyChanged(nameof(ImportList));
             }
         }
 
