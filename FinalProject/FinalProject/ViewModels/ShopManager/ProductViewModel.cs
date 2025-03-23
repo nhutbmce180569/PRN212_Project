@@ -339,6 +339,71 @@ namespace FinalProject.ViewModels.ShopManager
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        public void AddNewBrand()
+        {
+            // Nhập tên Brand từ người dùng thông qua InputBox
+            string brandName = Microsoft.VisualBasic.Interaction.InputBox("Enter new Brand Name:", "New Brand");
+            if (!string.IsNullOrWhiteSpace(brandName))
+            {
+                // Tạo mới Brand
+                var newBrand = new Brand { Name = brandName };
+
+                // Lưu Brand vào database
+                using (var context = new FstoreContext())
+                {
+                    context.Brands.Add(newBrand);
+                    context.SaveChanges();
+                }
+
+                // Thêm Brand vào danh sách hiện có trong ViewModel
+                Brands.Add(newBrand);
+
+                // Đảm bảo textboxItem không null và gán Brand vừa tạo cho nó
+                if (textboxItem == null)
+                {
+                    textboxItem = new Product { Brand = newBrand };
+                }
+                else
+                {
+                    textboxItem.Brand = newBrand;
+                }
+                OnPropertyChanged(nameof(textboxItem));
+            }
+        }
+
+        public void AddNewCategory()
+        {
+            // Nhập tên Brand từ người dùng thông qua InputBox
+            string categoryName = Microsoft.VisualBasic.Interaction.InputBox("Enter new Category Name:", "New Category");
+            if (!string.IsNullOrWhiteSpace(categoryName))
+            {
+                // Tạo mới Brand
+                var newCategory = new Category { Name = categoryName };
+
+                // Lưu Brand vào database
+                using (var context = new FstoreContext())
+                {
+                    context.Categories.Add(newCategory);
+                    context.SaveChanges();
+                }
+
+                // Thêm Brand vào danh sách hiện có trong ViewModel
+                Categories.Add(newCategory);
+
+                // Đảm bảo textboxItem không null và gán Brand vừa tạo cho nó
+                if (textboxItem == null)
+                {
+                    textboxItem = new Product { Category = newCategory };
+                }
+                else
+                {
+                    textboxItem.Category = newCategory;
+                }
+                OnPropertyChanged(nameof(textboxItem));
+            }
+        }
+
         private void Search(object obj)
         {
             if (string.IsNullOrWhiteSpace(SearchText))

@@ -26,16 +26,16 @@ INSERT INTO Suppliers (SupplierID, TaxID, Name, Email, PhoneNumber, Address, Cre
 (2, 'TAX67890', N'TechWorld Ltd.', 'info@techworld.com', '0977777777', N'456 Tech Park', '2024-03-01', NULL, NULL, 1, 0);
 
 -- Categories
-INSERT INTO Categories (CategoryID, Name) VALUES
-(1, 'Smartphones'),
-(2, 'Laptops'),
-(3, 'Accessories');
+INSERT INTO Categories (Name) VALUES
+('Smartphones'),
+('Laptops'),
+('Accessories');
 
 -- Brands
-INSERT INTO Brands (BrandID, Name) VALUES
-(1, 'Apple'),
-(2, 'Samsung'),
-(3, 'Asus');
+INSERT INTO Brands (Name) VALUES
+('Apple'),
+('Samsung'),
+('Asus');
 
 -- Products
 INSERT INTO Products (BrandID, CategoryID, Model, FullName, Description, IsDeleted, Price, Stock) VALUES
