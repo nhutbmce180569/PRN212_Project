@@ -58,11 +58,13 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="5*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Grid.Row="0" Content="Add"  Command="{Binding OpenAddPopupCommand}"></Button>
             <Button Grid.Column="1" Grid.Row="0" Content="Update" Command="{Binding OpenUpdatePopupCommand}"></Button>
-            <Button Grid.Column="2" Grid.Row="0" Content="Delete" Command="{Binding DeleteCommand}" HorizontalAlignment="Right" Margin="0, 0, 10, 0" Background="#FFA10404"></Button>
+            <Button Grid.Column="2" Grid.Row="0" Content="Export" Command="{Binding ExportCommand}" Background="Black"></Button>
+            <Button Grid.Column="3" Grid.Row="0" Content="Delete" Command="{Binding DeleteCommand}" HorizontalAlignment="Right" Margin="0, 0, 10, 0" Background="#FFA10404"></Button>
 
         </Grid>
         <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding EmployeeList}" SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="#E3F2FD">
