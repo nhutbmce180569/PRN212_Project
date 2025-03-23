@@ -2,6 +2,7 @@
 using FinalProject.Models;
 using FinalProject.Views.ShopManager.Customer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
@@ -34,6 +35,7 @@ namespace FinalProject.ViewModels.ShopManager
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand SearchCommand { get; }
+        public ICommand ExportCommand { get; }
         public CustomerViewModel()
         {
             Load();
@@ -43,6 +45,7 @@ namespace FinalProject.ViewModels.ShopManager
             SearchCommand = new RelayCommand(Search);
             OpenAddPopupCommand = new RelayCommand(OpenPopup);
             OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
+            ExportCommand = new RelayCommand(Export);
         }
 
         public CustomerViewModel(Customer customer)
@@ -161,6 +164,63 @@ namespace FinalProject.ViewModels.ShopManager
                 MessageBox.Show("Please select customer to update", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
+        }
+
+        private void Export(object obj)
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "Excel files (*.xlsx)|*.xlsx",
+                    FileName = "customers.xlsx",
+                    Title = "Save Exported Data"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    var workbook = new ClosedXML.Excel.XLWorkbook();
+                    var worksheet = workbook.Worksheets.Add("Customers");
+
+                    var headerRange = worksheet.Range(1, 1, 1, 9);
+                    headerRange.Style.Font.Bold = true;
+                    headerRange.Style.Alignment.Horizontal = ClosedXML.Excel.XLAlignmentHorizontalValues.Center;
+                    worksheet.Columns().AdjustToContents();
+
+                    // Header row
+                    worksheet.Cell(1, 1).Value = "CustomerId";
+                    worksheet.Cell(1, 2).Value = "FullName";
+                    worksheet.Cell(1, 3).Value = "Email";
+                    worksheet.Cell(1, 4).Value = "Gender";
+                    worksheet.Cell(1, 5).Value = "Birthday";
+                    worksheet.Cell(1, 6).Value = "CreatedDate";
+                    worksheet.Cell(1, 7).Value = "PhoneNumber";
+                    worksheet.Cell(1, 8).Value = "IsDeleted";
+                    worksheet.Cell(1, 9).Value = "IsBlock";
+
+                    // Data rows
+                    for (int i = 0; i < AllCustomerList.Count; i++)
+                    {
+                        var p = AllCustomerList[i];
+                        worksheet.Cell(i + 2, 1).Value = p.CustomerId;
+                        worksheet.Cell(i + 2, 2).Value = p.FullName?? "";
+                        worksheet.Cell(i + 2, 3).Value = p.Email?? "";
+                        worksheet.Cell(i + 2, 4).Value = p.Gender;
+                        worksheet.Cell(i + 2, 5).Value = p.Birthday;
+                        worksheet.Cell(i + 2, 6).Value = p.CreatedDate;
+                        worksheet.Cell(i + 2, 7).Value = p.PhoneNumber;
+                        worksheet.Cell(i + 2, 8).Value = p.IsDeleted == true ? "Yes" : "No";
+                        worksheet.Cell(i + 2, 9).Value = p.IsBlock == true ? "Yes" : "No";
+                    }
+
+                    workbook.SaveAs(saveFileDialog.FileName);
+                    MessageBox.Show("Export to Excel successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error exporting to Excel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public void Load()
