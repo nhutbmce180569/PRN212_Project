@@ -24,6 +24,11 @@ using FinalProject.Views.OrderManager.Order;
 using Microsoft.IdentityModel.Tokens;
 using Avalonia.Controls;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
+
+
+
 
 
 
@@ -44,6 +49,14 @@ namespace FinalProject.ViewModels.OrderManager
 
         public ObservableCollection<OrderStatus> OrderStatusList { get; set; }
 
+
+
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
+            set { _searchText = value; OnPropertyChanged(nameof(SearchText)); }
+        }
 
         public event Action OnOrderAdded;
         private OrderStatus _selectedOrderStatus;
@@ -73,7 +86,7 @@ namespace FinalProject.ViewModels.OrderManager
                 {
                     product.Stock += quantity;
                     context.SaveChanges();
-                    MessageBox.Show($"Stock for product {product.FullName} has been increased by {quantity}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    //MessageBox.Show($"Stock for product {product.FullName} has been increased by {quantity}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
@@ -93,7 +106,7 @@ namespace FinalProject.ViewModels.OrderManager
                     {
                         product.Stock -= quantity;
                         context.SaveChanges();
-                        MessageBox.Show($"Stock for product {product.FullName} has been decreased by {quantity}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        //MessageBox.Show($"Stock for product {product.FullName} has been decreased by {quantity}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {
@@ -178,7 +191,14 @@ namespace FinalProject.ViewModels.OrderManager
             }
         }
 
-
+        public ObservableCollection<OrderDetail> NewOrderDetails { get; set; } = new ObservableCollection<OrderDetail>();
+        // Số lượng nhập cho sản phẩm mới
+        private int? _newOrderDetailQuantity;
+        public int? NewOrderDetailQuantity
+        {
+            get => _newOrderDetailQuantity;
+            set { _newOrderDetailQuantity = value; OnPropertyChanged(nameof(NewOrderDetailQuantity)); }
+        }
 
         private OrderDetail textBoxDetail = new OrderDetail();
         public OrderDetail TextBoxDetail
@@ -303,8 +323,9 @@ namespace FinalProject.ViewModels.OrderManager
         public ICommand DeleteCommand { get; }
         public ICommand OpenAddPopupCommand { get; }
         public ICommand OpenUpdatePopupCommand { get; }
-        public ICommand SearchCommand { get; }
-
+        public ICommand SearchCommand { get; }             
+        public ICommand ExportJsonCommand { get; }
+        public ICommand AddProductDetailCommand { get; }
         public bool IsValidPhoneNumber(string phoneNumber)
         {
 
@@ -315,13 +336,14 @@ namespace FinalProject.ViewModels.OrderManager
         public OrderViewModel()
         {
             Load();
-
+            AddProductDetailCommand = new RelayCommand(AddProductDetail);
             AddCommand = new RelayCommand(Add);
             UpdateCommand = new RelayCommand(Update);
             DeleteCommand = new RelayCommand(Delete);
             OpenAddPopupCommand = new RelayCommand(OpenPopup);
             OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
-
+            SearchCommand = new RelayCommand(ExecuteSearch);
+            ExportJsonCommand = new RelayCommand(ExportJson);
         }
         public OrderViewModel(object obj)
         {
@@ -372,7 +394,28 @@ namespace FinalProject.ViewModels.OrderManager
             Application.Current.Windows[0].Opacity = 0.5;
             popup.ShowDialog();
         }
-
+        private void AddProductDetail(object obj)
+        {
+            if (SelectedProduct == null)
+            {
+                MessageBox.Show("Please choose a product!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            if (!NewOrderDetailQuantity.HasValue || NewOrderDetailQuantity.Value <= 0)
+            {
+                MessageBox.Show("Please enter a valid quantity.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            var newDetail = new OrderDetail
+            {
+                ProductId = SelectedProduct.ProductId,
+                Price = SelectedProduct.Price,
+                Quantity = NewOrderDetailQuantity
+            };
+            NewOrderDetails.Add(newDetail);
+          
+            NewOrderDetailQuantity = null;
+        }
 
         private void OpenUpdatePopup(object obj)
         {
@@ -505,32 +548,31 @@ namespace FinalProject.ViewModels.OrderManager
                 var existingOrder = context.Orders.FirstOrDefault(o => o.OrderId == TextBoxItem.OrderId);
                 if (existingOrder != null)
                 {
-                    // Get the existing order details before update to compare the old quantity
+                  
                     var oldOrderDetail = context.OrderDetails.FirstOrDefault(od => od.OrderId == TextBoxItem.OrderId && od.ProductId == TextBoxProduct.ProductId);
 
-                    // 1. Decrease stock for the old quantity (if the product was already in the order)
                     if (oldOrderDetail != null)
                     {
-                        // Calculate the difference in quantities
+                        
                         int quantityDifference = oldOrderDetail.Quantity.Value - TextBoxDetail.Quantity.Value;
 
                         if (quantityDifference > 0)
                         {
-                            // Increase stock if the quantity is reduced
+                            
                             IncreaseStock(TextBoxProduct.ProductId, quantityDifference);
                         }
                         else if (quantityDifference < 0)
                         {
-                            // Decrease stock if the quantity is increased
                             DecreaseStock(TextBoxProduct.ProductId, Math.Abs(quantityDifference));
                         }
                     }
 
-                    // Update the order details
+                    
                     existingOrder.FullName = TextBoxItem.FullName;
                     existingOrder.Address = TextBoxItem.Address;
                     existingOrder.PhoneNumber = TextBoxItem.PhoneNumber;
-                    existingOrder.Status = TextBoxItem.Status;  // Update the status
+                    existingOrder.Status = TextBoxItem.Status;
+                    existingOrder.DeliveredDate = TextBoxItem.DeliveredDate ?? DateTime.Now.AddDays(3); 
                     existingOrder.TotalAmount = TextBoxProduct.Price;
 
                     var existingOrderDetail = context.OrderDetails
@@ -566,78 +608,128 @@ namespace FinalProject.ViewModels.OrderManager
         }
 
 
+        private bool AddOrderWithMultipleProducts(Order order, List<OrderDetail> orderDetails, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            try
+            {
+                if (order == null)
+                {
+                    errorMessage = "Order cannot be null.";
+                    return false;
+                }
+
+                if (orderDetails == null || !orderDetails.Any())
+                {
+                    errorMessage = "No order details provided.";
+                    return false;
+                }
+
+                order.TotalAmount = orderDetails.Sum(od => (od.Price ?? 0) * (od.Quantity ?? 0));
+                order.OrderedDate = DateTime.Now;
+                order.DeliveredDate = order.DeliveredDate ?? DateTime.Now.AddDays(3);
+
+                using (var context = new FstoreContext())
+                {
+                    Console.WriteLine($"Order Debug: CustomerId={order.CustomerId}, Status={order.Status}, Total={order.TotalAmount}");
+                    foreach (var d in orderDetails)
+                    {
+                        Console.WriteLine($"Detail: ProductId={d.ProductId}, Quantity={d.Quantity}, Price={d.Price}");
+                    }
+
+                   
+                    context.Orders.Add(order);
+                    context.SaveChanges(); 
+
+                   
+                    foreach (var detail in orderDetails)
+                    {
+                        detail.OrderId = order.OrderId;
+
+                        var product = context.Products.FirstOrDefault(p => p.ProductId == detail.ProductId);
+                        if (product != null)
+                        {
+                            int qty = detail.Quantity ?? 0;
+                            if (product.Stock >= qty)
+                            {
+                                product.Stock -= qty;
+                            }
+                            else
+                            {
+                                errorMessage = $"Not enough stock for product {product.FullName}. Available: {product.Stock}";
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            errorMessage = "Product not found.";
+                            return false;
+                        }
+                    }
+
+                    context.OrderDetails.AddRange(orderDetails);
+                    context.SaveChanges();
+                }
+
+                return true;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                errorMessage = dbEx.InnerException?.Message ?? dbEx.Message;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+                return false;
+            }
+
+        }
+
+
 
 
 
         private void Add(object obj)
         {
-            if (textBoxItem == null || textBoxItem == null) return;
+            if (TextBoxItem == null)
+                return;
             if (!IsValidPhoneNumber(TextBoxItem.PhoneNumber))
             {
-                MessageBox.Show("Invalid phone number. Ensure that the phone number contains only digits and does not exceed 15 characters.",
-                                "Error",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                MessageBox.Show("Invalid phone number.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
-            else if (string.IsNullOrEmpty(TextBoxItem.Address))
+            if (string.IsNullOrWhiteSpace(TextBoxItem.Address))
             {
-                MessageBox.Show("Address cannot be empty.",
-                                "Error",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                MessageBox.Show("Address cannot be empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
-            else if (!TextBoxDetail.Quantity.HasValue || TextBoxDetail.Quantity.Value <= 0)
+            if (NewOrderDetails == null || NewOrderDetails.Count == 0)
             {
-                MessageBox.Show("Quantity must be greater than 0 and cannot be empty.",
-                                "Error",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                MessageBox.Show("Please add at least one product to the order.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            string errorMessage;
+            bool success = AddOrderWithMultipleProducts(TextBoxItem, NewOrderDetails.ToList(), out errorMessage);
+            if (success)
+            {
+                MessageBox.Show("Order added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                OnOrderAdded?.Invoke();
+                TextBoxItem = new Order();
+                NewOrderDetails.Clear();
+                OnPropertyChanged(nameof(TextBoxItem));
+                if (Application.Current.Windows.Count > 1)
+                {
+                    Application.Current.Windows[1]?.Close();
+                    Application.Current.Windows[0].Opacity = 1;
+                    Application.Current.Windows[0].Focus();
+                }
             }
             else
             {
-                // Create a new order
-                var newitem = new Order
-                {
-                    CustomerId = textBoxItem.CustomerId,
-                    FullName = textBoxItem.FullName,
-                    Address = textBoxItem.Address,
-                    PhoneNumber = textBoxItem.PhoneNumber,
-                    OrderedDate = DateTime.Now,
-                    DeliveredDate = DateTime.Now.AddDays(3),
-                    Status = 1,  // Pending status
-                    TotalAmount = textBoxProduct.Price,
-                };
-
-                using (var Context = new FstoreContext())
-                {
-                    Context.Orders.Add(newitem);
-                    Context.SaveChanges();
-                }
-
-                AllOrderList = new ObservableCollection<Order>(OrderList);
-
-                var newitemOrderDetail = new OrderDetail
-                {
-                    OrderId = OrderList.Any() ? OrderList.Max(x => x.OrderId) + 1 : 1,
-                    ProductId = textBoxProduct.ProductId,
-                    Price = textBoxProduct.Price,
-                    Quantity = textBoxDetail.Quantity,
-                };
-                using (var Context = new FstoreContext())
-                {
-                    Context.OrderDetails.Add(newitemOrderDetail);
-                    Context.SaveChanges();
-                }
-
-                // Decrease stock after order is placed
-                DecreaseStock(textBoxProduct.ProductId, textBoxDetail.Quantity.Value);
-
-                OnOrderAdded?.Invoke();
-                textBoxItem = new Order();
-                OnPropertyChanged(nameof(textBoxItem));
-                Application.Current.Windows[1]?.Close();
-                Application.Current.Windows[0].Opacity = 1;
-                Application.Current.Windows[0].Focus();
+                MessageBox.Show("Error: " + errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -647,7 +739,7 @@ namespace FinalProject.ViewModels.OrderManager
         {
             using (var Context = new FstoreContext())
             {
-                // Lấy các đơn hàng mà không có trạng thái cancel (status != 4)
+               
                 var list = Context.Orders.ToList();
                 var listpro = Context.Products.ToList();
                 var listdetail = Context.OrderDetails.ToList();
@@ -663,7 +755,7 @@ namespace FinalProject.ViewModels.OrderManager
                 }
                 OnPropertyChanged(nameof(OrderList));
 
-                // Tương tự với các collection khác
+               
                 if (OrderDetailList == null)
                     OrderDetailList = new ObservableCollection<OrderDetail>(listdetail);
                 else
@@ -720,7 +812,61 @@ namespace FinalProject.ViewModels.OrderManager
         }
 
 
+        private void ExportJson(object obj)
+        {
+            try
+            {
+                using (var context = new FstoreContext())
+                {
+                    var orders = context.Orders
+                                        .Include(o => o.OrderDetails)
+                                        .ToList();
 
+                    var settings = new Newtonsoft.Json.JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore,
+                        Formatting = Newtonsoft.Json.Formatting.Indented
+                    };
+
+                    var json = Newtonsoft.Json.JsonConvert.SerializeObject(orders, settings);
+
+
+                    var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+
+                    var filePath = System.IO.Path.Combine(baseDir, "OrdersExport.json");
+
+                    File.WriteAllText(filePath, json);
+
+                    MessageBox.Show("Export success file JSON at: " + filePath,
+                                    "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Export fail: " + ex.Message,
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void ExecuteSearch(object obj)
+        {
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+
+                OrderList = new ObservableCollection<Order>(AllOrderList);
+            }
+            else
+            {
+                var lowerSearch = SearchText.ToLower();
+                var filtered = AllOrderList.Where(o =>
+                    (!string.IsNullOrEmpty(o.FullName) && o.FullName.ToLower().Contains(lowerSearch)) ||
+                    (!string.IsNullOrEmpty(o.Address) && o.Address.ToLower().Contains(lowerSearch)) ||
+                    (!string.IsNullOrEmpty(o.PhoneNumber) && o.PhoneNumber.ToLower().Contains(lowerSearch)) ||
+                    (o.CustomerId.HasValue && o.CustomerId.Value.ToString().Contains(lowerSearch))
+                );
+                OrderList = new ObservableCollection<Order>(filtered);
+            }
+            OnPropertyChanged(nameof(OrderList));
+        }
 
     }
 
