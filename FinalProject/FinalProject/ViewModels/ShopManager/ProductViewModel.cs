@@ -21,7 +21,6 @@ namespace FinalProject.ViewModels.ShopManager
     {
         public ObservableCollection<Product> allproducts { get; set; }
         public ObservableCollection<Product> products { get; set; }
-        public Dictionary<int, bool> SelectedProducts { get; set; } = new Dictionary<int, bool>();
         public ICommand AddCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
@@ -41,7 +40,6 @@ namespace FinalProject.ViewModels.ShopManager
             DeleteCommand = new RelayCommand(Delete);
             SearchCommand = new RelayCommand(Search);
             ExportCommand = new RelayCommand(Export);
-            DeleteSelectedCommand = new RelayCommand(DeleteSelected);
             OpenCreatePopupCommand = new RelayCommand(OpenCreatePopup);
             OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
 
@@ -56,20 +54,16 @@ namespace FinalProject.ViewModels.ShopManager
                     .Include(p => p.Category)
                     .ToList();
 
+                Brands = new ObservableCollection<Brand>(context.Brands.ToList());
+                Categories = new ObservableCollection<Category>(context.Categories.ToList());
+
                 products = new ObservableCollection<Product>(list);
                 allproducts = new ObservableCollection<Product>(products);
             }
 
-            foreach (var product in products)
-            {
-                if (!SelectedProducts.ContainsKey(product.ProductId))
-                    SelectedProducts[product.ProductId] = false;
-            }
-
-            OnPropertyChanged(nameof(products));
+            OnPropertyChanged(nameof(Brands));
+            OnPropertyChanged(nameof(Categories));
         }
-
-
 
         private Product _textboxItem;
         public Product textboxItem
@@ -130,87 +124,44 @@ namespace FinalProject.ViewModels.ShopManager
         }
         private void Delete(object obj)
         {
-            // Lấy danh sách các sản phẩm được tick checkbox
-            var multiSelected = SelectedProducts
-                .Where(kvp => kvp.Value)
-                .Select(kvp => products.FirstOrDefault(p => p.ProductId == kvp.Key))
-                .Where(p => p != null)
-                .ToList();
-
-            // XÓA HÀNG LOẠT
-            if (multiSelected.Any())
+            if (_selectItem == null)
             {
-                var confirmMsg = $"Are you sure you want to delete {multiSelected.Count} selected product(s)?";
-                var result = MessageBox.Show(confirmMsg, "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-                if (result != MessageBoxResult.Yes) return;
-
-                using (var context = new FstoreContext())
-                {
-                    foreach (var product in multiSelected)
-                    {
-                        var dbProduct = context.Products
-                            .Include(p => p.OrderDetails)
-                            .Include(p => p.ImportOrderDetails)
-                            .FirstOrDefault(p => p.ProductId == product.ProductId);
-
-                        if (dbProduct != null)
-                        {
-                            if (dbProduct.OrderDetails.Any() || dbProduct.ImportOrderDetails.Any())
-                            {
-                                MessageBox.Show($"Cannot delete {product.FullName} because it has related order details.",
-                                                "Delete Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                                continue;
-                            }
-
-                            context.Products.Remove(dbProduct);
-                            products.Remove(product);
-                            SelectedProducts[product.ProductId] = false;
-                        }
-                    }
-                    context.SaveChanges();
-                }
-
-                allproducts = new ObservableCollection<Product>(products);
-                OnPropertyChanged(nameof(products));
-                OnPropertyChanged(nameof(allproducts));
-
-                MessageBox.Show($"{multiSelected.Count} product(s) deleted successfully.", "Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Please select a product to delete.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            // XÓA ĐƠN LẺ
-            if (selectItem != null)
-            {
-                var confirm = MessageBox.Show($"Are you sure you want to delete {selectItem.FullName}?",
-                                              "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (confirm != MessageBoxResult.Yes) return;
+            var result = MessageBox.Show($"Are you sure you want to delete {_selectItem.FullName}?",
+                                         "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
+            if (result == MessageBoxResult.Yes)
+            {
                 using (var context = new FstoreContext())
                 {
-                    var dbProduct = context.Products
+                    // Tìm lại sản phẩm trong database
+                    var product = context.Products
                         .Include(p => p.OrderDetails)
                         .Include(p => p.ImportOrderDetails)
-                        .FirstOrDefault(p => p.ProductId == selectItem.ProductId);
+                        .FirstOrDefault(p => p.ProductId == _selectItem.ProductId);
 
-                    if (dbProduct != null)
+                    if (product != null)
                     {
-                        if (dbProduct.OrderDetails.Any() || dbProduct.ImportOrderDetails.Any())
+                        // Kiểm tra nếu sản phẩm có dữ liệu trong OrderDetails hoặc ImportOrderDetails
+                        if (product.OrderDetails.Any() || product.ImportOrderDetails.Any())
                         {
                             MessageBox.Show("This product cannot be deleted because it has related order details.",
                                             "Delete Error", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
 
-                        context.Products.Remove(dbProduct);
+                        // Nếu không có dữ liệu liên quan, tiến hành xóa
+                        context.Products.Remove(product);
                         context.SaveChanges();
 
-                        products.Remove(selectItem);
+                        // Cập nhật danh sách UI
+                        products.Remove(_selectItem);
                         allproducts = new ObservableCollection<Product>(products);
                         OnPropertyChanged(nameof(products));
                         OnPropertyChanged(nameof(allproducts));
-
-                        MessageBox.Show($"{selectItem.FullName} deleted successfully.", "Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {
@@ -221,11 +172,7 @@ namespace FinalProject.ViewModels.ShopManager
                 // Reset form nhập
                 textboxItem = new Product { Brand = new Brand(), Category = new Category() };
                 OnPropertyChanged(nameof(textboxItem));
-                return;
             }
-
-            // KHÔNG CHỌN GÌ HẾT
-            MessageBox.Show("Please select a product to delete, or tick checkboxes for batch deletion.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         private bool _canUpdate;
@@ -258,7 +205,7 @@ namespace FinalProject.ViewModels.ShopManager
                 }
                 else
                 {
-                    if (textboxItem.Price < 0)
+                    if (textboxItem.Price <= 0)
                     {
                         MessageBox.Show("Product prices cannot be negative.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
@@ -343,7 +290,7 @@ namespace FinalProject.ViewModels.ShopManager
                             context.Categories.Add(category);
                             context.SaveChanges(); // Lưu để lấy CategoryId mới
                         }
-                        if (textboxItem.Price < 0)
+                        if (textboxItem.Price <= 0)
                         {
                             MessageBox.Show("Product prices cannot be negative.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
@@ -392,6 +339,71 @@ namespace FinalProject.ViewModels.ShopManager
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        public void AddNewBrand()
+        {
+            // Nhập tên Brand từ người dùng thông qua InputBox
+            string brandName = Microsoft.VisualBasic.Interaction.InputBox("Enter new Brand Name:", "New Brand");
+            if (!string.IsNullOrWhiteSpace(brandName))
+            {
+                // Tạo mới Brand
+                var newBrand = new Brand { Name = brandName };
+
+                // Lưu Brand vào database
+                using (var context = new FstoreContext())
+                {
+                    context.Brands.Add(newBrand);
+                    context.SaveChanges();
+                }
+
+                // Thêm Brand vào danh sách hiện có trong ViewModel
+                Brands.Add(newBrand);
+
+                // Đảm bảo textboxItem không null và gán Brand vừa tạo cho nó
+                if (textboxItem == null)
+                {
+                    textboxItem = new Product { Brand = newBrand };
+                }
+                else
+                {
+                    textboxItem.Brand = newBrand;
+                }
+                OnPropertyChanged(nameof(textboxItem));
+            }
+        }
+
+        public void AddNewCategory()
+        {
+            // Nhập tên Brand từ người dùng thông qua InputBox
+            string categoryName = Microsoft.VisualBasic.Interaction.InputBox("Enter new Category Name:", "New Category");
+            if (!string.IsNullOrWhiteSpace(categoryName))
+            {
+                // Tạo mới Brand
+                var newCategory = new Category { Name = categoryName };
+
+                // Lưu Brand vào database
+                using (var context = new FstoreContext())
+                {
+                    context.Categories.Add(newCategory);
+                    context.SaveChanges();
+                }
+
+                // Thêm Brand vào danh sách hiện có trong ViewModel
+                Categories.Add(newCategory);
+
+                // Đảm bảo textboxItem không null và gán Brand vừa tạo cho nó
+                if (textboxItem == null)
+                {
+                    textboxItem = new Product { Category = newCategory };
+                }
+                else
+                {
+                    textboxItem.Category = newCategory;
+                }
+                OnPropertyChanged(nameof(textboxItem));
+            }
+        }
+
         private void Search(object obj)
         {
             if (string.IsNullOrWhiteSpace(SearchText))
@@ -531,46 +543,6 @@ namespace FinalProject.ViewModels.ShopManager
             catch (Exception ex)
             {
                 MessageBox.Show($"Error exporting to Excel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void DeleteSelected(object obj)
-        {
-            var selectedProducts = products.Where(p => SelectedProducts.ContainsKey(p.ProductId) && SelectedProducts[p.ProductId]).ToList();
-
-            if (!selectedProducts.Any())
-            {
-                MessageBox.Show("No products selected.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            using (var context = new FstoreContext())
-            {
-                foreach (var product in selectedProducts)
-                {
-                    var dbProduct = context.Products.Find(product.ProductId);
-                    if (dbProduct != null)
-                    {
-                        context.Products.Remove(dbProduct);
-                    }
-                }
-                context.SaveChanges();
-            }
-
-            foreach (var product in selectedProducts)
-            {
-                products.Remove(product);
-                SelectedProducts.Remove(product.ProductId);
-            }
-
-            allproducts = new ObservableCollection<Product>(products);
-            OnPropertyChanged(nameof(products));
-
-            MessageBox.Show($"{selectedProducts.Count} product(s) deleted successfully.", "Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            foreach (var product in SelectedProducts.Keys.ToList())
-            {
-                SelectedProducts[product] = false;
             }
         }
 
