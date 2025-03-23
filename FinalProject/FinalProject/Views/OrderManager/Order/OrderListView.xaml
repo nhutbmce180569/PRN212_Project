@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:FinalProject.Views.OrderManager.Order"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="850"
       Title="OrderListView">
 
     <Page.Resources>
@@ -23,7 +23,7 @@
         </Style>
         <Style TargetType="Button">
             <Setter Property="Height" Value="30px"></Setter>
-            <Setter Property="Width" Value="80px"></Setter>
+            <Setter Property="Width" Value="72px"></Setter>
             <Setter Property="Background" Value="#1565C0"></Setter>
             <Setter Property="Foreground" Value="White"></Setter>
         </Style>
@@ -65,12 +65,12 @@
 
         <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding OrderList}" SelectedItem="{Binding SelectedItem , Mode=OneWayToSource}" Background="#E3F2FD">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Order ID" Width="0.4*" Binding="{Binding OrderId}"></DataGridTextColumn>
-                <DataGridTextColumn Header="CustomerID" Width="1.3*" Binding="{Binding CustomerId}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Order ID" Width="*" Binding="{Binding OrderId}"></DataGridTextColumn>
+                <DataGridTextColumn Header="CustomerID" Width="*" Binding="{Binding CustomerId}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Fullname" Width="*" Binding="{Binding FullName}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Address" Width="2.2*" Binding="{Binding Address}"></DataGridTextColumn>
-                <DataGridTextColumn Header="OrderDate" Width="1.2*" Binding="{Binding OrderedDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
-                <DataGridTextColumn Header="PhoneNumber" Width="0.7*" Binding="{Binding PhoneNumber}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Address" Width="*" Binding="{Binding Address}"></DataGridTextColumn>
+                <DataGridTextColumn Header="OrderDate" Width="*" Binding="{Binding OrderedDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
+                <DataGridTextColumn Header="PhoneNumber" Width="*" Binding="{Binding PhoneNumber}"></DataGridTextColumn>
                 <DataGridTextColumn Header="DeliveredDate" Width="*" Binding="{Binding DeliveredDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Status" Width="*" Binding="{Binding Status}"></DataGridTextColumn>
                 <DataGridTextColumn Header="TotalAmout" Width="*" Binding="{Binding TotalAmount}"></DataGridTextColumn>
