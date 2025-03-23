@@ -2,116 +2,82 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Update Product"
-        Height="450" Width="450"
+        Height="400" Width="550"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Background="#F4F4F4">
+        Background="AliceBlue">
 
-    <Grid>
-        <!-- Form Container -->
-        <Border Background="White" Padding="20" BorderBrush="#DDD" BorderThickness="1" 
-                Margin="20" Effect="{DynamicResource ShadowEffect}">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid>
+            <!-- Cấu trúc cột -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            <!-- Cấu trúc dòng -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-                <!-- Title -->
-                <TextBlock Text="Update Product" FontSize="20" FontWeight="Bold" Foreground="#333"
-                           HorizontalAlignment="Center" Grid.Row="0" Margin="0 0 0 15"/>
+            <!-- Tiêu đề -->
+            <TextBlock Text="Update Product" FontSize="20" FontWeight="Bold" Foreground="#333"
+                           HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="0 0 0 15"/>
 
-                <!-- Brand -->
-                <!-- Brand -->
-                <Label Grid.Row="1" Content="Brand:" FontWeight="Bold" VerticalAlignment="Center"/>
-                <ComboBox Grid.Row="1" ItemsSource="{Binding Brands}" 
-           DisplayMemberPath="Name" 
-           SelectedItem="{Binding textboxItem.Brand, Mode=TwoWay}" 
-           Padding="5" BorderBrush="#CCC" Margin="120,0,21,26" Grid.RowSpan="2"/>
+            <!-- Brand -->
+            <Label Margin="0,0,0,10" Grid.Row="1" Grid.Column="0" Content="Brand:" FontWeight="Bold"/>
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <ComboBox ItemsSource="{Binding Brands}" DisplayMemberPath="Name" 
+                              SelectedItem="{Binding textboxItem.Brand}" Width="250" Padding="5" Margin="0,0,0,10"/>
+               
+            </StackPanel>
 
-                <!-- Category -->
-                <!-- Category -->
-                <Label Grid.Row="2" Content="Category:" FontWeight="Bold" VerticalAlignment="Center"/>
-                <ComboBox Grid.Row="2" ItemsSource="{Binding Categories}" 
-           DisplayMemberPath="Name" 
-           SelectedItem="{Binding textboxItem.Category, Mode=TwoWay}" 
-           Padding="5" BorderBrush="#CCC" Margin="120,0,21,28" Grid.RowSpan="2"/>
+            <!-- Category -->
+            <Label Margin="0,0,0,10" Grid.Row="2" Grid.Column="0" Content="Category:" FontWeight="Bold"/>
+            <StackPanel  Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <ComboBox Margin="0,0,0,10" ItemsSource="{Binding Categories}" DisplayMemberPath="Name" 
+                              SelectedItem="{Binding textboxItem.Category}" Width="250" Padding="5"/>
+            </StackPanel>
 
-                <!-- Model -->
-                <Label Grid.Row="3" Content="Model:" FontWeight="Bold"/>
-                <TextBox Grid.Row="3" Margin="120 0 0 0" Text="{Binding textboxItem.Model, Mode=TwoWay}" 
-                         Padding="5" BorderBrush="#CCC" Width="213" HorizontalAlignment="Left"/>
+            <!-- Model -->
+            <Label Margin="0,0,0,10" Grid.Row="3" Grid.Column="0" Content="Model:" FontWeight="Bold"/>
+            <TextBox Margin="0,0,0,10" Grid.Row="3" Grid.Column="1" Text="{Binding textboxItem.Model, Mode=TwoWay}" Padding="5" Width="250"/>
 
-                <!-- Full Name -->
-                <Label Grid.Row="4" Content="Full Name:" FontWeight="Bold"/>
-                <TextBox Grid.Row="4" Margin="120 0 0 0" Text="{Binding textboxItem.FullName, Mode=TwoWay}" 
-                         Padding="5" BorderBrush="#CCC" Width="213" HorizontalAlignment="Left"/>
+            <!-- Full Name -->
+            <Label Margin="0,0,0,10" Grid.Row="4" Grid.Column="0" Content="Full Name:" FontWeight="Bold"/>
+            <TextBox Margin="0,0,0,10" Grid.Row="4" Grid.Column="1" Text="{Binding textboxItem.FullName, Mode=TwoWay}" Padding="5" Width="250"/>
 
-                <!-- Description -->
-                <Label Grid.Row="5" Content="Description:" FontWeight="Bold"/>
-                <TextBox Grid.Row="5" Margin="120 0 0 0" Text="{Binding textboxItem.Description, Mode=TwoWay}" 
-                         Padding="5" BorderBrush="#CCC" Width="213" HorizontalAlignment="Left"/>
+            <!-- Description -->
+            <Label Margin="0,0,0,10" Grid.Row="5" Grid.Column="0" Content="Description:" FontWeight="Bold"/>
+            <TextBox Margin="0,0,0,10" Grid.Row="5" Grid.Column="1" Text="{Binding textboxItem.Description, Mode=TwoWay}" Padding="5" Width="250"/>
 
-                <!-- Price -->
-                <Label Grid.Row="6" Content="Price:" FontWeight="Bold"/>
-                <TextBox Grid.Row="6" Margin="120 0 0 0" Text="{Binding textboxItem.Price, Mode=TwoWay}" 
-                         Padding="5" BorderBrush="#CCC" Width="213" HorizontalAlignment="Left"/>
+            <!-- Price -->
+            <Label Margin="0,0,0,10" Grid.Row="6" Grid.Column="0" Content="Price:" FontWeight="Bold"/>
+            <TextBox Margin="0,0,0,10" Grid.Row="6" Grid.Column="1" Text="{Binding textboxItem.Price, Mode=TwoWay}" Padding="5" Width="250"/>
 
-                <!-- Is Deleted Checkbox -->
-                <StackPanel Grid.Row="8" Orientation="Horizontal" Margin="120 10 0 0">
-                    <CheckBox Content="Is Deleted" IsChecked="{Binding textboxItem.IsDeleted, Mode=TwoWay}"/>
-                </StackPanel>
+            <!-- Is Deleted Checkbox -->
+            <StackPanel Margin="0,0,0,10" Grid.Row="8" Grid.ColumnSpan="2" HorizontalAlignment="Right">
+                <CheckBox Content="Disable This Product" IsChecked="{Binding textboxItem.IsDeleted, Mode=TwoWay}"/>
+            </StackPanel>
 
-                <!-- Buttons -->
-                <StackPanel Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Center" Margin="20">
-                    <Button Content="Update" Command="{Binding UpdateCommand}" Width="110" Height="40" 
-                            Background="#FFA500" Foreground="White" FontWeight="Bold" 
-                            Margin="10" Cursor="Hand">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="#FFA500"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="FontWeight" Value="Bold"/>
-                                <Setter Property="Margin" Value="10"/>
-                                <Setter Property="Cursor" Value="Hand"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#E69500"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-
-                    <Button Content="Cancel" Width="110" Height="40" Background="#DC3545" Foreground="White" 
-                            FontWeight="Bold" Click="Cancel_Click" Margin="10" Cursor="Hand">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="#DC3545"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="FontWeight" Value="Bold"/>
-                                <Setter Property="Margin" Value="10"/>
-                                <Setter Property="Cursor" Value="Hand"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#C82333"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </StackPanel>
-            </Grid>
-        </Border>
+            <!-- Buttons -->
+            <DockPanel Grid.Row="9" Grid.ColumnSpan="3" LastChildFill="False">
+                <Button Content="Cancel" Width="80" Height="30" Background="#DC3545" Foreground="White"
+            FontWeight="Bold" Click="Cancel_Click" Margin="5,0,0,0" Cursor="Hand"
+            DockPanel.Dock="Right"/>
+                <Button x:Name="Update" Content="Update" Command="{Binding UpdateCommand}" Width="70" Height="30"
+            Background="#FFA500" Foreground="White" FontWeight="Bold" Margin="5,0,0,0" Cursor="Hand"
+            DockPanel.Dock="Right"/>
+            </DockPanel>
+        </Grid>
     </Grid>
 </Window>
