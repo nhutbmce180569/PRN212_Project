@@ -15,7 +15,7 @@ namespace FinalProject.ViewModels.WarehouseManager
     internal class SupplierViewModel : BaseViewModel
     {
         public event Action OnSupplierAdded;
-        private ObservableCollection<Supplier> _supplierList;
+        public ObservableCollection<Supplier> _supplierList;
         public ObservableCollection<Supplier> SupplierList
         {
             get => _supplierList;
@@ -201,26 +201,39 @@ namespace FinalProject.ViewModels.WarehouseManager
                 }
                 else
                 {
-                    var item = new Supplier
+                    try
                     {
-                        TaxId = _textBoxItem.TaxId,
-                        Name = _textBoxItem.Name,
-                        Address = _textBoxItem.Address,
-                        Email = _textBoxItem.Email,
-                        PhoneNumber = _textBoxItem.PhoneNumber,
-                        CreatedDate = DateTime.Now
-                    };
+                        var item = new Supplier
+                        {
+                            TaxId = _textBoxItem.TaxId,
+                            Name = _textBoxItem.Name,
+                            Address = _textBoxItem.Address,
+                            Email = _textBoxItem.Email,
+                            PhoneNumber = _textBoxItem.PhoneNumber,
+                            CreatedDate = DateTime.Now
+                        };
 
-                    using var context = new FstoreContext();
-                    context.Suppliers.Add(item);
-                    context.SaveChanges();
-                    OnSupplierAdded?.Invoke();
-                    _textBoxItem = new Supplier();
-                    OnPropertyChanged(nameof(TextBoxItem));
-                    Application.Current.Windows[2]?.Close();
-                    Application.Current.Windows[0].Opacity = 1;
-                    Application.Current.Windows[0].Focus();
-                    Application.Current.Windows[0].IsHitTestVisible = true;
+                        Debug.WriteLine(item.Name + item == null);
+
+                        using var context = new FstoreContext();
+                        context.Suppliers.Add(item);
+                        context.SaveChanges();
+
+                        AllSupplierList.Add(item);
+                        SupplierList.Add(item);
+
+                        OnSupplierAdded?.Invoke();
+                        _textBoxItem = new Supplier();
+                        OnPropertyChanged(nameof(TextBoxItem));
+                        Application.Current.Windows[2]?.Close();
+                        Application.Current.Windows[0].Opacity = 1;
+                        Application.Current.Windows[0].Focus();
+                        Application.Current.Windows[0].IsHitTestVisible = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Lỗi khi lưu vào database: {ex.Message}\n{ex.InnerException?.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
         }

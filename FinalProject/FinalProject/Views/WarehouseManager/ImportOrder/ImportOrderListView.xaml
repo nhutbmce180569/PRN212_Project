@@ -64,13 +64,14 @@
         </Grid>
         <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding ImportList}" SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="#E3F2FD">
             <DataGrid.Columns>
-                <DataGridTextColumn Width="0.5*" Header="ID" Binding="{Binding Ioid}"></DataGridTextColumn>
-                <DataGridTextColumn Width="1.5*" Header="Product" Binding="{Binding ImportOrderDetails[0].Product.Model}"></DataGridTextColumn>
-                <DataGridTextColumn Width="1.2*" Header="Supplier" Binding="{Binding Supplier.Name}"></DataGridTextColumn>
-                <DataGridTextColumn Width="0.5*" Header="Quantity" Binding="{Binding ImportOrderDetails[0].Quantity}"></DataGridTextColumn>
-                <DataGridTextColumn Width="1.0*" Header="Import Price" Binding="{Binding ImportOrderDetails[0].ImportPrice}"></DataGridTextColumn>
-                <DataGridTextColumn Width="1.6*" Header="Total Amount" Binding="{Binding TotalCost}"></DataGridTextColumn>
-                <DataGridTextColumn Width="0.7*" Header="CreatedDate" Binding="{Binding ImportDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Supplier" Binding="{Binding Supplier.Name}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Product" Binding="{Binding ImportOrderDetails[0].Product.Model}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Employee ID" Binding="{Binding Employee.EmployeeId}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Employee Name" Binding="{Binding Employee.FullName}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Import Quantity" Binding="{Binding ImportOrderDetails[0].Quantity}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Import Price" Binding="{Binding ImportOrderDetails[0].ImportPrice}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Total Amount" Binding="{Binding TotalCost}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Import Date" Binding="{Binding ImportDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
         <Button Grid.Row="2" Content="Export" HorizontalAlignment="Right" Margin="0,0,5,0" Command="{Binding ExportCommand}"/>
