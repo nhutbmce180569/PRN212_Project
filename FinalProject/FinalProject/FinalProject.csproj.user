@@ -7,9 +7,6 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Views\Home.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\OrderManager\OrderManagerView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -43,9 +40,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Admin\Employee\UpdateEmployee.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Home.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Login.xaml">
