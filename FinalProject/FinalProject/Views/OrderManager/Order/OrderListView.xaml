@@ -33,7 +33,7 @@
     </Page.Resources>
     <Grid Background="#E3F2FD">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
             <RowDefinition Height="8*"></RowDefinition>
             <RowDefinition Height="4*"></RowDefinition>
             <RowDefinition Height="4*"></RowDefinition>
@@ -42,11 +42,24 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="5*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Grid.Row="0" Content="Add"  Command="{Binding OpenAddPopupCommand}"></Button>
             <Button Grid.Column="1" Grid.Row="0" Content="Update" Command="{Binding OpenUpdatePopupCommand}"></Button>
             <Button Grid.Column="2" Grid.Row="0" Content="Delete" Command="{Binding DeleteCommand}" HorizontalAlignment="Right" Margin="0, 0, 10, 0"></Button>
+            <Button  Grid.Column="3" Grid.Row="0" Content="Export JSON" Command="{Binding ExportJsonCommand}" Margin="10"/>
+
+            <StackPanel Grid.Column="4" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <TextBox Width="200" 
+             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"  />
+                <Button Content="Search" 
+            Command="{Binding SearchCommand}" 
+            Margin="5,0,0,0" />
+            </StackPanel>
+
+
 
         </Grid>
 
