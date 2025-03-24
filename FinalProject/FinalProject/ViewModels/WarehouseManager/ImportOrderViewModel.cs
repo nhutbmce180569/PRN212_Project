@@ -2,6 +2,7 @@
 using MaterialDesignColors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,12 +34,14 @@ namespace FinalProject.ViewModels.WarehouseManager
         public ObservableCollection<ImportOrder> AllImportList { set; get; }
         public ICommand SearchCommand { get; }
         public ICommand ExportCommand { get; }
+        public ICommand DetailCommand { get; } // xem detail
 
         public ImportOrderViewModel()
         {
             Load();
             SearchCommand = new RelayCommand(Search);
             ExportCommand = new RelayCommand(Export);
+            DetailCommand = new RelayCommand(ViewDetails);
         }
 
         private void Export(object obj)
@@ -96,12 +99,31 @@ namespace FinalProject.ViewModels.WarehouseManager
             }
         }
 
+        private ImportOrder _selectedItem;
+        public ImportOrder SelectedItem
+        {
+            get { return _selectedItem; }
+            set
+            {
+                _selectedItem = value;
+                OnPropertyChanged(nameof(_selectedItem));
+            }
+        }
+
         private void Load()
         {
             using var context = new FstoreContext();
             var list = context.ImportOrders.Include(i => i.ImportOrderDetails).ThenInclude(p => p.Product).Include(s => s.Supplier).Include(e => e.Employee).ToList();
             AllImportList = new ObservableCollection<ImportOrder>(list);
             ImportList = new ObservableCollection<ImportOrder>(AllImportList);
+        }
+
+        private void ViewDetails(object obj)
+        {
+            if (SelectedItem != null)
+            {
+                Debug.WriteLine("");
+            }
         }
 
         private String _searchBoxItem;

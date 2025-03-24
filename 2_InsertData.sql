@@ -48,9 +48,9 @@ SET IDENTITY_INSERT Products OFF
 -- ImportOrders
 SET IDENTITY_INSERT ImportOrders ON
 INSERT INTO ImportOrders (IOID, EmployeeID, SupplierID, ImportDate, TotalCost, Completed) VALUES
-( 1, 1, 1, '2024-03-01', 50000000, 1),
-( 2, 2, 2, '2024-03-02', 270000000, 1),
-( 3, 1, 2, '2024-03-02', 60000000, 1)
+( 1, 3, 1, '2024-03-01', 50000000, 1),
+( 2, 3, 2, '2024-03-02', 270000000, 1),
+( 3, 3, 2, '2024-03-02', 60000000, 1)
 SET IDENTITY_INSERT ImportOrders OFF
 
 -- ImportOrderDetails
