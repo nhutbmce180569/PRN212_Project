@@ -288,18 +288,25 @@ namespace FinalProject.ViewModels.WarehouseManager
             {
                 if (MessageBox.Show("Are you sure to delete this supplier?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    try
-                    {
-                        using var context = new FstoreContext();
-                        context.Suppliers.Remove(_selectedItem);
-                        context.SaveChanges();
-                        SupplierList.Remove(_selectedItem);
-                        AllSupplierList.Remove(_selectedItem);
-                        MessageBox.Show("Delete Successfully", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    catch (Exception e)
+                    using var context = new FstoreContext();
+
+                    var list = from item in context.ImportOrders
+                               where item.SupplierId == _textBoxItem.SupplierId
+                               select item;
+
+                    if (list.Any())
                     {
                         MessageBox.Show("This supplier is providing products\n Cannot delete", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        context.Suppliers.Remove(_selectedItem);
+                        context.SaveChanges();
+                        AllSupplierList.Remove(_selectedItem);
+                        SupplierList = new ObservableCollection<Supplier>(AllSupplierList);
+                        OnPropertyChanged(nameof(SupplierList));
+                        OnPropertyChanged(nameof(AllSupplierList));
+                        MessageBox.Show("Delete Successfully", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
             }
