@@ -20,6 +20,7 @@ using System.Text.RegularExpressions;
 using FinalProject.Views.Admin.Employee;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
+using FinalProject.Views.ShopManager.Product;
 
 namespace FinalProject.ViewModels.Admin
 {
@@ -40,6 +41,12 @@ namespace FinalProject.ViewModels.Admin
 
         public ObservableCollection<Employee> AllEmployeeList { set; get; }
 
+        public List<string> Genders { set; get; }
+
+        public List<string> Statuses { set; get; }
+
+        public ObservableCollection<Role> Roles { set; get; }
+
         public ICommand OpenAddPopupCommand { get; }
         public ICommand OpenUpdatePopupCommand { get; }
         public ICommand AddCommand { get; }
@@ -51,90 +58,14 @@ namespace FinalProject.ViewModels.Admin
 
         public EmployeeViewModel()
         {
-            TextBoxItem.CreatedDate = DateTime.Now;
             Load();
             AddCommand = new RelayCommand(Add);
             UpdateCommand = new RelayCommand(Update);
             DeleteCommand = new RelayCommand(Delete);
             SearchCommand = new RelayCommand(Search);
-            OpenAddPopupCommand = new RelayCommand(OpenPopup);
+            OpenAddPopupCommand = new RelayCommand(OpenAddPopup);
             OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
             ExportCommand = new RelayCommand(Export);
-        }
-
-        private void Export(object obj)
-        {
-            try
-            {
-                SaveFileDialog saveFileDialog = new SaveFileDialog
-                {
-                    Filter = "Excel files (*.xlsx)|*.xlsx",
-                    FileName = "employees.xlsx",
-                    Title = "Save Exported Data"
-                };
-
-                if (saveFileDialog.ShowDialog() == true)
-                {
-                    var workbook = new ClosedXML.Excel.XLWorkbook();
-                    var worksheet = workbook.Worksheets.Add("Employees");
-
-                    var headerRange = worksheet.Range(1, 1, 1, 9);
-                    headerRange.Style.Font.Bold = true;
-                    headerRange.Style.Alignment.Horizontal = ClosedXML.Excel.XLAlignmentHorizontalValues.Center;
-                    worksheet.Columns().AdjustToContents();
-
-                    // Header row
-                    worksheet.Cell(1, 1).Value = "Employee ID";
-                    worksheet.Cell(1, 2).Value = "FullName";
-                    worksheet.Cell(1, 3).Value = "Birthday";
-                    worksheet.Cell(1, 4).Value = "Password";
-                    worksheet.Cell(1, 5).Value = "Phone Number";
-                    worksheet.Cell(1, 6).Value = "Email";
-                    worksheet.Cell(1, 7).Value = "Gender";
-                    worksheet.Cell(1, 8).Value = "CreatedDate";
-                    worksheet.Cell(1, 9).Value = "Status";
-                    worksheet.Cell(1, 10).Value = "Role";
-
-                    // Data rows
-                    for (int i = 0; i < AllEmployeeList.Count; i++)
-                    {
-                        var p = AllEmployeeList[i];
-                        worksheet.Cell(i + 2, 1).Value = p.EmployeeId;
-                        worksheet.Cell(i + 2, 2).Value = p.FullName;
-                        worksheet.Cell(i + 2, 3).Value = p.Birthday;
-                        worksheet.Cell(i + 2, 4).Value = p.Password;
-                        worksheet.Cell(i + 2, 5).Value = p.PhoneNumber;
-                        worksheet.Cell(i + 2, 6).Value = p.Email;
-                        worksheet.Cell(i + 2, 7).Value = p.Gender;
-                        worksheet.Cell(i + 2, 8).Value = p.CreatedDate;
-                        worksheet.Cell(i + 2, 9).Value = p.Status;
-                        if (p.RoleId == 1)
-                        {
-                            worksheet.Cell(i + 2, 10).Value = "Admin";
-                        }
-                        else if (p.RoleId == 2)
-                        {
-                            worksheet.Cell(i + 2, 10).Value = "Shop Manager";
-                        }
-                        else if (p.RoleId == 3)
-                        {
-                            worksheet.Cell(i + 2, 10).Value = "Warehouse Manager";
-                        }
-                        else if (p.RoleId == 4)
-                        {
-                            worksheet.Cell(i + 2, 10).Value = "Order Manager";
-                        }
-
-                    }
-
-                    workbook.SaveAs(saveFileDialog.FileName);
-                    MessageBox.Show("Export to Excel successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error exporting to Excel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
 
         public EmployeeViewModel(Employee employee)
@@ -145,10 +76,9 @@ namespace FinalProject.ViewModels.Admin
             UpdateCommand = new RelayCommand(Update);
             DeleteCommand = new RelayCommand(Delete);
             SearchCommand = new RelayCommand(Search);
-            OpenAddPopupCommand = new RelayCommand(OpenPopup);
+            OpenAddPopupCommand = new RelayCommand(OpenAddPopup);
             OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
         }
-
 
         private Employee textBoxItem = new Employee();
         public Employee TextBoxItem
@@ -171,14 +101,13 @@ namespace FinalProject.ViewModels.Admin
                 OnPropertyChanged(nameof(SelectedItem));
                 if (selectedItem != null)
                 {
-                    textBoxItem = JsonConvert.DeserializeObject<Employee>(JsonConvert.SerializeObject(selectedItem));
+                    textBoxItem = JsonConvert.DeserializeObject<Employee>(JsonConvert.SerializeObject(selectedItem, new JsonSerializerSettings{ ReferenceLoopHandling = ReferenceLoopHandling.Ignore}));
                     OnPropertyChanged(nameof(TextBoxItem));
                 }
             }
         }
 
-
-        private void OpenPopup(object obj)
+        private void OpenAddPopup(object obj)
         {
             var action = new EmployeeViewModel();
             action.OnEmployeeAdded += Load;
@@ -195,13 +124,11 @@ namespace FinalProject.ViewModels.Admin
                 Application.Current.Windows[0].IsHitTestVisible = false;
                 if (popup.IsLoaded)
                 {
-
                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                     {
                         if (!popup.IsActive) // khi click chuột ra ngoài không trong popup
                         {
                             popup.Topmost = true;
-
                             //// Lấy lại focus cho MainWindow
                             //Application.Current.MainWindow.Opacity = 1;
                         }
@@ -217,7 +144,7 @@ namespace FinalProject.ViewModels.Admin
             {
                 var action = new EmployeeViewModel(selectedItem);
                 action.OnEmployeeAdded += Load;
-                var popup = new UpdateEmployee(selectedItem)
+                var popup = new UpdateEmployee
                 {
                     DataContext = action,
                     Owner = Application.Current.MainWindow,
@@ -257,6 +184,7 @@ namespace FinalProject.ViewModels.Admin
 
 
 
+
         public void Load()
         {
             using (var context = new FstoreContext())
@@ -264,13 +192,20 @@ namespace FinalProject.ViewModels.Admin
                 var list = context.Employees.Where(e => e.RoleId != 1).ToList();
                 AllEmployeeList = new ObservableCollection<Employee>(list);
                 EmployeeList = new ObservableCollection<Employee>(AllEmployeeList);
+                var roleList = context.Roles.Where(r => r.RoleId != 1).ToList();
+                Roles = new ObservableCollection<Role>(roleList);
             }
+            TextBoxItem.CreatedDate = DateTime.Now;
+            Genders = new List<string> { "Male", "Female" };
+            Statuses = new List<string> { "Active", "Inactive" };
+
+
         }
 
-
+        Validator validator = new();
         private void Add(Object obj)
         {
-            // Kiểm tra các trường bắt buộc
+            
             if (textBoxItem.FullName.IsNullOrEmpty() ||
                 textBoxItem.Gender.IsNullOrEmpty() ||
                 textBoxItem.Email.IsNullOrEmpty() ||
@@ -282,14 +217,14 @@ namespace FinalProject.ViewModels.Admin
                 return;
             }
 
-            else if (!IsValidEmail(textBoxItem.Email))
+            else if (!validator.IsValidEmail(textBoxItem.Email))
             {
                 MessageBox.Show("Invalid email format", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            else if (!IsValidPhoneNumber(textBoxItem.PhoneNumber))
+            else if (!validator.IsValidPhone(textBoxItem.PhoneNumber))
             {
-                MessageBox.Show("Phone number can only be entered in numbers and up to 15 characters", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Phone number must be number and length from 10 to 11 digits", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -299,12 +234,12 @@ namespace FinalProject.ViewModels.Admin
                 return;
             }
 
-            else if (IsEmailExists(textBoxItem.Email))
+            else if (validator.IsEmailExists(textBoxItem.Email))
             {
                 MessageBox.Show("Email already exists", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            else if (!IsValidPassword(textBoxItem.Password))
+            else if (!validator.IsValidPassword(textBoxItem.Password))
             {
                 MessageBox.Show("Password must be at least 8 characters long, contain at least one uppercase letter and one special character!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -355,9 +290,9 @@ namespace FinalProject.ViewModels.Admin
             {
                 MessageBox.Show("Input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            else if (!IsValidPhoneNumber(textBoxItem.PhoneNumber))
+            else if (!validator.IsValidPhone(textBoxItem.PhoneNumber))
             {
-                MessageBox.Show("Phone number can only be entered in numbers and up to 15 characters!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Phone number must be number and length from 10 to 11 digits", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -368,7 +303,7 @@ namespace FinalProject.ViewModels.Admin
             }
             else if (textBoxItem.Password != selectedItem.Password)
             {
-                if (!IsValidPassword(textBoxItem.Password))
+                if (!validator.IsValidPassword(textBoxItem.Password))
                 {
                     MessageBox.Show("Password must be at least 8 characters long, contain at least one uppercase letter and one special character",
                                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -463,6 +398,81 @@ namespace FinalProject.ViewModels.Admin
             }
         }
 
+        private void Export(object obj)
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "Excel files (*.xlsx)|*.xlsx",
+                    FileName = "employees.xlsx",
+                    Title = "Save Exported Data"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    var workbook = new ClosedXML.Excel.XLWorkbook();
+                    var worksheet = workbook.Worksheets.Add("Employees");
+
+                    var headerRange = worksheet.Range(1, 1, 1, 9);
+                    headerRange.Style.Font.Bold = true;
+                    headerRange.Style.Alignment.Horizontal = ClosedXML.Excel.XLAlignmentHorizontalValues.Center;
+                    worksheet.Columns().AdjustToContents();
+
+                    // Header row
+                    worksheet.Cell(1, 1).Value = "Employee ID";
+                    worksheet.Cell(1, 2).Value = "FullName";
+                    worksheet.Cell(1, 3).Value = "Birthday";
+                    worksheet.Cell(1, 4).Value = "Password";
+                    worksheet.Cell(1, 5).Value = "Phone Number";
+                    worksheet.Cell(1, 6).Value = "Email";
+                    worksheet.Cell(1, 7).Value = "Gender";
+                    worksheet.Cell(1, 8).Value = "CreatedDate";
+                    worksheet.Cell(1, 9).Value = "Status";
+                    worksheet.Cell(1, 10).Value = "Role";
+
+                    // Data rows
+                    for (int i = 0; i < AllEmployeeList.Count; i++)
+                    {
+                        var p = AllEmployeeList[i];
+                        worksheet.Cell(i + 2, 1).Value = p.EmployeeId;
+                        worksheet.Cell(i + 2, 2).Value = p.FullName;
+                        worksheet.Cell(i + 2, 3).Value = p.Birthday;
+                        worksheet.Cell(i + 2, 4).Value = p.Password;
+                        worksheet.Cell(i + 2, 5).Value = p.PhoneNumber;
+                        worksheet.Cell(i + 2, 6).Value = p.Email;
+                        worksheet.Cell(i + 2, 7).Value = p.Gender;
+                        worksheet.Cell(i + 2, 8).Value = p.CreatedDate;
+                        worksheet.Cell(i + 2, 9).Value = p.Status;
+                        if (p.RoleId == 1)
+                        {
+                            worksheet.Cell(i + 2, 10).Value = "Admin";
+                        }
+                        else if (p.RoleId == 2)
+                        {
+                            worksheet.Cell(i + 2, 10).Value = "Shop Manager";
+                        }
+                        else if (p.RoleId == 3)
+                        {
+                            worksheet.Cell(i + 2, 10).Value = "Warehouse Manager";
+                        }
+                        else if (p.RoleId == 4)
+                        {
+                            worksheet.Cell(i + 2, 10).Value = "Order Manager";
+                        }
+
+                    }
+
+                    workbook.SaveAs(saveFileDialog.FileName);
+                    MessageBox.Show("Export to Excel successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error exporting to Excel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
 
         private bool CheckEmail(string newEmail, string originalEmail)
         {
@@ -473,7 +483,7 @@ namespace FinalProject.ViewModels.Admin
             }
 
             // Kiểm tra định dạng email
-            if (!IsValidEmail(newEmail))
+            if (!validator.IsValidEmail(newEmail))
             {
                 MessageBox.Show("Email is not in correct format", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
@@ -493,38 +503,6 @@ namespace FinalProject.ViewModels.Admin
             // Email hợp lệ và chưa tồn tại
             return true;
         }
-
-
-        public bool IsEmailExists(string email)
-        {
-            using (var context = new FstoreContext())
-            {
-                return context.Employees.Any(e => e.Email.ToLower() == email.ToLower());
-            }
-        }
-
-        public bool IsValidPassword(string password)
-        {
-            if (string.IsNullOrWhiteSpace(password))
-                return false;
-            string pattern = @"^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$";
-            return Regex.IsMatch(password, pattern);
-        }
-
-        public bool IsValidEmail(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-                return false;
-            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-            return Regex.IsMatch(email, pattern);
-        }
-
-        public bool IsValidPhoneNumber(string phoneNumber)
-        {
-            if (string.IsNullOrWhiteSpace(phoneNumber))
-                return false;
-            string pattern = @"^\d{1,15}$"; // Chỉ cho phép nhập số và tối đa 15 ký tự
-            return Regex.IsMatch(phoneNumber, pattern);
-        }
+       
     }
 }
