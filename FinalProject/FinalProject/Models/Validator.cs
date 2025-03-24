@@ -60,5 +60,16 @@ namespace FinalProject.Models
             string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
             return Regex.IsMatch(email, pattern);
         }
+
+        public bool IsValidNumberAmount(long price, long min)
+        {
+            if (price < min)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }
