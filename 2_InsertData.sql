@@ -23,8 +23,8 @@ INSERT INTO Customers ( FullName, Birthday, Password, PhoneNumber, Email, Gender
 -- Suppliers
 SET IDENTITY_INSERT Suppliers ON
 INSERT INTO Suppliers (SupplierID, TaxID, Name, Email, PhoneNumber, Address, CreatedDate, LastModify, DeletedDate, IsActivate, IsDeleted) VALUES
-(1, 'TAX12345', N'Ventrue Co.', 'contact@ventrue.com', '0988888888', N'123 Main St', '2024-03-01', NULL, NULL, 1, 0),
-(2, 'TAX67890', N'TechWorld Ltd.', 'info@techworld.com', '0977777777', N'456 Tech Park', '2024-03-01', NULL, NULL, 1, 0);
+(1, '0152345871', N'Ventrue Co.', 'contact@ventrue.com', '0988888888', N'123 Main St', '2024-03-01', NULL, NULL, 1, 0),
+(2, '0156329874', N'TechWorld Ltd.', 'info@techworld.com', '0977777777', N'456 Tech Park', '2024-03-01', NULL, NULL, 1, 0);
 SET IDENTITY_INSERT Suppliers OFF
 -- Categories
 INSERT INTO Categories (Name) VALUES
