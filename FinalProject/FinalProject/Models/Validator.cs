@@ -71,5 +71,21 @@ namespace FinalProject.Models
             return true;
         }
 
+        public bool IsValidPassword(string? password)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+                return false;
+            string pattern = @"^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$";
+            return Regex.IsMatch(password, pattern);
+        }
+
+        public bool IsEmailExists(string email)
+        {
+            using (var context = new FstoreContext())
+            {
+                return context.Employees.Any(e => e.Email.ToLower() == email.ToLower());
+            }
+        }
+
     }
 }
