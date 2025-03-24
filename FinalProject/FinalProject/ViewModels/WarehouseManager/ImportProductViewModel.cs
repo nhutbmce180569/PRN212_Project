@@ -10,7 +10,7 @@ using WPFLab.ViewModels;
 
 namespace FinalProject.ViewModels.WarehouseManager
 {
-    class ProductViewModel : BaseViewModel
+    class ImportProductViewModel : BaseViewModel
     {
         public event Action LoadInformation;
         public ObservableCollection<Product> allproducts { get; set; }
@@ -19,7 +19,7 @@ namespace FinalProject.ViewModels.WarehouseManager
         public ICommand ImportCommand { get; }
         public ICommand OpenImportPopupCommand { get; }
         public ObservableCollection<Supplier> Suppliers { get; set; }
-        public ProductViewModel()
+        public ImportProductViewModel()
         {
             Load();
             ImportCommand = new RelayCommand(ImportProduct);
@@ -59,8 +59,7 @@ namespace FinalProject.ViewModels.WarehouseManager
             {
                 _selectItem = value;
 
-
-                // Lấy đầy đủ thông tin Brand nếu chưa có
+                // lay day du thong tin brand neu chua co
                 if (_selectItem != null)
                 {
                     using var context = new FstoreContext();
@@ -77,7 +76,7 @@ namespace FinalProject.ViewModels.WarehouseManager
                             .FirstOrDefault(p => p.ProductId == _selectItem.ProductId);
                     }
 
-                    // Sao chép dữ liệu vào textboxItem nếu có sản phẩm được chọn
+                    // sao chep du lieu vao textbox neu co san pham duoc chon
 
                     _textboxItem = new Product
                     {
@@ -178,7 +177,8 @@ namespace FinalProject.ViewModels.WarehouseManager
 
         private void ImportProduct(object obj)
         {
-            if (ImportedQuantity < 1)
+            Validator v = new();
+            if (!v.IsValidNumberAmount(ImportedQuantity, 1))
             {
                 MessageBox.Show("Quantity must be greater than 0", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -186,7 +186,7 @@ namespace FinalProject.ViewModels.WarehouseManager
             {
                 MessageBox.Show("Please select product you want to import quantity", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            else if (ImportedPrice < 1000)
+            else if (!v.IsValidNumberAmount(ImportedPrice, 1000))
             {
                 MessageBox.Show("Price cannot be less than 1000", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -204,16 +204,39 @@ namespace FinalProject.ViewModels.WarehouseManager
                         importedProduct.Stock += ImportedQuantity;
                         context.Update(importedProduct);
 
-                        // thu nghiem
 
-                        ImportOrder iO = new ImportOrder() { TotalCost = ImportedPrice * ImportedQuantity, ImportDate = DateTime.Now, SupplierId = SelectedSupplier.SupplierId };
-                        context.ImportOrders.Add(iO);
-                        context.SaveChanges();
+                        if (Application.Current?.Properties.Contains("Employee") == true)
+                        {
+                            if (Application.Current.Properties["Employee"] is Employee currentEmployee)
+                            {
+                                var employee = context.Employees.FirstOrDefault(
+                                    c => c.EmployeeId == currentEmployee.EmployeeId
+                                );
 
-                        ImportOrderDetail iOD = new ImportOrderDetail() { Io = iO, ProductId = importedProduct.ProductId, Quantity = ImportedQuantity, ImportPrice = ImportedPrice };
-                        context.ImportOrderDetails.Add(iOD);
+                                if (employee != null)
+                                {
+                                    // thu nghiem
 
-                        // thu nghiem
+                                    ImportOrder iO = new ImportOrder() { Employee = employee, TotalCost = ImportedPrice * ImportedQuantity, ImportDate = DateTime.Now, SupplierId = SelectedSupplier.SupplierId };
+                                    context.ImportOrders.Add(iO);
+                                    context.SaveChanges();
+
+                                    ImportOrderDetail iOD = new ImportOrderDetail() { Io = iO, ProductId = importedProduct.ProductId, Quantity = ImportedQuantity, ImportPrice = ImportedPrice };
+                                    context.ImportOrderDetails.Add(iOD);
+
+                                    // thu nghiem
+                                }
+
+                            }
+                            else
+                            {
+                                MessageBox.Show("Employee object is null!");
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("No Employee found in Application.Current.Properties!");
+                        }
 
                         context.SaveChanges();
 
@@ -222,11 +245,11 @@ namespace FinalProject.ViewModels.WarehouseManager
                         OnPropertyChanged(nameof(products));
                         OnPropertyChanged(nameof(allproducts));
 
-                        // Xóa TextboxItem sau khi import xong
+                        // xoa textbox sau khi import
                         _textboxItem = new Product();
                         OnPropertyChanged(nameof(TextboxItem));
 
-                        // 🔥 Đóng popup an toàn hơn
+                        // Dong popup an toan
                         Application.Current.Windows[2]?.Close();
                         Application.Current.Windows[0].Opacity = 1;
                         Application.Current.Windows[0].Focus();

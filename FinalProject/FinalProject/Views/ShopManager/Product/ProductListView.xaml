@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:FinalProject.Views.ShopManager.Product"
       mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="900"
+      d:DesignHeight="450" d:DesignWidth="800"
       Title="Product List"
       Background="#F4F4F4">
 
@@ -48,19 +48,25 @@
                 <!-- Data Grid -->
                 <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="#DDD" BorderThickness="1" Padding="5">
                     <DataGrid Background="White" SelectedItem="{Binding selectItem, Mode=TwoWay}" 
-                              ItemsSource="{Binding products}" AutoGenerateColumns="False"
-                              RowHeight="40" HeadersVisibility="Column" FontSize="14"
-                              GridLinesVisibility="Horizontal" CanUserAddRows="False" CanUserDeleteRows="False">
+                              ItemsSource="{Binding products}" AutoGenerateColumns="False" 
+                              RowHeight="40" HeadersVisibility="Column" FontSize="14" Focusable="False"
+                              GridLinesVisibility="Horizontal" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserResizeColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="50" Header="ID" Binding="{Binding ProductId}"/>
-                            <DataGridTextColumn Width="150" Header="Brand" Binding="{Binding Brand.Name}"/>
-                            <DataGridTextColumn Width="150" Header="Category" Binding="{Binding Category.Name}"/>
-                            <DataGridTextColumn Width="150" Header="Model" Binding="{Binding Model}"/>
-                            <DataGridTextColumn Width="200" Header="Full Name" Binding="{Binding FullName}"/>
-                            <DataGridTextColumn Width="250" Header="Description" Binding="{Binding Description}"/>
-                            <DataGridTextColumn Width="100" Header="Price" Binding="{Binding Price}"/>
-                            <DataGridTextColumn Width="80" Header="Stock" Binding="{Binding Stock}"/>
-                            <DataGridCheckBoxColumn Width="80" Header="Disable" Binding="{Binding IsDeleted}"/>
+                            <DataGridTextColumn Width="40" Header="ID" Binding="{Binding ProductId}"/>
+                            <DataGridTextColumn Width="130" Header="Brand" Binding="{Binding Brand.Name}"/>
+                            <DataGridTextColumn Width="130" Header="Category" Binding="{Binding Category.Name}"/>
+                            <DataGridTextColumn Width="140" Header="Model" Binding="{Binding Model}"/>
+                            <DataGridTextColumn Width="210" Header="Full Name" Binding="{Binding FullName}"/>
+                            <DataGridTextColumn Width="90" Header="Price" Binding="{Binding Price}"/>
+                            <DataGridTextColumn Width="50" Header="Stock" Binding="{Binding Stock}"/>
+                            <DataGridTemplateColumn Width="60" Header="Disable">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate> 
+                                        <TextBlock Text="{Binding IsDeleted, StringFormat={}{0:Yes;No}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Width="*" Header="Description" Binding="{Binding Description}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>

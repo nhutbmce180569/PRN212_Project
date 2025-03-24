@@ -254,7 +254,7 @@ public partial class FstoreContext : DbContext
             entity.HasKey(e => e.SupplierId).HasName("PK__Supplier__4BE6669433797237");
 
             entity.Property(e => e.SupplierId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("SupplierID");
             entity.Property(e => e.Address).HasMaxLength(255);
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FinalProject.Views.OrderManager"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
-        Title="OrderManagerView" Height="600" Width="1000">
+        Title="OrderManagerView" Height="600" Width="1000" WindowStartupLocation="CenterScreen">
     <Window.Resources>
 
         <ResourceDictionary>
@@ -140,9 +140,7 @@
                 <Button Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Click="ButtonClick_ShowProfile">
                     <materialDesign:PackIcon Kind="Account"/>
                 </Button>
-                <Button x:Name="ButtonFechar" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White">
-                    <materialDesign:PackIcon Kind="Power"/>
-                </Button>
+                
             </StackPanel>
         </Grid>
     </Grid>

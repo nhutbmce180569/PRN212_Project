@@ -420,8 +420,8 @@ namespace FinalProject.ViewModels.Admin
                         {
                             context.Employees.Remove(employee);
                             context.SaveChanges();
-                            EmployeeList.Remove(selectedItem);
                             AllEmployeeList.Remove(selectedItem);
+                            EmployeeList = new ObservableCollection<Employee>(AllEmployeeList);
                             MessageBox.Show("Delete Successfully", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                     }

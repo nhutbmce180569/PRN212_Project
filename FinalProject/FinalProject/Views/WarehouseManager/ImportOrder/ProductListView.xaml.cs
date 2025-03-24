@@ -12,7 +12,7 @@ namespace FinalProject.Views.WarehouseManager.ImportOrder
         public ProductListView()
         {
             InitializeComponent();
-            DataContext = new ProductViewModel();
+            DataContext = new ImportProductViewModel();
         }
 
     }

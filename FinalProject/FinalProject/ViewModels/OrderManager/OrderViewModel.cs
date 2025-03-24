@@ -51,7 +51,7 @@ namespace FinalProject.ViewModels.OrderManager
 
 
 
-        private string _searchText;
+        private string _searchText = "";
         public string SearchText
         {
             get => _searchText;
@@ -323,7 +323,7 @@ namespace FinalProject.ViewModels.OrderManager
         public ICommand DeleteCommand { get; }
         public ICommand OpenAddPopupCommand { get; }
         public ICommand OpenUpdatePopupCommand { get; }
-        public ICommand SearchCommand { get; }             
+        public ICommand SearchCommand { get; }
         public ICommand ExportJsonCommand { get; }
         public ICommand AddProductDetailCommand { get; }
         public bool IsValidPhoneNumber(string phoneNumber)
@@ -371,7 +371,7 @@ namespace FinalProject.ViewModels.OrderManager
                 WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner
 
             };
-
+            action.OnOrderAdded += () => popup.Close();
             popup.Deactivated += (s, e) =>
             {
                 if (popup.IsLoaded)
@@ -413,7 +413,7 @@ namespace FinalProject.ViewModels.OrderManager
                 Quantity = NewOrderDetailQuantity
             };
             NewOrderDetails.Add(newDetail);
-          
+
             NewOrderDetailQuantity = null;
         }
 
@@ -548,17 +548,17 @@ namespace FinalProject.ViewModels.OrderManager
                 var existingOrder = context.Orders.FirstOrDefault(o => o.OrderId == TextBoxItem.OrderId);
                 if (existingOrder != null)
                 {
-                  
+
                     var oldOrderDetail = context.OrderDetails.FirstOrDefault(od => od.OrderId == TextBoxItem.OrderId && od.ProductId == TextBoxProduct.ProductId);
 
                     if (oldOrderDetail != null)
                     {
-                        
+
                         int quantityDifference = oldOrderDetail.Quantity.Value - TextBoxDetail.Quantity.Value;
 
                         if (quantityDifference > 0)
                         {
-                            
+
                             IncreaseStock(TextBoxProduct.ProductId, quantityDifference);
                         }
                         else if (quantityDifference < 0)
@@ -567,12 +567,12 @@ namespace FinalProject.ViewModels.OrderManager
                         }
                     }
 
-                    
+
                     existingOrder.FullName = TextBoxItem.FullName;
                     existingOrder.Address = TextBoxItem.Address;
                     existingOrder.PhoneNumber = TextBoxItem.PhoneNumber;
                     existingOrder.Status = TextBoxItem.Status;
-                    existingOrder.DeliveredDate = TextBoxItem.DeliveredDate ?? DateTime.Now.AddDays(3); 
+                    existingOrder.DeliveredDate = TextBoxItem.DeliveredDate ?? DateTime.Now.AddDays(3);
                     existingOrder.TotalAmount = TextBoxProduct.Price;
 
                     var existingOrderDetail = context.OrderDetails
@@ -638,11 +638,11 @@ namespace FinalProject.ViewModels.OrderManager
                         Console.WriteLine($"Detail: ProductId={d.ProductId}, Quantity={d.Quantity}, Price={d.Price}");
                     }
 
-                   
-                    context.Orders.Add(order);
-                    context.SaveChanges(); 
 
-                   
+                    context.Orders.Add(order);
+                    context.SaveChanges();
+
+
                     foreach (var detail in orderDetails)
                     {
                         detail.OrderId = order.OrderId;
@@ -725,6 +725,7 @@ namespace FinalProject.ViewModels.OrderManager
                     Application.Current.Windows[1]?.Close();
                     Application.Current.Windows[0].Opacity = 1;
                     Application.Current.Windows[0].Focus();
+                    Application.Current.Windows[0].IsHitTestVisible = true;
                 }
             }
             else
@@ -739,7 +740,7 @@ namespace FinalProject.ViewModels.OrderManager
         {
             using (var Context = new FstoreContext())
             {
-               
+
                 var list = Context.Orders.ToList();
                 var listpro = Context.Products.ToList();
                 var listdetail = Context.OrderDetails.ToList();
@@ -755,7 +756,7 @@ namespace FinalProject.ViewModels.OrderManager
                 }
                 OnPropertyChanged(nameof(OrderList));
 
-               
+
                 if (OrderDetailList == null)
                     OrderDetailList = new ObservableCollection<OrderDetail>(listdetail);
                 else
@@ -784,7 +785,8 @@ namespace FinalProject.ViewModels.OrderManager
                 OnPropertyChanged(nameof(CustomerList));
 
                 SelectedCustomer = CustomerList.FirstOrDefault();
-
+                AllOrderList = new ObservableCollection<Order>(list);
+                OnPropertyChanged(nameof(AllOrderList));
                 if (ProductList == null || !ProductList.Any())
                 {
                     MessageBox.Show("ProductList is empty!", "Debug", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -849,23 +851,30 @@ namespace FinalProject.ViewModels.OrderManager
         }
         private void ExecuteSearch(object obj)
         {
-            if (string.IsNullOrWhiteSpace(SearchText))
+            if (AllOrderList == null)
             {
-
-                OrderList = new ObservableCollection<Order>(AllOrderList);
+                OrderList = new ObservableCollection<Order>();
             }
             else
             {
-                var lowerSearch = SearchText.ToLower();
-                var filtered = AllOrderList.Where(o =>
-                    (!string.IsNullOrEmpty(o.FullName) && o.FullName.ToLower().Contains(lowerSearch)) ||
-                    (!string.IsNullOrEmpty(o.Address) && o.Address.ToLower().Contains(lowerSearch)) ||
-                    (!string.IsNullOrEmpty(o.PhoneNumber) && o.PhoneNumber.ToLower().Contains(lowerSearch)) ||
-                    (o.CustomerId.HasValue && o.CustomerId.Value.ToString().Contains(lowerSearch))
-                );
-                OrderList = new ObservableCollection<Order>(filtered);
+                if (_searchText.IsNullOrEmpty())
+                {
+                    OrderList = new ObservableCollection<Order>(AllOrderList);
+                }
+                else
+                {
+                    var lowerSearch = (SearchText ?? "").ToLower();
+                    var filtered = AllOrderList.Where(o =>
+                        (o.FullName?.ToLower().Contains(lowerSearch) == true) ||
+                        (o.Address?.ToLower().Contains(lowerSearch) == true) ||
+                        (o.PhoneNumber?.ToLower().Contains(lowerSearch) == true) ||
+                        (o.CustomerId?.ToString().Contains(lowerSearch) == true)
+                    );
+                    OrderList = new ObservableCollection<Order>(filtered);
+                }
             }
             OnPropertyChanged(nameof(OrderList));
+
         }
 
     }

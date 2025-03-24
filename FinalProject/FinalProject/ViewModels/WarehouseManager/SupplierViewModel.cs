@@ -15,7 +15,7 @@ namespace FinalProject.ViewModels.WarehouseManager
     internal class SupplierViewModel : BaseViewModel
     {
         public event Action OnSupplierAdded;
-        private ObservableCollection<Supplier> _supplierList;
+        public ObservableCollection<Supplier> _supplierList;
         public ObservableCollection<Supplier> SupplierList
         {
             get => _supplierList;
@@ -187,40 +187,83 @@ namespace FinalProject.ViewModels.WarehouseManager
             }
             else
             {
-                if (!IsValidPhone(TextBoxItem.PhoneNumber))
+                Validator v = new();
+                if (!v.IsValidPhone(TextBoxItem.PhoneNumber))
                 {
-                    MessageBox.Show("Invalid phone number format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Phone number must be number and length from 10 to 11 digits", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                else if (!IsValidEmail(TextBoxItem.Email))
+                else if (!v.IsValidEmail(TextBoxItem.Email))
                 {
                     MessageBox.Show("Invalid email format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                else if (TextBoxItem.Name.Length > 255)
+                else if (!v.IsValidOrganiztionName(TextBoxItem.Name, 255))
                 {
-                    MessageBox.Show("Invalid name format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("The length of name must be less than or equal 255 characters", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else if (!v.IsValidTaxId(TextBoxItem.TaxId))
+                {
+                    MessageBox.Show("Tax number must be number with 10 digits", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
-                    var item = new Supplier
+                    Debug.WriteLine("vuot qua validate");
+                    try
                     {
-                        TaxId = _textBoxItem.TaxId,
-                        Name = _textBoxItem.Name,
-                        Address = _textBoxItem.Address,
-                        Email = _textBoxItem.Email,
-                        PhoneNumber = _textBoxItem.PhoneNumber,
-                        CreatedDate = DateTime.Now
-                    };
+                        using var context = new FstoreContext();
 
-                    using var context = new FstoreContext();
-                    context.Suppliers.Add(item);
-                    context.SaveChanges();
-                    OnSupplierAdded?.Invoke();
-                    _textBoxItem = new Supplier();
-                    OnPropertyChanged(nameof(TextBoxItem));
-                    Application.Current.Windows[2]?.Close();
-                    Application.Current.Windows[0].Opacity = 1;
-                    Application.Current.Windows[0].Focus();
-                    Application.Current.Windows[0].IsHitTestVisible = true;
+                        var isInforExisted = context.Suppliers
+                        .FirstOrDefault(s => s.Email == TextBoxItem.Email || s.PhoneNumber == TextBoxItem.PhoneNumber || s.TaxId == TextBoxItem.TaxId);
+
+                        if (isInforExisted == null)
+                        {
+                            var item = new Supplier
+                            {
+                                TaxId = _textBoxItem.TaxId,
+                                Name = _textBoxItem.Name,
+                                Address = _textBoxItem.Address,
+                                Email = _textBoxItem.Email,
+                                PhoneNumber = _textBoxItem.PhoneNumber,
+                                CreatedDate = DateTime.Now
+                            };
+
+                            Debug.WriteLine(item.Name + item == null);
+
+                            context.Suppliers.Add(item);
+                            context.SaveChanges();
+
+                            AllSupplierList.Add(item);
+                            SupplierList.Add(item);
+
+                            Debug.WriteLine("add");
+
+                            OnSupplierAdded?.Invoke();
+                            _textBoxItem = new Supplier();
+                            OnPropertyChanged(nameof(TextBoxItem));
+                            Application.Current.Windows[2]?.Close();
+                            Application.Current.Windows[0].Opacity = 1;
+                            Application.Current.Windows[0].Focus();
+                            Application.Current.Windows[0].IsHitTestVisible = true;
+                        }
+                        else
+                        {
+                            if (isInforExisted.Email == TextBoxItem.Email)
+                            {
+                                MessageBox.Show("Email is existed", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                            else if (isInforExisted.TaxId == TextBoxItem.TaxId)
+                            {
+                                MessageBox.Show("Tax number is existed", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                            else if (isInforExisted.PhoneNumber == TextBoxItem.PhoneNumber)
+                            {
+                                MessageBox.Show("Phone number is existed", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error database saving: {ex.Message}\n{ex.InnerException?.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
         }
@@ -236,32 +279,62 @@ namespace FinalProject.ViewModels.WarehouseManager
             }
             else
             {
-                if (!IsValidPhone(_textBoxItem.PhoneNumber))
+                Validator v = new();
+                if (!v.IsValidPhone(TextBoxItem.PhoneNumber))
                 {
-                    MessageBox.Show("Invalid phone number format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Phone number must be number and length from 10 to 11 digits", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                else if (!IsValidEmail(_textBoxItem.Email))
+                else if (!v.IsValidEmail(TextBoxItem.Email))
                 {
                     MessageBox.Show("Invalid email format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                else if (_textBoxItem.Name.Length > 255)
+                else if (!v.IsValidOrganiztionName(TextBoxItem.Name, 255))
                 {
-                    MessageBox.Show("Invalid name format", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("The length of name must be less than or equal 255 characters", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else if (!v.IsValidTaxId(TextBoxItem.TaxId))
+                {
+                    MessageBox.Show("Tax number must be number with 10 digits", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
-                    using (var context = new FstoreContext())
+                    using var context = new FstoreContext();
+
+                    var isInforExisted = context.Suppliers
+                        .FirstOrDefault(s => s.SupplierId != SelectedItem.SupplierId &&
+                         (s.Email == TextBoxItem.Email ||
+                          s.PhoneNumber == TextBoxItem.PhoneNumber ||
+                          s.TaxId == TextBoxItem.TaxId));
+
+                    //var isInforExisted = context.Suppliers.Find(TextBoxItem.SupplierId);
+
+                    if (isInforExisted == null)
                     {
                         context.Suppliers.Update(_textBoxItem);
                         context.SaveChanges();
+                        OnSupplierAdded?.Invoke();
+                        _textBoxItem = new Supplier();
+                        OnPropertyChanged(nameof(TextBoxItem));
+                        Application.Current.Windows[2]?.Close();
+                        Application.Current.Windows[0].Opacity = 1;
+                        Application.Current.Windows[0].Focus();
+                        Application.Current.Windows[0].IsHitTestVisible = true;
                     }
-                    OnSupplierAdded?.Invoke();
-                    _textBoxItem = new Supplier();
-                    OnPropertyChanged(nameof(TextBoxItem));
-                    Application.Current.Windows[2]?.Close();
-                    Application.Current.Windows[0].Opacity = 1;
-                    Application.Current.Windows[0].Focus();
-                    Application.Current.Windows[0].IsHitTestVisible = true;
+                    else
+                    {
+                        if (isInforExisted.Email == TextBoxItem.Email)
+                        {
+                            MessageBox.Show("Email is existed", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        else if (isInforExisted.TaxId == TextBoxItem.TaxId)
+                        {
+                            MessageBox.Show("Tax number is existed", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        else if (isInforExisted.PhoneNumber == TextBoxItem.PhoneNumber)
+                        {
+                            MessageBox.Show("Phone number is existed", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
                 }
             }
         }
@@ -275,18 +348,25 @@ namespace FinalProject.ViewModels.WarehouseManager
             {
                 if (MessageBox.Show("Are you sure to delete this supplier?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    try
-                    {
-                        using var context = new FstoreContext();
-                        context.Suppliers.Remove(_selectedItem);
-                        context.SaveChanges();
-                        SupplierList.Remove(_selectedItem);
-                        AllSupplierList.Remove(_selectedItem);
-                        MessageBox.Show("Delete Successfully", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    catch (Exception e)
+                    using var context = new FstoreContext();
+
+                    var list = from item in context.ImportOrders
+                               where item.SupplierId == _textBoxItem.SupplierId
+                               select item;
+
+                    if (list.Any())
                     {
                         MessageBox.Show("This supplier is providing products\n Cannot delete", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        context.Suppliers.Remove(_selectedItem);
+                        context.SaveChanges();
+                        AllSupplierList.Remove(_selectedItem);
+                        SupplierList = new ObservableCollection<Supplier>(AllSupplierList);
+                        OnPropertyChanged(nameof(SupplierList));
+                        OnPropertyChanged(nameof(AllSupplierList));
+                        MessageBox.Show("Delete Successfully", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
             }
@@ -323,18 +403,18 @@ namespace FinalProject.ViewModels.WarehouseManager
                 OnPropertyChanged(nameof(SupplierList));
             }
         }
-        public bool IsValidEmail(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-                return false;
+        //public bool IsValidEmail(string email)
+        //{
+        //    if (string.IsNullOrWhiteSpace(email))
+        //        return false;
 
-            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-            return Regex.IsMatch(email, pattern);
-        }
-        public bool IsValidPhone(string input)
-        {
-            return !string.IsNullOrEmpty(input) && input.Length == 10 && input.All(char.IsDigit);
-        }
+        //    string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+        //    return Regex.IsMatch(email, pattern);
+        //}
+        //public bool IsValidPhone(string input)
+        //{
+        //    return !string.IsNullOrEmpty(input) && input.Length == 10 && input.All(char.IsDigit);
+        //}
 
     }
 }

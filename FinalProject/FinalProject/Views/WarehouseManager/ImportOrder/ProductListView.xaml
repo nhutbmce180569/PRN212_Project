@@ -52,15 +52,14 @@
                           RowHeight="40" HeadersVisibility="Column" FontSize="14"
                           GridLinesVisibility="Horizontal">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="50" Header="ID" Binding="{Binding ProductId}"/>
-                            <DataGridTextColumn Width="150" Header="Brand" Binding="{Binding Brand.Name}"/>
-                            <DataGridTextColumn Width="150" Header="Category" Binding="{Binding Category.Name}"/>
-                            <DataGridTextColumn Width="150" Header="Model" Binding="{Binding Model}"/>
-                            <DataGridTextColumn Width="200" Header="Full Name" Binding="{Binding FullName}"/>
-                            <DataGridTextColumn Width="250" Header="Description" Binding="{Binding Description}"/>
+                            <DataGridTextColumn Width="30" Header="ID" Binding="{Binding ProductId}"/>
+                            <DataGridTextColumn Width="*" Header="Brand" Binding="{Binding Brand.Name}"/>
+                            <DataGridTextColumn Width="*" Header="Category" Binding="{Binding Category.Name}"/>
+                            <DataGridTextColumn Width="*" Header="Model" Binding="{Binding Model}"/>
+                            <DataGridTextColumn Width="*" Header="Full Name" Binding="{Binding FullName}"/>
+                            <!--<DataGridTextColumn Width="*" Header="Description" Binding="{Binding Description}"/>-->
                             <DataGridTextColumn Width="100" Header="Price" Binding="{Binding Price}"/>
-                            <DataGridTextColumn Width="80" Header="Stock" Binding="{Binding Stock}"/>
-                            <DataGridCheckBoxColumn Width="80" Header="Deleted" Binding="{Binding IsDeleted}"/>
+                            <DataGridTextColumn Width="60" Header="Stock" Binding="{Binding Stock}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>
