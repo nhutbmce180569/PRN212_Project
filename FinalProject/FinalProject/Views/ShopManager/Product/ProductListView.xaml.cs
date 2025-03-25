@@ -26,7 +26,7 @@ namespace FinalProject.Views.ShopManager.Product
         {
             InitializeComponent();
             DataContext = new ProductViewModel();
-
+            var productViewModel = new ProductViewModel();
         }
 
         private void NavigateToCategory(object sender, RoutedEventArgs e)
@@ -45,6 +45,12 @@ namespace FinalProject.Views.ShopManager.Product
             {
                 NavigationService.Navigate(new BrandListView());
             }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            var productViewModel = DataContext as ProductViewModel;
+            productViewModel?.RefreshData();  // Gọi phương thức Load để tải lại dữ liệu
         }
     }
 }

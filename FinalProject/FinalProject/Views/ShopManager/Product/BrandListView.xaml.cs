@@ -31,6 +31,7 @@ namespace FinalProject.Views.ShopManager.Product
         {
             // Điều hướng quay lại trang trước (ProductListView)
             NavigationService.GoBack();
+            NavigationService.Navigate(new ProductListView());
         }
     }
 }

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows;
 using WPFLab.Helper;
 using WPFLab.ViewModels;
+using System.Windows.Navigation;
 
 namespace FinalProject.ViewModels.ShopManager
 {
@@ -131,6 +132,9 @@ namespace FinalProject.ViewModels.ShopManager
                 // Reset form nhập
                 textboxItem = new Brand();
                 OnPropertyChanged(nameof(textboxItem));
+                var productViewModel = new ProductViewModel();
+                productViewModel.RefreshData(); // Làm mới dữ liệu
+
             }
         }
 
@@ -187,6 +191,8 @@ namespace FinalProject.ViewModels.ShopManager
                     allbrands = new ObservableCollection<Brand>(brands);
                     OnPropertyChanged(nameof(brands));
                     OnPropertyChanged(nameof(allbrands));
+                    var productViewModel = new ProductViewModel();
+                    productViewModel.RefreshData(); // Làm mới dữ liệu
                     MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -232,6 +238,8 @@ namespace FinalProject.ViewModels.ShopManager
                         // Reset textbox
                         textboxItem = new Brand();
                         OnPropertyChanged(nameof(textboxItem));
+                        var productViewModel = new ProductViewModel();
+                        productViewModel.RefreshData(); // Làm mới dữ liệu
                         MessageBox.Show("Create Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }

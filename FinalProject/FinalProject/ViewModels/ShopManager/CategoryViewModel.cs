@@ -40,6 +40,8 @@ namespace FinalProject.ViewModels.ShopManager
             }
 
             OnPropertyChanged(nameof(categories));
+            var productViewModel = new ProductViewModel();
+            productViewModel.RefreshData(); // Làm mới dữ liệu
         }
 
         private Category _textboxItem;
@@ -117,6 +119,8 @@ namespace FinalProject.ViewModels.ShopManager
                         allcategories = new ObservableCollection<Category>(categories);
                         OnPropertyChanged(nameof(categories));
                         OnPropertyChanged(nameof(allcategories));
+                        var productViewModel = new ProductViewModel();
+                        productViewModel.RefreshData(); // Làm mới dữ liệu
 
                         MessageBox.Show("Delete successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
@@ -184,6 +188,8 @@ namespace FinalProject.ViewModels.ShopManager
                     allcategories = new ObservableCollection<Category>(categories);
                     OnPropertyChanged(nameof(categories));
                     OnPropertyChanged(nameof(allcategories));
+                    var productViewModel = new ProductViewModel();
+                    productViewModel.RefreshData(); // Làm mới dữ liệu
                     MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -229,6 +235,8 @@ namespace FinalProject.ViewModels.ShopManager
                         // Reset textbox
                         textboxItem = new Category();
                         OnPropertyChanged(nameof(textboxItem));
+                        var productViewModel = new ProductViewModel();
+                        productViewModel.RefreshData(); // Làm mới dữ liệu
                         MessageBox.Show("Create Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }

@@ -44,7 +44,10 @@ namespace FinalProject.ViewModels.ShopManager
             OpenUpdatePopupCommand = new RelayCommand(OpenUpdatePopup);
 
         }
-
+        public void RefreshData()
+        {
+            Load();  // Gọi hàm Load() trong lớp
+        }
         private void Load()
         {
             using (var context = new FstoreContext())
@@ -63,6 +66,8 @@ namespace FinalProject.ViewModels.ShopManager
 
             OnPropertyChanged(nameof(Brands));
             OnPropertyChanged(nameof(Categories));
+            OnPropertyChanged(nameof(products)); // Đảm bảo cập nhật lại UI sau khi thay đổi dữ liệu
+            OnPropertyChanged(nameof(allproducts));
         }
 
         private Product _textboxItem;
