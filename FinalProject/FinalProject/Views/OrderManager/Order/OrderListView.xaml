@@ -9,94 +9,105 @@
       Title="OrderListView">
 
     <Page.Resources>
-        <Style TargetType="TextBlock" >
-            <Setter Property="HorizontalAlignment" Value="Right"></Setter>
-            <Setter Property="VerticalAlignment" Value="Center"></Setter>
-            <Setter Property="Padding" Value="10px"></Setter>
+        <!-- Style for TextBlock -->
+        <Style TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="14"/>
         </Style>
+
+        <!-- Style for TextBox -->
         <Style TargetType="TextBox">
-            <Setter Property="Padding" Value="5px"></Setter>
-            <Setter Property="Height" Value="30"></Setter>
-            <Setter Property="Width" Value="190"></Setter>
-            <Setter Property="TextWrapping" Value="NoWrap"></Setter>
-            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="TextWrapping" Value="NoWrap"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="#FFF"/>
         </Style>
+
+        <!-- Style for Button -->
         <Style TargetType="Button">
-            <Setter Property="Height" Value="30px"></Setter>
-            <Setter Property="Width" Value="72px"></Setter>
-            <Setter Property="Background" Value="#1565C0"></Setter>
-            <Setter Property="Foreground" Value="White"></Setter>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Background" Value="#1565C0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
         </Style>
+
+        <!-- Style for DataGridRow -->
         <Style TargetType="DataGridRow">
-            <Setter Property="Margin" Value="2"></Setter>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Height" Value="40"/>
         </Style>
     </Page.Resources>
+
     <Grid Background="#E3F2FD">
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"></RowDefinition>
-            <RowDefinition Height="8*"></RowDefinition>
-            <RowDefinition Height="4*"></RowDefinition>
-            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <!-- Button row -->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="5*"></ColumnDefinition>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Grid.Row="0" Content="Add"  Command="{Binding OpenAddPopupCommand}"></Button>
-            <Button Grid.Column="1" Grid.Row="0" Content="Update" Command="{Binding OpenUpdatePopupCommand}"></Button>
-            <Button Grid.Column="2" Grid.Row="0" Content="Delete" Command="{Binding DeleteCommand}" HorizontalAlignment="Right" Margin="0, 0, 10, 0"></Button>
-            <Button  Grid.Column="3" Grid.Row="0" Content="Export JSON" Command="{Binding ExportJsonCommand}" Margin="10"/>
+            <Button Grid.Column="0" Content="Add" Command="{Binding OpenAddPopupCommand}"/>
+            <Button Grid.Column="1" Content="Update" Command="{Binding OpenUpdatePopupCommand}"/>
+            <Button Grid.Column="2" Content="Delete" Command="{Binding DeleteCommand}" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+            <Button Grid.Column="3" Content="Export JSON" Command="{Binding ExportJsonCommand}" Margin="10"/>
 
-            <StackPanel Grid.Column="4" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <TextBox Width="200" 
-             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  />
-                <Button Content="Search" 
-            Command="{Binding SearchCommand}" 
-            Margin="5,0,0,0" />
+            <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <TextBox Width="200" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                <Button Content="Search" Command="{Binding SearchCommand}" Margin="5,0,0,0"/>
             </StackPanel>
-
-
-
         </Grid>
 
-        <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding OrderList}" SelectedItem="{Binding SelectedItem , Mode=OneWayToSource}" Background="#E3F2FD">
+        <!-- Order List DataGrid -->
+        <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding OrderList}" SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}" Background="#FFF" Margin="10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Order ID" Width="*" Binding="{Binding OrderId}"></DataGridTextColumn>
-                <DataGridTextColumn Header="CustomerID" Width="*" Binding="{Binding CustomerId}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Fullname" Width="*" Binding="{Binding FullName}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Address" Width="*" Binding="{Binding Address}"></DataGridTextColumn>
-                <DataGridTextColumn Header="OrderDate" Width="*" Binding="{Binding OrderedDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
-                <DataGridTextColumn Header="PhoneNumber" Width="*" Binding="{Binding PhoneNumber}"></DataGridTextColumn>
-                <DataGridTextColumn Header="DeliveredDate" Width="*" Binding="{Binding DeliveredDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Status" Width="*" Binding="{Binding Status}"></DataGridTextColumn>
-                <DataGridTextColumn Header="TotalAmout" Width="*" Binding="{Binding TotalAmount}"></DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <DataGrid Grid.Row="2" 
-          AutoGenerateColumns="False" 
-          ItemsSource="{Binding SelectedOrderDetails}" 
-          Background="#E3F2FD">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Product ID" Width="*" Binding="{Binding ProductId}" />
-                <DataGridTextColumn Header="Quantity" Width="*" Binding="{Binding Quantity}" />
-                <DataGridTextColumn Header="Price" Width="*" Binding="{Binding Price}" />
+                <DataGridTextColumn Header="Order ID" Width="*" Binding="{Binding OrderId}"/>
+                <DataGridTextColumn Header="CustomerID" Width="*" Binding="{Binding CustomerId}"/>
+                <DataGridTextColumn Header="Fullname" Width="*" Binding="{Binding FullName}"/>
+                <DataGridTextColumn Header="Address" Width="*" Binding="{Binding Address}"/>
+                <DataGridTextColumn Header="OrderDate" Width="*" Binding="{Binding OrderedDate, StringFormat=\{0:dd/MM/yyyy\}}"/>
+                <DataGridTextColumn Header="PhoneNumber" Width="*" Binding="{Binding PhoneNumber}"/>
+                <DataGridTextColumn Header="DeliveredDate" Width="*" Binding="{Binding DeliveredDate, StringFormat=\{0:dd/MM/yyyy\}}"/>
+                <DataGridTextColumn Header="Status" Width="*" Binding="{Binding Status}"/>
+                <DataGridTextColumn Header="TotalAmout" Width="*" Binding="{Binding TotalAmount}"/>
             </DataGrid.Columns>
         </DataGrid>
 
-
-        <DataGrid Grid.Row="3" 
-   AutoGenerateColumns="False" 
-   ItemsSource="{Binding SelectedProducts}" 
-   Background="#E3F2FD" SelectionChanged="DataGrid_SelectionChanged">
+        <!-- Selected Order Details DataGrid -->
+        <DataGrid Grid.Row="2" AutoGenerateColumns="False" ItemsSource="{Binding SelectedOrderDetails}" Background="#FFF" Margin="10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Product ID" Width="*" Binding="{Binding ProductId}" />
-                <DataGridTextColumn Header="ProductName" Width="*" Binding="{Binding FullName}" />
-                <DataGridTextColumn Header="Price" Width="*" Binding="{Binding Price}" />
-                <DataGridTextColumn Header="Stock" Width="*" Binding="{Binding Stock}" />
+                <DataGridTextColumn Header="Product ID" Width="*" Binding="{Binding ProductId}"/>
+                <DataGridTextColumn Header="Quantity" Width="*" Binding="{Binding Quantity}"/>
+                <DataGridTextColumn Header="Price" Width="*" Binding="{Binding Price}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Selected Products DataGrid -->
+        <DataGrid Grid.Row="3" AutoGenerateColumns="False" ItemsSource="{Binding SelectedProducts}" Background="#FFF" Margin="10" SelectionChanged="DataGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Product ID" Width="*" Binding="{Binding ProductId}"/>
+                <DataGridTextColumn Header="ProductName" Width="*" Binding="{Binding FullName}"/>
+                <DataGridTextColumn Header="Price" Width="*" Binding="{Binding Price}"/>
+                <DataGridTextColumn Header="Stock" Width="*" Binding="{Binding Stock}"/>
             </DataGrid.Columns>
         </DataGrid>
 
