@@ -77,6 +77,7 @@
                 <DataGridTextColumn Header="Gender" Width="*" Binding="{Binding Gender}"></DataGridTextColumn>
                 <DataGridTextColumn Header="PhoneNumber" Width="*" Binding="{Binding PhoneNumber}"></DataGridTextColumn>
                 <DataGridTextColumn Header="CreatedDate" Width="*" Binding="{Binding CreatedDate, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Is Block" Width="*" Binding="{Binding IsBlock}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
