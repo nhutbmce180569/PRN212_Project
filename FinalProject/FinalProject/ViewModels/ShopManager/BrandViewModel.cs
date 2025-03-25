@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows;
 using WPFLab.Helper;
 using WPFLab.ViewModels;
+using System.Windows.Navigation;
 
 namespace FinalProject.ViewModels.ShopManager
 {
@@ -131,6 +132,9 @@ namespace FinalProject.ViewModels.ShopManager
                 // Reset form nhập
                 textboxItem = new Brand();
                 OnPropertyChanged(nameof(textboxItem));
+                var productViewModel = new ProductViewModel();
+                productViewModel.RefreshData(); // Làm mới dữ liệu
+
             }
         }
 
@@ -162,32 +166,37 @@ namespace FinalProject.ViewModels.ShopManager
                 }
                 else
                 {
-                    if (textboxItem.Name.Length > 255)
+                    Validator v = new();
+                    if (!v.IsValidOrganiztionName(textboxItem.Name, 50))
                     {
-                        MessageBox.Show("Product names cannot exceed 255 characters.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
+                        MessageBox.Show("The length of brand's name must be less than or equal 50 characters", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-                    using (var context = new FstoreContext())
+                    else
                     {
-                        var existingProduct = context.Brands.Find(textboxItem.BrandId);
-                        if (existingProduct != null)
+                        using (var context = new FstoreContext())
                         {
-                            existingProduct.Name = textboxItem.Name;
-                            context.SaveChanges();
+                            var existingProduct = context.Brands.Find(textboxItem.BrandId);
+                            if (existingProduct != null)
+                            {
+                                existingProduct.Name = textboxItem.Name;
+                                context.SaveChanges();
+                            }
                         }
-                    }
 
-                    // Cập nhật danh sách sản phẩm trong UI
-                    var index = brands.IndexOf(selectItem);
-                    if (index >= 0)
-                    {
-                        brands[index] = textboxItem;
-                    }
+                        // Cập nhật danh sách sản phẩm trong UI
+                        var index = brands.IndexOf(selectItem);
+                        if (index >= 0)
+                        {
+                            brands[index] = textboxItem;
+                        }
 
-                    allbrands = new ObservableCollection<Brand>(brands);
-                    OnPropertyChanged(nameof(brands));
-                    OnPropertyChanged(nameof(allbrands));
-                    MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                        allbrands = new ObservableCollection<Brand>(brands);
+                        OnPropertyChanged(nameof(brands));
+                        OnPropertyChanged(nameof(allbrands));
+                        var productViewModel = new ProductViewModel();
+                        productViewModel.RefreshData(); // Làm mới dữ liệu
+                        MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
             }
             catch (Exception ex)
@@ -209,30 +218,34 @@ namespace FinalProject.ViewModels.ShopManager
                 {
                     using (var context = new FstoreContext())
                     {
-
-                        if (textboxItem.Name.Length > 255)
+                        Validator v = new();
+                        if (!v.IsValidOrganiztionName(textboxItem.Name, 50))
                         {
-                            MessageBox.Show("Product names cannot exceed 255 characters.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
+                            MessageBox.Show("The length of brand's name must be less than or equal 50 characters", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
-                        // Tạo sản phẩm mới
-                        var newitem = new Brand
+                        else
                         {
-                            Name = textboxItem.Name
-                        };
+                            // Tạo sản phẩm mới
+                            var newitem = new Brand
+                            {
+                                Name = textboxItem.Name
+                            };
 
-                        // Thêm sản phẩm vào CSDL
-                        context.Brands.Add(newitem);
-                        context.SaveChanges();
+                            // Thêm sản phẩm vào CSDL
+                            context.Brands.Add(newitem);
+                            context.SaveChanges();
 
-                        // Thêm vào danh sách observablecollection trên UI
-                        brands.Add(newitem);
-                        allbrands = new ObservableCollection<Brand>(brands);
+                            // Thêm vào danh sách observablecollection trên UI
+                            brands.Add(newitem);
+                            allbrands = new ObservableCollection<Brand>(brands);
 
-                        // Reset textbox
-                        textboxItem = new Brand();
-                        OnPropertyChanged(nameof(textboxItem));
-                        MessageBox.Show("Create Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                            // Reset textbox
+                            textboxItem = new Brand();
+                            OnPropertyChanged(nameof(textboxItem));
+                            var productViewModel = new ProductViewModel();
+                            productViewModel.RefreshData(); // Làm mới dữ liệu
+                            MessageBox.Show("Create Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
                     }
                 }
             }
