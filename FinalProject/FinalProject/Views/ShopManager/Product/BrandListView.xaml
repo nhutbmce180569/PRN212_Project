@@ -5,68 +5,56 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:FinalProject.Views.ShopManager.Product"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="400"
-      Title="BrandListView">
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="BrandListView" Background="AliceBlue">
 
-    <Grid Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <!-- Title or Header row -->
-            <RowDefinition Height="*"></RowDefinition>
-            <!-- Main content area -->
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"></ColumnDefinition>
-                <ColumnDefinition Width="6*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <!-- Back Button -->
-            <Button Content="Back" Width="100" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Margin="10" Click="Button_Click"  />
-        </Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"></ColumnDefinition>
-                <!-- DataGrid column -->
-                <ColumnDefinition Width="6*"></ColumnDefinition>
-                <!-- Form column -->
-            </Grid.ColumnDefinitions>
-
-            <!-- DataGrid for brands -->
-            <Grid Grid.Column="0">
-                <DataGrid Background="White" 
-                          SelectedItem="{Binding selectItem, Mode=OneWayToSource}" 
-                          ItemsSource="{Binding brands}" 
-                          AutoGenerateColumns="False" 
-                          Margin="0,0,5,0">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Width="1*" Header="ID" Binding="{Binding BrandId}"></DataGridTextColumn>
-                        <DataGridTextColumn Width="3*" Header="Brand Name" Binding="{Binding Name}"></DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-
-            <!-- Form section for Brand Name input and Buttons -->
-            <Grid Grid.Column="1">
+    <Grid Background="White" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Border BorderBrush="Black" BorderThickness="1" Height="400" Padding="10" Width="700">
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <!-- Brand Name input row -->
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <!-- Button row -->
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                    <TextBlock Text="Brand Name: " FontSize="14" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,5"/>
-                    <TextBox Width="230" Text="{Binding textboxItem.Name, Mode=TwoWay}" VerticalAlignment="Center" Height="35" HorizontalAlignment="Left"/>
+                <!-- Brand Name Form -->
+                <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Margin="0, 0,140,0">
+                    <TextBlock Margin="10,0,0,0" Text="Brand Name: " FontSize="13" FontWeight="Bold"/>
+                    <TextBox HorizontalAlignment="Stretch" Text="{Binding textboxItem.Name, Mode=TwoWay}" 
+                             Height="30" Margin="10,5,0,0"/>
                 </StackPanel>
 
-                <!-- Buttons for Create, Update, Delete -->
-                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,10">
-                    <Button Command="{Binding AddCommand}" Width="70" Height="35" Margin="5" Content="CREATE" Background="#28A745" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
-                    <Button Command="{Binding UpdateCommand}" Width="70" Height="35" Margin="5" Content="UPDATE" Background="#FFC107" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
-                    <Button Command="{Binding DeleteCommand}" Width="70" Height="35" Margin="5" Content="DELETE" Background="#DC3545" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
-                </StackPanel>
+                <Grid Grid.Row="1" Background="White" Margin="10">
+                    <!-- DataGrid and Buttons Section -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- DataGrid for brands -->
+                        <DataGrid Grid.Column="0" Background="White" SelectedItem="{Binding selectItem, Mode=OneWayToSource}" 
+                                  ItemsSource="{Binding brands}" AutoGenerateColumns="False" Margin="0,0,0,0" 
+                                  RowHeight="35" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="60" Header="ID" Binding="{Binding BrandId}" />
+                                <DataGridTextColumn Width="*" Header="Brand Name" Binding="{Binding Name}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <!-- Form for Create/Update/Delete buttons -->
+                        <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                                    Margin="10,20,10,10">
+                            <Button Foreground="White" Command="{Binding AddCommand}" Width="80" Height="35" Margin="5" Content="CREATE" 
+                                    Background="#28A745" FontWeight="Bold"/>
+                            <Button Foreground="White" Command="{Binding UpdateCommand}" Width="Auto" Height="35" Margin="5" Content="UPDATE" 
+                                    Background="#FFC107" FontWeight="Bold"/>
+                            <Button Foreground="White" Command="{Binding DeleteCommand}" Width="Auto" Height="35" Margin="5" Content="DELETE" 
+                                    Background="#DC3545" FontWeight="Bold"/>
+                            <Button Foreground="White" Width="Auto" Height="35" Margin="5" Content="BACK" Background="LightGray" FontWeight="Bold" Click="Button_Click"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
             </Grid>
-        </Grid>
+        </Border>
     </Grid>
 </Page>
