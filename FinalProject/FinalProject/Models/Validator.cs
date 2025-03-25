@@ -94,6 +94,13 @@ namespace FinalProject.Models
                 return context.Customers.Any(e => e.Email.ToLower() == email.ToLower());
             }
         }
+        public bool IsEmailExists(string email)
+        {
+            using (var context = new FstoreContext())
+            {
+                return context.Customers.Any(e => e.Email.ToLower() == email.ToLower());
+            }
+        }
         public bool IsValidBirthday(DateTime day)
         {
             if (day == null)
