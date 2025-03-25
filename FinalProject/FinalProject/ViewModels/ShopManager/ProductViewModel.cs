@@ -211,49 +211,51 @@ namespace FinalProject.ViewModels.ShopManager
                 }
                 else
                 {
-                    if (textboxItem.Price <= 0)
+                    Validator v = new();
+                    if (!v.IsValidOrganiztionName(textboxItem.FullName, 255))
                     {
-                        MessageBox.Show("Product prices cannot be negative.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
+                        MessageBox.Show("The length of poduct'name must be less than or equal 255 characters", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-                    if (textboxItem.FullName.Length > 255)
+                    else if (!v.IsValidOrganiztionName(textboxItem.Model, 50))
                     {
-                        MessageBox.Show("Product names cannot exceed 255 characters.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
+                        MessageBox.Show("The length of model's name must be less than or equal 255 characters", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-                    if (textboxItem.Model.Length > 50)
+                    else if (!v.IsValidPrice(textboxItem.Price))
                     {
-                        MessageBox.Show("Model cannot exceed 50 characters.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("The price must be bigger than 0", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-                    using (var context = new FstoreContext())
+                    else
                     {
-                        var existingProduct = context.Products.Find(textboxItem.ProductId);
-                        if (existingProduct != null)
+                        using (var context = new FstoreContext())
                         {
-                            existingProduct.BrandId = textboxItem.Brand?.BrandId;
-                            existingProduct.CategoryId = textboxItem.Category?.CategoryId;
-                            existingProduct.Model = textboxItem.Model;
-                            existingProduct.FullName = textboxItem.FullName;
-                            existingProduct.Description = textboxItem.Description;
-                            existingProduct.Price = textboxItem.Price;
-                            existingProduct.Stock = textboxItem.Stock;
-                            existingProduct.IsDeleted = textboxItem.IsDeleted;
-                            context.SaveChanges();
+                            var existingProduct = context.Products.Find(textboxItem.ProductId);
+                            if (existingProduct != null)
+                            {
+                                existingProduct.BrandId = textboxItem.Brand?.BrandId;
+                                existingProduct.CategoryId = textboxItem.Category?.CategoryId;
+                                existingProduct.Model = textboxItem.Model;
+                                existingProduct.FullName = textboxItem.FullName;
+                                existingProduct.Description = textboxItem.Description;
+                                existingProduct.Price = textboxItem.Price;
+                                existingProduct.Stock = textboxItem.Stock;
+                                existingProduct.IsDeleted = textboxItem.IsDeleted;
+                                context.SaveChanges();
+                            }
                         }
-                    }
 
-                    // Cập nhật danh sách sản phẩm trong UI
-                    var index = products.IndexOf(selectItem);
-                    if (index >= 0)
-                    {
-                        products[index] = textboxItem;
-                    }
+                        // Cập nhật danh sách sản phẩm trong UI
+                        var index = products.IndexOf(selectItem);
+                        if (index >= 0)
+                        {
+                            products[index] = textboxItem;
+                        }
 
-                    allproducts = new ObservableCollection<Product>(products);
-                    OnPropertyChanged(nameof(products));
-                    OnPropertyChanged(nameof(allproducts));
-                    ClosePopup();
-                    MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                        allproducts = new ObservableCollection<Product>(products);
+                        OnPropertyChanged(nameof(products));
+                        OnPropertyChanged(nameof(allproducts));
+                        ClosePopup();
+                        MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
             }
             catch (Exception ex)
@@ -280,62 +282,52 @@ namespace FinalProject.ViewModels.ShopManager
                     {
                         // Kiểm tra xem brand có tồn tại chưa, nếu chưa thì tạo mới
                         var brand = context.Brands.FirstOrDefault(b => b.Name == textboxItem.Brand.Name);
-                        if (brand == null)
-                        {
-                            brand = new Brand { Name = textboxItem.Brand.Name };
-                            context.Brands.Add(brand);
-                            context.SaveChanges(); // Lưu để lấy BrandId mới
-                        }
 
                         // Kiểm tra xem category có tồn tại chưa, nếu chưa thì tạo mới
                         var category = context.Categories.FirstOrDefault(c => c.Name == textboxItem.Category.Name);
-                        if (category == null)
-                        {
-                            category = new Category { Name = textboxItem.Category.Name };
-                            context.Categories.Add(category);
-                            context.SaveChanges(); // Lưu để lấy CategoryId mới
-                        }
-                        if (textboxItem.Price <= 0)
-                        {
-                            MessageBox.Show("Product prices cannot be negative.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
-                        if (textboxItem.FullName.Length > 255)
-                        {
-                            MessageBox.Show("Product names cannot exceed 255 characters.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
-                        if (textboxItem.Model.Length > 50)
-                        {
-                            MessageBox.Show("Model cannot exceed 50 characters.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
-                        // Tạo sản phẩm mới
-                        var newitem = new Product
-                        {
-                            BrandId = brand.BrandId, // Lấy BrandId từ brand vừa tạo hoặc tìm thấy
-                            CategoryId = category.CategoryId, // Lấy CategoryId từ category vừa tạo hoặc tìm thấy
-                            Model = textboxItem.Model,
-                            FullName = textboxItem.FullName,
-                            Description = textboxItem.Description,
-                            IsDeleted = textboxItem.IsDeleted,
-                            Price = textboxItem.Price,
-                            Stock = textboxItem.Stock
-                        };
 
-                        // Thêm sản phẩm vào CSDL
-                        context.Products.Add(newitem);
-                        context.SaveChanges();
+                        Validator v = new();
+                        if (!v.IsValidOrganiztionName(textboxItem.FullName, 255))
+                        {
+                            MessageBox.Show("The length of poduct'name must be less than or equal 255 characters", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        else if (!v.IsValidOrganiztionName(textboxItem.Model, 50))
+                        {
+                            MessageBox.Show("The length of model's name must be less than or equal 50 characters", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        else if (!v.IsValidPrice(textboxItem.Price))
+                        {
+                            MessageBox.Show("The price must be bigger than 0", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        else
+                        {
+                            // Tạo sản phẩm mới
+                            var newitem = new Product
+                            {
+                                BrandId = brand.BrandId, // Lấy BrandId từ brand vừa tạo hoặc tìm thấy
+                                CategoryId = category.CategoryId, // Lấy CategoryId từ category vừa tạo hoặc tìm thấy
+                                Model = textboxItem.Model,
+                                FullName = textboxItem.FullName,
+                                Description = textboxItem.Description,
+                                IsDeleted = textboxItem.IsDeleted,
+                                Price = textboxItem.Price,
+                                Stock = textboxItem.Stock
+                            };
 
-                        // Thêm vào danh sách observablecollection trên UI
-                        products.Add(newitem);
-                        allproducts = new ObservableCollection<Product>(products);
+                            // Thêm sản phẩm vào CSDL
+                            context.Products.Add(newitem);
+                            context.SaveChanges();
 
-                        // Reset textbox
-                        textboxItem = new Product();
-                        OnPropertyChanged(nameof(textboxItem));
-                        ClosePopup();
-                        MessageBox.Show("Create Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                            // Thêm vào danh sách observablecollection trên UI
+                            products.Add(newitem);
+                            allproducts = new ObservableCollection<Product>(products);
+
+                            // Reset textbox
+                            textboxItem = new Product();
+                            OnPropertyChanged(nameof(textboxItem));
+                            ClosePopup();
+                            MessageBox.Show("Create Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
                     }
                 }
             }
@@ -344,71 +336,6 @@ namespace FinalProject.ViewModels.ShopManager
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        public void AddNewBrand()
-        {
-            // Nhập tên Brand từ người dùng thông qua InputBox
-            string brandName = Microsoft.VisualBasic.Interaction.InputBox("Enter new Brand Name:", "New Brand");
-            if (!string.IsNullOrWhiteSpace(brandName))
-            {
-                // Tạo mới Brand
-                var newBrand = new Brand { Name = brandName };
-
-                // Lưu Brand vào database
-                using (var context = new FstoreContext())
-                {
-                    context.Brands.Add(newBrand);
-                    context.SaveChanges();
-                }
-
-                // Thêm Brand vào danh sách hiện có trong ViewModel
-                Brands.Add(newBrand);
-
-                // Đảm bảo textboxItem không null và gán Brand vừa tạo cho nó
-                if (textboxItem == null)
-                {
-                    textboxItem = new Product { Brand = newBrand };
-                }
-                else
-                {
-                    textboxItem.Brand = newBrand;
-                }
-                OnPropertyChanged(nameof(textboxItem));
-            }
-        }
-
-        public void AddNewCategory()
-        {
-            // Nhập tên Brand từ người dùng thông qua InputBox
-            string categoryName = Microsoft.VisualBasic.Interaction.InputBox("Enter new Category Name:", "New Category");
-            if (!string.IsNullOrWhiteSpace(categoryName))
-            {
-                // Tạo mới Brand
-                var newCategory = new Category { Name = categoryName };
-
-                // Lưu Brand vào database
-                using (var context = new FstoreContext())
-                {
-                    context.Categories.Add(newCategory);
-                    context.SaveChanges();
-                }
-
-                // Thêm Brand vào danh sách hiện có trong ViewModel
-                Categories.Add(newCategory);
-
-                // Đảm bảo textboxItem không null và gán Brand vừa tạo cho nó
-                if (textboxItem == null)
-                {
-                    textboxItem = new Product { Category = newCategory };
-                }
-                else
-                {
-                    textboxItem.Category = newCategory;
-                }
-                OnPropertyChanged(nameof(textboxItem));
-            }
-        }
-
         private void Search(object obj)
         {
             if (string.IsNullOrWhiteSpace(SearchText))

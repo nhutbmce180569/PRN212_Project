@@ -87,5 +87,15 @@ namespace FinalProject.Models
             }
         }
 
+        public bool IsValidPrice(long? price)
+        {
+            if (price <= 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }

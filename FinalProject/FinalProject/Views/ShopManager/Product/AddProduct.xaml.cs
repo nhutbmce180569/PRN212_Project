@@ -30,21 +30,5 @@ namespace FinalProject.Views.ShopManager.Product
         {
             this.Close();
         }
-
-        private void AddNewBrand_Click(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is ProductViewModel viewModel)
-            {
-                viewModel.AddNewBrand();
-            }
-        }
-
-        private void AddNewCategory_Click(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is ProductViewModel viewModel)
-            {
-                viewModel.AddNewCategory();
-            }
-        }
     }
 }
