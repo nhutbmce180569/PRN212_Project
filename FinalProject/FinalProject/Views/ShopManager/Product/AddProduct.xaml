@@ -37,16 +37,14 @@
             <Label Margin="0,0,0,10" Grid.Row="1" Grid.Column="0" Content="Brand:" FontWeight="Bold"/>
             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <ComboBox ItemsSource="{Binding Brands}" DisplayMemberPath="Name" 
-                              SelectedItem="{Binding textboxItem.Brand}" Width="190" Padding="5" Margin="0,0,0,10"/>
-                <Button Margin="0,0,0,10" Content="New" Click="AddNewBrand_Click" Width="60" Background="#0078D7" Foreground="White"/>
+                              SelectedItem="{Binding textboxItem.Brand}" Width="250" Padding="5" Margin="0,0,0,10"/>
             </StackPanel>
 
             <!-- Category -->
             <Label Margin="0,0,0,10" Grid.Row="2" Grid.Column="0" Content="Category:" FontWeight="Bold"/>
             <StackPanel  Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <ComboBox Margin="0,0,0,10" ItemsSource="{Binding Categories}" DisplayMemberPath="Name" 
-                              SelectedItem="{Binding textboxItem.Category}" Width="190" Padding="5"/>
-                <Button Margin="0,0,0,10" Content="New" Click="AddNewCategory_Click" Width="60" Background="#0078D7" Foreground="White"/>
+                              SelectedItem="{Binding textboxItem.Category}" Width="250" Padding="5"/>
             </StackPanel>
 
             <!-- Model -->
