@@ -20,30 +20,10 @@ namespace FinalProject.Views.Admin.Employee
     /// </summary>
     public partial class UpdateEmployee : Window
     {
-        public UpdateEmployee(FinalProject.Models.Employee employee)
+        public UpdateEmployee()
         {
             InitializeComponent();
-            txtGender.Items.Add("Male");
-            txtGender.Items.Add("Female");
-            txtGender.Items.Add("Other");
-            txtFullName.Text = employee.FullName;
-            txtBirthday.SelectedDate = employee.Birthday;
-            txtGender.SelectedIndex = txtGender.Items.IndexOf(employee.Gender.Trim());
-            txtEmail.Text = employee.Email;
-            txtPassword.Text = employee.Password;
-            txtPhoneNumber.Text = employee.PhoneNumber;
-            txtCreateDate.SelectedDate = employee.CreatedDate;
-            txtStatus.Items.Add("Active");
-            txtStatus.Items.Add("Inactive");
-            txtStatus.SelectedIndex = txtStatus.Items.IndexOf(employee.Status.Trim());
-            using (var context = new FstoreContext())
-            {
-                var roleList = context.Roles.Where(r => r.RoleId != 1).ToList();
-                txtRoleId.ItemsSource = roleList;
-                txtRoleId.SelectedValuePath = "RoleId";
-                txtRoleId.DisplayMemberPath = "Name";
-                txtRoleId.SelectedValue = employee.RoleId;
-            }          
+        
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

@@ -70,7 +70,7 @@
         <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding EmployeeList}" SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="#E3F2FD">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Width="0.5*" Binding="{Binding EmployeeId}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Role ID" Visibility="Collapsed"  Binding="{Binding RoleId}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Role ID" Width="0.7*" Binding="{Binding RoleId}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Fullname" Width="1.5*" Binding="{Binding FullName}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Birthday" Width="1*" Binding="{Binding Birthday, StringFormat=\{0:dd/MM/yyyy\}}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Email" Width="1.8*" Binding="{Binding Email}"></DataGridTextColumn>

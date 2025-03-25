@@ -233,7 +233,6 @@ namespace FinalProject.ViewModels.ShopManager
                             existingProduct.Price = textboxItem.Price;
                             existingProduct.Stock = textboxItem.Stock;
                             existingProduct.IsDeleted = textboxItem.IsDeleted;
-
                             context.SaveChanges();
                         }
                     }
