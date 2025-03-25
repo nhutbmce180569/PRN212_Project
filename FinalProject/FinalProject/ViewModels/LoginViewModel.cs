@@ -37,9 +37,7 @@ namespace FinalProject.ViewModels
 
                 if (em != null)
                 {
-                    //Hàm đưa Employee vào hệ thống
                     Application.Current.Properties["Employee"] = em;
-                    //hàm lấy Employee ra hệ thống
                     //if (Application.Current.Properties.Contains("CurrentEmployee"))
                     //{
                     //    var currentEmployee = Application.Current.Properties["CurrentEmployee"] as Employee;
