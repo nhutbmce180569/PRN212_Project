@@ -28,6 +28,7 @@ namespace FinalProject.ViewModels.ShopManager
             }
         }
         public ObservableCollection<Customer> AllCustomerList { set; get; }
+        public ObservableCollection<string> Gender { set; get; } = new ObservableCollection<string>() { "Male", "Female", "Other" };
 
         public ICommand OpenAddPopupCommand { get; }
         public ICommand OpenUpdatePopupCommand { get; }
@@ -82,6 +83,7 @@ namespace FinalProject.ViewModels.ShopManager
                 if (selectedItem != null)
                 {
                     textBoxItem = JsonConvert.DeserializeObject<Customer>(JsonConvert.SerializeObject(selectedItem));
+                    TextBoxItem.Gender = selectedItem.Gender.Trim();
                     OnPropertyChanged(nameof(TextBoxItem));
                 }
             }
@@ -128,7 +130,7 @@ namespace FinalProject.ViewModels.ShopManager
             {
                 var action = new CustomerViewModel(selectedItem);
                 action.OnCustomerAdded += Load;
-                var popup = new UpdateCustomer(selectedItem)
+                var popup = new UpdateCustomer()
                 {
                     DataContext = action,
                     Owner = Application.Current.MainWindow,
@@ -195,22 +197,20 @@ namespace FinalProject.ViewModels.ShopManager
                     worksheet.Cell(1, 5).Value = "Birthday";
                     worksheet.Cell(1, 6).Value = "CreatedDate";
                     worksheet.Cell(1, 7).Value = "PhoneNumber";
-                    worksheet.Cell(1, 8).Value = "IsDeleted";
-                    worksheet.Cell(1, 9).Value = "IsBlock";
+                    worksheet.Cell(1, 8).Value = "IsBlock";
 
                     // Data rows
                     for (int i = 0; i < AllCustomerList.Count; i++)
                     {
                         var p = AllCustomerList[i];
                         worksheet.Cell(i + 2, 1).Value = p.CustomerId;
-                        worksheet.Cell(i + 2, 2).Value = p.FullName?? "";
-                        worksheet.Cell(i + 2, 3).Value = p.Email?? "";
+                        worksheet.Cell(i + 2, 2).Value = p.FullName ?? "";
+                        worksheet.Cell(i + 2, 3).Value = p.Email ?? "";
                         worksheet.Cell(i + 2, 4).Value = p.Gender;
                         worksheet.Cell(i + 2, 5).Value = p.Birthday;
                         worksheet.Cell(i + 2, 6).Value = p.CreatedDate;
                         worksheet.Cell(i + 2, 7).Value = p.PhoneNumber;
-                        worksheet.Cell(i + 2, 8).Value = p.IsDeleted == true ? "Yes" : "No";
-                        worksheet.Cell(i + 2, 9).Value = p.IsBlock == true ? "Yes" : "No";
+                        worksheet.Cell(i + 2, 8).Value = p.IsBlock == true ? "Yes" : "No";
                     }
 
                     workbook.SaveAs(saveFileDialog.FileName);
@@ -231,6 +231,8 @@ namespace FinalProject.ViewModels.ShopManager
                 AllCustomerList = new ObservableCollection<Customer>(list);
                 CustomerList = new ObservableCollection<Customer>(AllCustomerList);
             }
+
+
         }
 
         private void Delete(object obj)
@@ -256,8 +258,10 @@ namespace FinalProject.ViewModels.ShopManager
                         {
                             context.Customers.Remove(selectedItem);
                             context.SaveChanges();
-                            CustomerList.Remove(selectedItem);
                             AllCustomerList.Remove(selectedItem);
+                            CustomerList = new ObservableCollection<Customer>(AllCustomerList);
+                            OnPropertyChanged(nameof(CustomerList));
+                            OnPropertyChanged(nameof(AllCustomerList));
                             MessageBox.Show("Delete Successfully", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                     }
@@ -267,115 +271,146 @@ namespace FinalProject.ViewModels.ShopManager
 
         private void Add(object obj)
         {
+            Validator validator = new Validator();
             if (textBoxItem.FullName.IsNullOrEmpty() ||
-                textBoxItem.PhoneNumber.IsNullOrEmpty() ||
-                textBoxItem.Email.IsNullOrEmpty() ||
-                textBoxItem.Password.IsNullOrEmpty() ||
-                textBoxItem.Gender.IsNullOrEmpty())
+                 textBoxItem.Gender.IsNullOrEmpty() ||
+                 textBoxItem.Email.IsNullOrEmpty() ||
+                 textBoxItem.PhoneNumber.IsNullOrEmpty() ||
+                 textBoxItem.Password.IsNullOrEmpty())
             {
-                MessageBox.Show("Please input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Input enough information", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            else if (!validator.IsValidEmail(textBoxItem.Email))
+            {
+                MessageBox.Show("Invalid email format", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            else if (!validator.IsValidPhone(textBoxItem.PhoneNumber))
+            {
+                MessageBox.Show("Phone number must be number and length from 10 to 11 digits", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            else if (textBoxItem.Birthday > DateTime.Now)
+            {
+                MessageBox.Show("Birthday cannot be in the future", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            else if (validator.IsEmailExistsCustomer(textBoxItem.Email))
+            {
+                MessageBox.Show("Email already exists", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            else if (!validator.IsValidPassword(textBoxItem.Password))
+            {
+                MessageBox.Show("Password must be at least 8 characters long, contain at least one uppercase letter and one special character!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
             else
             {
-                if (!ExistEmail(textBoxItem.Email) && IsValidEmail(textBoxItem.Email)
-                    && IsValidPhoneNumber(textBoxItem.PhoneNumber)
-                    && IsValidPassword(textBoxItem.Password)
-                    && IsValidFullname(textBoxItem.FullName)
-                    && ValidateDate(textBoxItem.Birthday))
+                var item = new Customer
                 {
-                    var item = new Customer
-                    {
-                        Password = PasswordBoxHelper.GetMD5(textBoxItem.Password),
-                        Email = textBoxItem.Email,
-                        PhoneNumber = textBoxItem.PhoneNumber,
-                        FullName = textBoxItem.FullName,
-                        Birthday = textBoxItem.Birthday,
-                        Gender = textBoxItem.Gender,
-                        CreatedDate = DateTime.Now
-                    };
-                    using (var context = new FstoreContext())
-                    {
-                        context.Customers.Add(item);
-                        context.SaveChanges();
-                    }
-                    OnCustomerAdded?.Invoke();
-                    textBoxItem = new Customer();
-                    OnPropertyChanged(nameof(TextBoxItem));
-                    Application.Current.Windows[2]?.Close();
-                    Application.Current.Windows[0].Opacity = 1;
-                    Application.Current.MainWindow.Focus();
-                    Application.Current.Windows[0].IsHitTestVisible = true;
-                    MessageBox.Show("Add Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Password = PasswordBoxHelper.GetMD5(textBoxItem.Password),
+                    Email = textBoxItem.Email,
+                    PhoneNumber = textBoxItem.PhoneNumber,
+                    FullName = textBoxItem.FullName,
+                    Birthday = textBoxItem.Birthday,
+                    Gender = textBoxItem.Gender,
+                    CreatedDate = DateTime.Now
+                };
+                using (var context = new FstoreContext())
+                {
+                    context.Customers.Add(item);
+                    context.SaveChanges();
                 }
-
+                OnCustomerAdded?.Invoke();
+                textBoxItem = new Customer();
+                OnPropertyChanged(nameof(TextBoxItem));
+                Application.Current.Windows[2]?.Close();
+                Application.Current.Windows[0].Opacity = 1;
+                Application.Current.MainWindow.Focus();
+                Application.Current.Windows[0].IsHitTestVisible = true;
+                MessageBox.Show("Add Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
-        public bool IsValidFullname(string name)
-        {
-            if (name.Length >= 255)
-            {
-                MessageBox.Show("Fullname cannot be too long", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-            return true;
-        }
+
 
         private void Update(object obj)
         {
-           if (textBoxItem.FullName.IsNullOrEmpty() ||
-           textBoxItem.PhoneNumber.IsNullOrEmpty() ||
-           textBoxItem.Email.IsNullOrEmpty() ||
-           textBoxItem.Password.IsNullOrEmpty())
-           {
-                MessageBox.Show("Input enough information", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
-           }
+            Validator validator = new Validator();
+            if (textBoxItem.FullName.IsNullOrEmpty() ||
+                 textBoxItem.Gender.IsNullOrEmpty() ||
+                 textBoxItem.Email.IsNullOrEmpty() ||
+                 textBoxItem.PhoneNumber.IsNullOrEmpty() ||
+                 textBoxItem.Password.IsNullOrEmpty())
+            {
+                MessageBox.Show("Input enough information", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            else if (!validator.IsValidEmail(textBoxItem.Email))
+            {
+                MessageBox.Show("Invalid email format", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            else if (!validator.IsValidPhone(textBoxItem.PhoneNumber))
+            {
+                MessageBox.Show("Phone number must be number and length from 10 to 11 digits", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            else if (textBoxItem.Birthday > DateTime.Now)
+            {
+                MessageBox.Show("Birthday cannot be in the future", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             else
             {
-                if (IsValidEmail(textBoxItem.Email)
-                        && IsValidPhoneNumber(textBoxItem.PhoneNumber)
-                        && IsValidFullname(textBoxItem.FullName)
-                        && ValidateDate(textBoxItem.Birthday))
+                if (!textBoxItem.Password.Equals(selectedItem.Password))
                 {
-                    if (!textBoxItem.Password.Equals(selectedItem.Password))
+                    if (validator.IsValidPassword(textBoxItem.Password))
                     {
-                        if (IsValidPassword(textBoxItem.Password))
-                        {
-                            TextBoxItem.Password = PasswordBoxHelper.GetMD5(textBoxItem.Password);
-                        }
-                        else
-                        {
-                            return;
-                        }
+                        TextBoxItem.Password = PasswordBoxHelper.GetMD5(textBoxItem.Password);
                     }
-
-                    if (!selectedItem.Email.Equals(textBoxItem.Email))
+                    else
                     {
-                        if (ExistEmail(textBoxItem.Email))
-                        {
-                            return;
-                        }
+                        MessageBox.Show("Password must be at least 8 characters long, contain at least one uppercase letter and one special character!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
                     }
-
-                    using (var context = new FstoreContext())
-                    {
-                        context.Customers.Update(textBoxItem);
-                        context.SaveChanges();
-                    }
-
-                    OnCustomerAdded?.Invoke();
-                    textBoxItem = new Customer();
-                    OnPropertyChanged(nameof(TextBoxItem));
-
-                    Application.Current.Windows[2]?.Close();
-                    Application.Current.Windows[0].Opacity = 1;
-                    Application.Current.Windows[0].Focus();
-                    Application.Current.Windows[0].IsHitTestVisible = true;
-
-                    MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+
+                if (!selectedItem.Email.Equals(textBoxItem.Email))
+                {
+                    if (validator.IsEmailExistsCustomer(textBoxItem.Email))
+                    {
+                        MessageBox.Show("This email has been using!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                }
+
+                using (var context = new FstoreContext())
+                {
+                    context.Customers.Update(textBoxItem);
+                    context.SaveChanges();
+                }
+
+                OnCustomerAdded?.Invoke();
+                textBoxItem = new Customer();
+                OnPropertyChanged(nameof(TextBoxItem));
+
+                Application.Current.Windows[2]?.Close();
+                Application.Current.Windows[0].Opacity = 1;
+                Application.Current.Windows[0].Focus();
+                Application.Current.Windows[0].IsHitTestVisible = true;
+
+                MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+
         private String searchBoxItem;
         public String SearchBoxItem
         {
@@ -423,31 +458,7 @@ namespace FinalProject.ViewModels.ShopManager
 
             return true;
         }
-        public bool IsValidEmail(string email)
-        {
-            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-            if (!Regex.IsMatch(email, pattern))
-            {
-                MessageBox.Show("Invalid email format.\nExample: abc123@gmail.com", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-            return true;
-        }
-        public bool ExistEmail(string email)
-        {
-            using (var context = new FstoreContext())
-            {
-                var item = from cus in context.Customers
-                           where cus.Email.Equals(email)
-                           select cus;
-                if (item.Any())
-                {
-                    MessageBox.Show("An email is used.\nPlease different email.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return true;
-                }
-            }
-            return false;
-        }
+
         public bool IsValidPhoneNumber(string phoneNumber)
         {
             if (!phoneNumber.All(char.IsDigit))

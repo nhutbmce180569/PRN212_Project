@@ -1,0 +1,20 @@
+Admin 
+nguyenvana@example.com
+User123@
+
+
+Shop Manager
+nguyenvanb@example.com
+User123@
+
+
+Warehouse Manager
+nguyenvanc@example.com
+User123@
+
+
+Order Manager
+nguyenvand@example.com
+User123@
+
+

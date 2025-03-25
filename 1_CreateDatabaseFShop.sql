@@ -66,7 +66,7 @@ CREATE TABLE Customers (
 );
 
 CREATE TABLE Suppliers (
-    SupplierID INT PRIMARY KEY,
+    SupplierID INT IDENTITY(1, 1) PRIMARY KEY,
     TaxID VARCHAR(20),
     Name NVARCHAR(255) NOT NULL,
     Email VARCHAR(254),
@@ -80,12 +80,12 @@ CREATE TABLE Suppliers (
 );
 
 CREATE TABLE Categories (
-    CategoryID INT PRIMARY KEY,
+	CategoryID INT IDENTITY(1, 1) PRIMARY KEY,
     Name VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE Brands (
-    BrandID INT PRIMARY KEY,
+	BrandID INT IDENTITY(1, 1) PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL
 );
 

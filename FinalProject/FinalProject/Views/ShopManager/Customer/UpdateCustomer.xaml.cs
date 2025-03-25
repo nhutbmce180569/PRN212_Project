@@ -21,18 +21,9 @@ namespace FinalProject.Views.ShopManager.Customer
     /// </summary>
     public partial class UpdateCustomer : Window
     {
-        public UpdateCustomer(FinalProject.Models.Customer customer)
+        public UpdateCustomer()
         {
             InitializeComponent();
-            txtGender.Items.Add("Male");
-            txtGender.Items.Add("Female");
-            txtGender.Items.Add("Other");
-            txtFullName.Text = customer.FullName;
-            txtBirthday.SelectedDate = customer.Birthday;
-            txtGender.SelectedIndex = txtGender.Items.IndexOf(customer.Gender.Trim());
-            txtEmail.Text = customer.Email;
-            txtPassword.Text = customer.Password;
-            txtPhoneNumber.Text = customer.PhoneNumber;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

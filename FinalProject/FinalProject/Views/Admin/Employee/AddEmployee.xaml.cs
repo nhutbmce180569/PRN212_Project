@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using FinalProject.Models;
+using FinalProject.ViewModels.Admin;
 
 namespace FinalProject.Views.Admin.Employee
 {
@@ -23,16 +24,7 @@ namespace FinalProject.Views.Admin.Employee
         public AddEmployee()
         {
             InitializeComponent();
-            cbGender.ItemsSource = new List<string>() { "Male", "Female", "Other" };
-            cbStatus.ItemsSource = new List<string>() { "Active", "Inactive"};
-
-            using (var context = new FstoreContext())
-            {
-                var roles = context.Roles.Where(r => r.RoleId != 1).ToList();
-                cbRoleId.ItemsSource = roles;
-            }
-
-            dpCreatedDate.SelectedDate = DateTime.Now;
+            DataContext = new EmployeeViewModel();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

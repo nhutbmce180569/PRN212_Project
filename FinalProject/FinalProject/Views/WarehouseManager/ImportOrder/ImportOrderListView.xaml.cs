@@ -13,5 +13,10 @@ namespace FinalProject.Views.WarehouseManager.ImportOrder
             InitializeComponent();
             DataContext = new ImportOrderViewModel();
         }
+
+        private void Button_Click_Detail(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
     }
 }

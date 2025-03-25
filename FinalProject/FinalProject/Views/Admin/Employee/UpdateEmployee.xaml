@@ -56,24 +56,29 @@ Title="UpdateEmployee" Height="350" Width="500">
             <TextBlock Text="Create Date" Grid.Column="0" Grid.Row="7"></TextBlock>
             <TextBlock Text="Status" Grid.Column="0" Grid.Row="8"></TextBlock>
             <TextBlock Text="Role ID" Grid.Column="0" Grid.Row="9"></TextBlock>
-            <TextBox x:Name="txtFullName" Grid.Column="1" Grid.Row="1" Text="{Binding TextBoxItem.FullName, Mode=OneWayToSource}"></TextBox>
-            <ComboBox Name="txtGender" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Gender}"
+            <!--Text Box-->
+            <TextBox x:Name="txtFullName" Grid.Column="1" Grid.Row="1" Text="{Binding TextBoxItem.FullName, Mode=TwoWay}"></TextBox>
+            <ComboBox Name="txtGender" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Genders}"
                 SelectedItem="{Binding TextBoxItem.Gender, Mode=TwoWay}" Height="30" Width="190"></ComboBox>
-            <TextBox x:Name="txtEmail" Grid.Column="1" Grid.Row="3" Text="{Binding TextBoxItem.Email, Mode=OneWayToSource}"></TextBox>
-            <TextBox x:Name="txtPhoneNumber" Grid.Column="1" Grid.Row="4" Text="{Binding TextBoxItem.PhoneNumber, Mode=OneWayToSource}"></TextBox>
+            <TextBox x:Name="txtEmail" Grid.Column="1" Grid.Row="3" Text="{Binding TextBoxItem.Email, Mode=TwoWay}"></TextBox>
+            <TextBox x:Name="txtPhoneNumber" Grid.Column="1" Grid.Row="4" Text="{Binding TextBoxItem.PhoneNumber, Mode=TwoWay}"></TextBox>
             <DatePicker x:Name="txtBirthday" Grid.Column="1" Grid.Row="5" Height="40" Width="190" HorizontalAlignment="Left"
-                SelectedDate="{Binding TextBoxItem.Birthday, Mode=OneWayToSource}"
+                SelectedDate="{Binding TextBoxItem.Birthday, Mode=TwoWay}"
                 SelectedDateFormat="Short"
         ></DatePicker>
-            <TextBox x:Name="txtPassword" Grid.Column="1" Grid.Row="6" Text="{Binding TextBoxItem.Password, Mode=OneWayToSource}"></TextBox>
+            <TextBox x:Name="txtPassword" Grid.Column="1" Grid.Row="6" Text="{Binding TextBoxItem.Password, Mode=TwoWay}"></TextBox>
             <DatePicker x:Name="txtCreateDate" Grid.Column="1" Grid.Row="7" Height="40" Width="190" HorizontalAlignment="Left"
                 SelectedDate="{Binding TextBoxItem.CreatedDate, Mode=TwoWay}"
                 SelectedDateFormat="Short" IsEnabled="False"></DatePicker>
             <ComboBox Name="txtStatus" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="8"  Background="White"
-                SelectedItem="{Binding TextBoxItem.Status, Mode=TwoWay}" Height="30" Width="190"></ComboBox>
-            <ComboBox Name="txtRoleId" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="9"  Background="White"
-                 SelectedValue="{Binding TextBoxItem.RoleId, Mode=TwoWay}" Height="30" Width="190"
-                      SelectedValuePath="RoleId" DisplayMemberPath="Name"></ComboBox>
+              ItemsSource="{Binding Statuses}"  SelectedItem="{Binding TextBoxItem.Status, Mode=TwoWay}" Height="30" Width="190"></ComboBox>
+            <ComboBox HorizontalAlignment="Left" Grid.Column="1" Grid.Row="9" x:Name="txtRoleId" Background="White"
+            ItemsSource="{Binding Roles}"
+            SelectedValue="{Binding TextBoxItem.RoleId, Mode=TwoWay}"
+            SelectedValuePath="RoleId"
+            DisplayMemberPath="Name"
+            Height="30" Width="190"/>
+            <!---->
             <Grid Grid.Row="10" Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>

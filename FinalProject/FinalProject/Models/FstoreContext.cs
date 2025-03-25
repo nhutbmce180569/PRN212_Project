@@ -59,7 +59,7 @@ public partial class FstoreContext : DbContext
             entity.HasKey(e => e.BrandId).HasName("PK__Brands__DAD4F3BEDCFC4A34");
 
             entity.Property(e => e.BrandId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("BrandID");
             entity.Property(e => e.Name).HasMaxLength(50);
         });
@@ -69,7 +69,7 @@ public partial class FstoreContext : DbContext
             entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A2BFE3C648E");
 
             entity.Property(e => e.CategoryId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("CategoryID");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
@@ -254,7 +254,7 @@ public partial class FstoreContext : DbContext
             entity.HasKey(e => e.SupplierId).HasName("PK__Supplier__4BE6669433797237");
 
             entity.Property(e => e.SupplierId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("SupplierID");
             entity.Property(e => e.Address).HasMaxLength(255);
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
