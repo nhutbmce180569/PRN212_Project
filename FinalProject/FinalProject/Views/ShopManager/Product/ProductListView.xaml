@@ -49,18 +49,18 @@
                     <DataGrid Background="White" SelectedItem="{Binding selectItem, Mode=TwoWay}" 
                               ItemsSource="{Binding products}" AutoGenerateColumns="False" 
                               RowHeight="40" HeadersVisibility="Column" FontSize="14" Focusable="False"
-                              GridLinesVisibility="Horizontal" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserResizeColumns="False">
+                              GridLinesVisibility="Horizontal" CanUserAddRows="False" CanUserDeleteRows="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="40" Header="ID" Binding="{Binding ProductId}"/>
-                            <DataGridTextColumn Width="130" Header="Brand" Binding="{Binding Brand.Name}"/>
-                            <DataGridTextColumn Width="130" Header="Category" Binding="{Binding Category.Name}"/>
-                            <DataGridTextColumn Width="140" Header="Model" Binding="{Binding Model}"/>
-                            <DataGridTextColumn Width="210" Header="Full Name" Binding="{Binding FullName}"/>
-                            <DataGridTextColumn Width="90" Header="Price" Binding="{Binding Price}"/>
+                            <DataGridTextColumn Width="90" Header="Brand" Binding="{Binding Brand.Name}"/>
+                            <DataGridTextColumn Width="100" Header="Category" Binding="{Binding Category.Name}"/>
+                            <DataGridTextColumn Width="90" Header="Model" Binding="{Binding Model}"/>
+                            <DataGridTextColumn Width="140" Header="Full Name" Binding="{Binding FullName}"/>
+                            <DataGridTextColumn Width="70" Header="Price" Binding="{Binding Price}"/>
                             <DataGridTextColumn Width="50" Header="Stock" Binding="{Binding Stock}"/>
                             <DataGridTemplateColumn Width="60" Header="Disable">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate> 
+                                    <DataTemplate>
                                         <TextBlock Text="{Binding IsDeleted, StringFormat={}{0:Yes;No}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

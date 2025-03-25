@@ -34,7 +34,7 @@
                         <!-- DataGrid for brands -->
                         <DataGrid Grid.Column="0" Background="White" SelectedItem="{Binding selectItem, Mode=OneWayToSource}" 
                                   ItemsSource="{Binding brands}" AutoGenerateColumns="False" Margin="0,0,0,0" 
-                                  RowHeight="35" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False">
+                                  RowHeight="35" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" HorizontalAlignment="Stretch">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="60" Header="ID" Binding="{Binding BrandId}" />
                                 <DataGridTextColumn Width="*" Header="Brand Name" Binding="{Binding Name}" />
