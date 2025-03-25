@@ -16,6 +16,12 @@
     <Compile Update="Views\ShopManager\Customer\CustomerListView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\ShopManager\Product\BrandListView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ShopManager\Product\CategoryListView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\ShopManager\ShopManagerView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -76,6 +82,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\ShopManager\Product\AddProduct.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ShopManager\Product\BrandListView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ShopManager\Product\CategoryListView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\ShopManager\Product\ProductListView.xaml">

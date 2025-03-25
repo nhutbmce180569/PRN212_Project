@@ -147,5 +147,6 @@
                
             </StackPanel>
         </Grid>
+        <Frame Name="MainFrame" NavigationUIVisibility="Hidden" />
     </Grid>
 </Window>

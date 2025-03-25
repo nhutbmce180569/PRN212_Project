@@ -1,0 +1,72 @@
+﻿<Page x:Class="FinalProject.Views.ShopManager.Product.CategoryListView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:FinalProject.Views.ShopManager.Product"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CategoryListView">
+
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <!-- Title or Header row -->
+            <RowDefinition Height="*"></RowDefinition>
+            <!-- Main content area -->
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="6*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <!-- Back Button -->
+            <Button Content="Back" Width="100" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Margin="10" Click="Button_Click"  />
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <!-- DataGrid column -->
+                <ColumnDefinition Width="6*"></ColumnDefinition>
+                <!-- Form column -->
+            </Grid.ColumnDefinitions>
+
+            <!-- DataGrid for brands -->
+            <Grid Grid.Column="0">
+                <DataGrid Background="White" 
+                          SelectedItem="{Binding selectItem, Mode=OneWayToSource}" 
+                          ItemsSource="{Binding categories}" 
+                          AutoGenerateColumns="False" 
+                          Margin="0,0,5,0">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="1*" Header="ID" Binding="{Binding CategoryId}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="3*" Header="Brand Name" Binding="{Binding Name}"></DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+
+            <!-- Form section for Brand Name input and Buttons -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <!-- Brand Name input row -->
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <!-- Button row -->
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                    <TextBlock Text="Brand Name: " FontSize="14" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,5"/>
+                    <TextBox Width="230" Text="{Binding textboxItem.Name, Mode=TwoWay}" VerticalAlignment="Center" Height="35" HorizontalAlignment="Left"/>
+                </StackPanel>
+
+                <!-- Buttons for Create, Update, Delete -->
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,10">
+                    <Button Command="{Binding AddCommand}" Width="70" Height="35" Margin="5" Content="CREATE" Background="#28A745" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                    <Button Command="{Binding UpdateCommand}" Width="70" Height="35" Margin="5" Content="UPDATE" Background="#FFC107" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                    <Button Command="{Binding DeleteCommand}" Width="70" Height="35" Margin="5" Content="DELETE" Background="#DC3545" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
