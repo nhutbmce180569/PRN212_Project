@@ -100,8 +100,8 @@ namespace FinalProject.ViewModels
         private void ChangePassword(object obj)
         {
             int id = EmployeeView.EmployeeId;
+            Validator va = new Validator();
 
-            // Kiểm tra các ô nhập mật khẩu có bị rỗng không
             if (string.IsNullOrEmpty(_oldPasswordBox) ||
                 string.IsNullOrEmpty(_newPasswordBox) ||
                 string.IsNullOrEmpty(_confirmPasswordBox))
@@ -110,23 +110,28 @@ namespace FinalProject.ViewModels
                 return;
             }
 
-            // Kiểm tra mật khẩu mới có trùng với xác nhận mật khẩu không
-            if (_newPasswordBox != _confirmPasswordBox)
+            if (!_newPasswordBox.Equals(_confirmPasswordBox))
             {
                 MessageBox.Show("New password and confirm password do not match!");
                 return;
             }
 
-            // Kiểm tra độ mạnh của mật khẩu mới
-            if (!IsValidPassword(_newPasswordBox))
+            if (!_newPasswordBox.Equals(_oldPasswordBox))
+            {
+                MessageBox.Show("New password and old password must be different!");
+                return;
+            }
+
+            if (!va.IsValidPassword(_newPasswordBox))
             {
                 MessageBox.Show("New password must contain lowercase letters, uppercase letters, numbers and special characters!");
                 return;
             }
 
+
+
             
 
-            // Mã hóa mật khẩu cũ và kiểm tra với mật khẩu hiện tại trong database
             string oldPasswordHash = PasswordBoxHelper.GetMD5(_oldPasswordBox);
 
             using (var context = new FstoreContext())
@@ -164,15 +169,7 @@ namespace FinalProject.ViewModels
             }
         }
 
-        private bool IsValidPassword(string password)
-        {
-            // Kiểm tra mật khẩu có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt
-            return password.Length >= 8 &&
-                   password.Any(char.IsUpper) &&
-                   password.Any(char.IsLower) &&
-                   password.Any(char.IsDigit) &&
-                   password.Any(ch => !char.IsLetterOrDigit(ch));
-        }
+        
 
 
         private void OpenChangePasswordPopup(object obj)
@@ -210,15 +207,12 @@ namespace FinalProject.ViewModels
             }
         }
 
-        private bool IsValidPhoneNumber(string phoneNumber)
-        {
-            return Regex.IsMatch(phoneNumber, @"^\d{10,15}$");
-        }
 
         private void SaveUpdate(object obj)
         {
             try
             {
+                Validator va = new Validator();
                 if (string.IsNullOrEmpty(EmployeeView.FullName) ||
                     string.IsNullOrEmpty(EmployeeView.PhoneNumber) ||
                     string.IsNullOrEmpty(EmployeeView.Gender))
@@ -227,14 +221,14 @@ namespace FinalProject.ViewModels
                     return;
                 }
 
-                if (!IsValidPhoneNumber(EmployeeUpdate.PhoneNumber))
+                if (!va.IsValidPhone(EmployeeUpdate.PhoneNumber))
                 {
-                    MessageBox.Show("Phone number must contain only digits and be between 1 and 15 characters long.");
+                    MessageBox.Show("Phone number must contain only digits and be between 1 and 11 characters long.");
                     return;
                 }
-                if (EmployeeUpdate.Birthday >= DateTime.Today)
+                if (!va.IsValidBirthday((DateTime)EmployeeUpdate.Birthday))
                 {
-                    MessageBox.Show("Your birthday cannot be in the future!");
+                    MessageBox.Show("Invalid birthday!");
                     return;
                 }
 
