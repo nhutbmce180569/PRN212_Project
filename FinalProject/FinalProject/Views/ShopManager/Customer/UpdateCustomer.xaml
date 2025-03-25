@@ -51,16 +51,24 @@
             <TextBlock Text="PhoneNumber" Grid.Column="0" Grid.Row="4"></TextBlock>
             <TextBlock Text="Birthday" Grid.Column="0" Grid.Row="5"></TextBlock>
             <TextBlock Text="Password" Grid.Column="0" Grid.Row="6"></TextBlock>
-            <TextBox x:Name="txtFullName" Grid.Column="1" Grid.Row="1" Text="{Binding TextBoxItem.FullName, Mode=OneWayToSource}"></TextBox>
+            <TextBox x:Name="txtFullName" Grid.Column="1" Grid.Row="1" Text="{Binding TextBoxItem.FullName, Mode=TwoWay}"></TextBox>
             <ComboBox Name="txtGender" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Gender}"
           SelectedItem="{Binding TextBoxItem.Gender, Mode=TwoWay}" Height="30" Width="190"></ComboBox>
-            <TextBox x:Name="txtEmail" Grid.Column="1" Grid.Row="3" Text="{Binding TextBoxItem.Email, Mode=OneWayToSource}"></TextBox>
-            <TextBox x:Name="txtPhoneNumber" Grid.Column="1" Grid.Row="4" Text="{Binding TextBoxItem.PhoneNumber, Mode=OneWayToSource}"></TextBox>
+            <TextBox x:Name="txtEmail" Grid.Column="1" Grid.Row="3" Text="{Binding TextBoxItem.Email, Mode=TwoWay}"></TextBox>
+            <TextBox x:Name="txtPhoneNumber" Grid.Column="1" Grid.Row="4" Text="{Binding TextBoxItem.PhoneNumber, Mode=TwoWay}"></TextBox>
             <DatePicker x:Name="txtBirthday" Grid.Column="1" Grid.Row="5" Height="40" Width="190" HorizontalAlignment="Left"
-SelectedDate="{Binding TextBoxItem.Birthday, Mode=OneWayToSource}"
+SelectedDate="{Binding TextBoxItem.Birthday, Mode=TwoWay}"
 SelectedDateFormat="Short"
 ></DatePicker>
-            <TextBox x:Name="txtPassword" Grid.Column="1" Grid.Row="6" Text="{Binding TextBoxItem.Password, Mode=OneWayToSource}"></TextBox>
+            <TextBox x:Name="txtPassword" Grid.Column="1" Grid.Row="6" Text="{Binding TextBoxItem.Password, Mode=TwoWay}"></TextBox>
+            <Grid Grid.Row="7" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" ></ColumnDefinition>
+                    <ColumnDefinition Width="9*" ></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <CheckBox Grid.Column="0" IsChecked="{Binding TextBoxItem.IsBlock, Mode=TwoWay}" VerticalAlignment="Center"></CheckBox>
+                <TextBlock Text="Is block" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+            </Grid>
             <Grid Grid.Row="8" Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>

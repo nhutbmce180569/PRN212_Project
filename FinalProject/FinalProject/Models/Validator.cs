@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace FinalProject.Models
 {
@@ -12,7 +13,7 @@ namespace FinalProject.Models
     {
         public Validator()
         {
-            
+
         }
         public bool IsValidPhone(string? input)
         {
@@ -31,7 +32,14 @@ namespace FinalProject.Models
             }
             return !string.IsNullOrEmpty(input) && input.Length <= lenght;
         }
-
+        public bool IsValidFullname(string name)
+        {
+            if (name.Length >= 255)
+            {
+                return false;
+            }
+            return true;
+        }
         public bool IsValidPersonName(string? input, int lenght)
         {
             if (string.IsNullOrWhiteSpace(input))
@@ -86,6 +94,12 @@ namespace FinalProject.Models
                 return context.Employees.Any(e => e.Email.ToLower() == email.ToLower());
             }
         }
-
+        public bool IsEmailExistsCustomer(string email)
+        {
+            using (var context = new FstoreContext())
+            {
+                return context.Customers.Any(e => e.Email.ToLower() == email.ToLower());
+            }
+        }
     }
 }
