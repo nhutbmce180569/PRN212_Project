@@ -116,7 +116,7 @@ namespace FinalProject.ViewModels
                 return;
             }
 
-            if (!_newPasswordBox.Equals(_oldPasswordBox))
+            if (_newPasswordBox.Equals(_oldPasswordBox))
             {
                 MessageBox.Show("New password and old password must be different!");
                 return;
