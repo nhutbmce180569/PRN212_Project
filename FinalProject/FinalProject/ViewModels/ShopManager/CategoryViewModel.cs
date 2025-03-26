@@ -40,6 +40,8 @@ namespace FinalProject.ViewModels.ShopManager
             }
 
             OnPropertyChanged(nameof(categories));
+            var productViewModel = new ProductViewModel();
+            productViewModel.RefreshData(); // Làm mới dữ liệu
         }
 
         private Category _textboxItem;
@@ -117,12 +119,14 @@ namespace FinalProject.ViewModels.ShopManager
                         allcategories = new ObservableCollection<Category>(categories);
                         OnPropertyChanged(nameof(categories));
                         OnPropertyChanged(nameof(allcategories));
+                        var productViewModel = new ProductViewModel();
+                        productViewModel.RefreshData(); // Làm mới dữ liệu
 
                         MessageBox.Show("Delete successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {
-                        MessageBox.Show("Brand not found in database.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Caegory not found in database.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
 
@@ -159,32 +163,37 @@ namespace FinalProject.ViewModels.ShopManager
                 }
                 else
                 {
-                    if (textboxItem.Name.Length > 255)
+                    Validator v = new();
+                    if (!v.IsValidOrganiztionName(textboxItem.Name, 100))
                     {
-                        MessageBox.Show("Category names cannot exceed 255 characters.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
+                        MessageBox.Show("The length of category's name must be less than or equal 100 characters", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-                    using (var context = new FstoreContext())
+                    else
                     {
-                        var existingCategory = context.Categories.Find(textboxItem.CategoryId);
-                        if (existingCategory != null)
+                        using (var context = new FstoreContext())
                         {
-                            existingCategory.Name = textboxItem.Name;
-                            context.SaveChanges();
+                            var existingCategory = context.Categories.Find(textboxItem.CategoryId);
+                            if (existingCategory != null)
+                            {
+                                existingCategory.Name = textboxItem.Name;
+                                context.SaveChanges();
+                            }
                         }
-                    }
 
-                    // Cập nhật danh sách sản phẩm trong UI
-                    var index = categories.IndexOf(selectItem);
-                    if (index >= 0)
-                    {
-                        categories[index] = textboxItem;
-                    }
+                        // Cập nhật danh sách sản phẩm trong UI
+                        var index = categories.IndexOf(selectItem);
+                        if (index >= 0)
+                        {
+                            categories[index] = textboxItem;
+                        }
 
-                    allcategories = new ObservableCollection<Category>(categories);
-                    OnPropertyChanged(nameof(categories));
-                    OnPropertyChanged(nameof(allcategories));
-                    MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                        allcategories = new ObservableCollection<Category>(categories);
+                        OnPropertyChanged(nameof(categories));
+                        OnPropertyChanged(nameof(allcategories));
+                        var productViewModel = new ProductViewModel();
+                        productViewModel.RefreshData(); // Làm mới dữ liệu
+                        MessageBox.Show("Update Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
             }
             catch (Exception ex)
@@ -207,29 +216,34 @@ namespace FinalProject.ViewModels.ShopManager
                     using (var context = new FstoreContext())
                     {
 
-                        if (textboxItem.Name.Length > 255)
+                        Validator v = new();
+                        if (!v.IsValidOrganiztionName(textboxItem.Name, 100))
                         {
-                            MessageBox.Show("Category names cannot exceed 255 characters.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
+                            MessageBox.Show("The length of category's name must be less than or equal 100 characters", "Erorr", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
-                        // Tạo sản phẩm mới
-                        var newitem = new Category
+                        else
                         {
-                            Name = textboxItem.Name
-                        };
+                            // Tạo sản phẩm mới
+                            var newitem = new Category
+                            {
+                                Name = textboxItem.Name
+                            };
 
-                        // Thêm sản phẩm vào CSDL
-                        context.Categories.Add(newitem);
-                        context.SaveChanges();
+                            // Thêm sản phẩm vào CSDL
+                            context.Categories.Add(newitem);
+                            context.SaveChanges();
 
-                        // Thêm vào danh sách observablecollection trên UI
-                        categories.Add(newitem);
-                        allcategories = new ObservableCollection<Category>(categories);
+                            // Thêm vào danh sách observablecollection trên UI
+                            categories.Add(newitem);
+                            allcategories = new ObservableCollection<Category>(categories);
 
-                        // Reset textbox
-                        textboxItem = new Category();
-                        OnPropertyChanged(nameof(textboxItem));
-                        MessageBox.Show("Create Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                            // Reset textbox
+                            textboxItem = new Category();
+                            OnPropertyChanged(nameof(textboxItem));
+                            var productViewModel = new ProductViewModel();
+                            productViewModel.RefreshData(); // Làm mới dữ liệu
+                            MessageBox.Show("Create Successful", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
                     }
                 }
             }
