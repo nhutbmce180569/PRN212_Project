@@ -29,7 +29,6 @@ namespace FinalProject.Views.ShopManager.Product
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // Điều hướng quay lại trang trước (ProductListView)
             NavigationService.GoBack();
             NavigationService.Navigate(new ProductListView());
         }

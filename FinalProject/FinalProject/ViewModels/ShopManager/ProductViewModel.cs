@@ -420,7 +420,6 @@ namespace FinalProject.ViewModels.ShopManager
                 }
             }
         }
-
         private void Export(object obj)
         {
             try
