@@ -87,14 +87,14 @@ namespace FinalProject.Models
             return Regex.IsMatch(password, pattern);
         }
 
-        public bool IsEmailExists(string email)
+        public bool IsEmailExistsCustomer(string email)
         {
             using (var context = new FstoreContext())
             {
-                return context.Employees.Any(e => e.Email.ToLower() == email.ToLower());
+                return context.Customers.Any(e => e.Email.ToLower() == email.ToLower());
             }
         }
-        public bool IsEmailExistsCustomer(string email)
+        public bool IsEmailExists(string email)
         {
             using (var context = new FstoreContext())
             {
@@ -108,6 +108,15 @@ namespace FinalProject.Models
                 return false;
             }
             return day <= DateTime.Today;
+        }
+        public bool IsValidPrice(long? price)
+        {
+            if (price <= 0)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

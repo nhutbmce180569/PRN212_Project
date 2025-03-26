@@ -10,25 +10,28 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using FinalProject.Models;
 using FinalProject.ViewModels.ShopManager;
 
 namespace FinalProject.Views.ShopManager.Product
 {
     /// <summary>
-    /// Interaction logic for AddProduct.xaml
+    /// Interaction logic for CategoryListView.xaml
     /// </summary>
-    public partial class AddProduct : Window
+    public partial class CategoryListView : Page
     {
-        public AddProduct()
+        public CategoryListView()
         {
             InitializeComponent();
+            DataContext = new CategoryViewModel();
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            // Điều hướng quay lại trang trước (ProductListView)
+            NavigationService.GoBack();
+            NavigationService.Navigate(new ProductListView());
         }
     }
 }

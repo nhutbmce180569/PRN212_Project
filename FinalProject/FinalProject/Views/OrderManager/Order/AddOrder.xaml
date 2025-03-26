@@ -4,94 +4,99 @@
         Title="Add Order" Height="600" Width="800"
         WindowStyle="None" AllowsTransparency="True" Background="AliceBlue" Topmost="True">
 
-    <Grid Margin="10" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
-        <!-- 11 hàng -->
+    <Grid Margin="20" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
-            <!-- Title -->
-            <RowDefinition Height="1*"/>
-            <!-- Customer info -->
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
-            <!-- Status -->
             <RowDefinition Height="1*"/>
-            <!-- Chọn sản phẩm -->
+            <RowDefinition Height="1.1*"/>
             <RowDefinition Height="1*"/>
-            <!-- Hiển thị Price -->
             <RowDefinition Height="1*"/>
-            <!-- Nhập Quantity -->
             <RowDefinition Height="1*"/>
-            <!-- Nút Add Product -->
-            <RowDefinition Height="*"/>
-            <!-- DataGrid danh sách sản phẩm -->
+            <RowDefinition Height="1.2*"/>
             <RowDefinition Height="3*"/>
-            <!-- Nút Save/Close -->
-            <!-- Status -->
-            <RowDefinition Height="2*"/>
-            <!-- Chọn sản phẩm -->
-
+            <RowDefinition Height="1.5*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Tiêu đề -->
-        <TextBlock Grid.ColumnSpan="2" Text="Add Order" FontSize="22" FontWeight="Bold" Margin="5"/>
+        <!-- Title -->
+        <TextBlock Grid.ColumnSpan="2" Text="Add Order" FontSize="26" FontWeight="Bold"
+                   Foreground="DarkSlateBlue" Margin="5" HorizontalAlignment="Center"/>
 
-        <!-- Thông tin đơn hàng -->
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="CustomerID:" VerticalAlignment="Center"/>
+        <!-- CustomerID -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="CustomerID:" VerticalAlignment="Center" FontWeight="SemiBold"/>
         <ComboBox Grid.Row="1" Grid.Column="1" Width="300" Margin="5"
-                      ItemsSource="{Binding CustomerList}"
-                      SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}"
-                      DisplayMemberPath="CustomerId"/>
+                  ItemsSource="{Binding CustomerList}"
+                  SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}"
+                  DisplayMemberPath="CustomerId"
+                  Padding="4" BorderBrush="Gray" BorderThickness="1" />
 
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Fullname:" VerticalAlignment="Center"/>
+        <!-- Fullname -->
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Fullname:" VerticalAlignment="Center" FontWeight="SemiBold"/>
         <TextBox Grid.Row="2" Grid.Column="1" Width="300" Margin="5"
-                     Text="{Binding TextBoxItem.FullName, Mode=TwoWay}" IsReadOnly="True"/>
+                 Text="{Binding TextBoxItem.FullName, Mode=TwoWay}" IsReadOnly="True"
+                 Padding="4" BorderBrush="LightGray" BorderThickness="1" Background="#FFF"/>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" Text="Address:" VerticalAlignment="Center"/>
+        <!-- Address -->
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Address:" VerticalAlignment="Center" FontWeight="SemiBold"/>
         <TextBox Grid.Row="3" Grid.Column="1" Width="300" Margin="5"
-                     Text="{Binding TextBoxItem.Address, Mode=TwoWay}"/>
+                 Text="{Binding TextBoxItem.Address, Mode=TwoWay}"
+                 Padding="4" BorderBrush="LightGray" BorderThickness="1"/>
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="PhoneNumber:" VerticalAlignment="Center"/>
+        <!-- Phone -->
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="PhoneNumber:" VerticalAlignment="Center" FontWeight="SemiBold"/>
         <TextBox Grid.Row="4" Grid.Column="1" Width="300" Margin="5"
-                     Text="{Binding TextBoxItem.PhoneNumber, Mode=TwoWay}"/>
+                 Text="{Binding TextBoxItem.PhoneNumber, Mode=TwoWay}"
+                 Padding="4" BorderBrush="LightGray" BorderThickness="1"/>
 
-        <TextBlock Grid.Row="5" Grid.Column="0" Text="Status:" VerticalAlignment="Center"/>
-        <ComboBox Grid.Row="5" Grid.Column="1" Width="300" Margin="5">
+        <!-- Status -->
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Status:" VerticalAlignment="Center" FontWeight="SemiBold"/>
+        <ComboBox Grid.Row="5" Grid.Column="1" Width="300" Margin="5" Padding="4" BorderBrush="Gray">
             <ComboBoxItem Content="Pending" IsSelected="True"/>
         </ComboBox>
 
-        <TextBlock Grid.Row="6" Grid.Column="0" Text="Delivered Date:" VerticalAlignment="Center"/>
+        <!-- Delivered Date -->
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="Delivered Date:" VerticalAlignment="Center" FontWeight="SemiBold"/>
         <DatePicker Grid.Row="6" Grid.Column="1" Width="300" Margin="5"
-            SelectedDate="{Binding TextBoxItem.DeliveredDate, Mode=TwoWay}" />
+                    SelectedDate="{Binding TextBoxItem.DeliveredDate, Mode=TwoWay}"
+                    BorderBrush="LightGray" BorderThickness="1" Padding="4"/>
 
-
-        <!-- Nhập chi tiết sản phẩm -->
-        <TextBlock Grid.Row="7" Grid.Column="0" Text="Product:" VerticalAlignment="Center"/>
+        <!-- Product -->
+        <TextBlock Grid.Row="7" Grid.Column="0" Text="Product:" VerticalAlignment="Center" FontWeight="SemiBold"/>
         <ComboBox Grid.Row="7" Grid.Column="1" Width="300" Margin="5"
-                      ItemsSource="{Binding ProductList}"
-                      SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
-                      DisplayMemberPath="FullName"/>
+                  ItemsSource="{Binding ProductList}"
+                  SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
+                  DisplayMemberPath="FullName"
+                  Padding="4" BorderBrush="Gray" BorderThickness="1"/>
 
-        <TextBlock Grid.Row="8" Grid.Column="0" Text="Price:" VerticalAlignment="Center"/>
+        <!-- Price -->
+        <TextBlock Grid.Row="8" Grid.Column="0" Text="Price:" VerticalAlignment="Center" FontWeight="SemiBold"/>
         <TextBox Grid.Row="8" Grid.Column="1" Width="300" Margin="5"
-                     Text="{Binding TextBoxProduct.Price, Mode=TwoWay}" IsReadOnly="True"/>
+                 Text="{Binding TextBoxProduct.Price, Mode=TwoWay}" IsReadOnly="True"
+                 Padding="4" BorderBrush="LightGray" BorderThickness="1" Background="#FFF"/>
 
-        <TextBlock Grid.Row="9" Grid.Column="0" Text="Quantity:" VerticalAlignment="Center"/>
+        <!-- Quantity -->
+        <TextBlock Grid.Row="9" Grid.Column="0" Text="Quantity:" VerticalAlignment="Center" FontWeight="SemiBold"/>
         <TextBox Grid.Row="9" Grid.Column="1" Width="300" Margin="5"
-                     Text="{Binding NewOrderDetailQuantity, Mode=TwoWay}"/>
+                 Text="{Binding NewOrderDetailQuantity, Mode=TwoWay}"
+                 Padding="4" BorderBrush="LightGray" BorderThickness="1"/>
 
-        <!-- Nút Add Product -->
+        <!-- Add Product Button -->
         <Button Grid.Row="10" Grid.Column="1" Content="Add Product" Margin="5" Width="150"
-                    Command="{Binding AddProductDetailCommand}"/>
+                Command="{Binding AddProductDetailCommand}"
+                Background="#FF6EC6" Foreground="White" FontWeight="Bold" BorderThickness="0"
+                Padding="6" Cursor="Hand"/>
 
-        <!-- DataGrid hiển thị danh sách sản phẩm đã thêm -->
+        <!-- DataGrid -->
         <DataGrid Grid.Row="11" Grid.ColumnSpan="2" ItemsSource="{Binding NewOrderDetails}"
-                      AutoGenerateColumns="False" Margin="5" Height="120">
+                  AutoGenerateColumns="False" Margin="5" Height="120"
+                  Background="White" BorderBrush="Gray" BorderThickness="1" HeadersVisibility="Column">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Product ID" Binding="{Binding ProductId}" Width="*"/>
                 <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="*"/>
@@ -99,11 +104,12 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Nút Save Order và Close -->
+        <!-- Save / Close Buttons -->
         <StackPanel Grid.Row="12" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
-            <Button Content="Save Order" Width="100" Margin="5" Command="{Binding AddCommand}"/>
-            <Button Content="Close" Width="100" Margin="5" Click="Close_Click"/>
+            <Button Content="Save Order" Width="100" Margin="5" Command="{Binding AddCommand}" Background="Green"
+                    Foreground="White" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
+            <Button Content="Close" Width="100" Margin="5" Click="Close_Click" Background="Red"
+                    Foreground="White" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
         </StackPanel>
     </Grid>
-
 </Window>

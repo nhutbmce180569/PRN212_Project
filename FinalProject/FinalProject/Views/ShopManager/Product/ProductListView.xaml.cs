@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,8 +26,31 @@ namespace FinalProject.Views.ShopManager.Product
         {
             InitializeComponent();
             DataContext = new ProductViewModel();
+            var productViewModel = new ProductViewModel();
         }
-        
 
+        private void NavigateToCategory(object sender, RoutedEventArgs e)
+        {
+            // Kiểm tra NavigationService có hợp lệ hay không
+            if (NavigationService != null)
+            {
+                NavigationService.Navigate(new CategoryListView());
+            }
+        }
+
+        // Điều hướng đến trang BrandListView khi nhấn nút
+        private void NavigateToBrand(object sender, RoutedEventArgs e)
+        {
+            if (NavigationService != null)
+            {
+                NavigationService.Navigate(new BrandListView());
+            }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            var productViewModel = DataContext as ProductViewModel;
+            productViewModel?.RefreshData();  // Gọi phương thức Load để tải lại dữ liệu
+        }
     }
 }
